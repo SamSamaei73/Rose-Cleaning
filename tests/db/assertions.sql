@@ -51,6 +51,8 @@ select transition_booking('10000000-0000-4000-8000-000000000003',:'alice_booking
 select transition_booking('10000000-0000-4000-8000-000000000003',:'alice_booking',1,'confirm');
 select test_assert((select count(*) from booking_events where booking_id=:'alice_booking')=2,'Repeated confirmation adds no duplicate event');
 select test_assert((select count(*) from notifications)=3,'Repeated confirmation adds no duplicate email');
+select test_assert((select count(*) from notifications where event_type='request_received')=2,'Request acknowledgements retain their distinct event type');
+select test_assert((select count(*) from notifications where event_type='booking_confirmed')=1,'Only an operator confirmation creates a confirmation event');
 do $$ begin
   begin perform transition_booking('10000000-0000-4000-8000-000000000003',(select id from bookings where customer_id='10000000-0000-4000-8000-000000000002'),1,'confirm');raise exception 'TEST FAILED: conflicting confirmation accepted';exception when others then if sqlerrm<>'CAPACITY_CONFLICT' then raise;end if;end;
 end $$;
@@ -62,6 +64,17 @@ select test_assert((select status='confirmed' and (quote->>'totalPence')::int=60
 select transition_booking('10000000-0000-4000-8000-000000000001',:'alice_booking',4,'cancel');
 select test_assert((select reserved_start is null from bookings where id=:'alice_booking'),'Cancellation frees capacity');
 select test_assert((select count(*) from pg_tables where schemaname='public' and not rowsecurity)=0,'Every application table has RLS');
+-- A named cleaner cannot be double-assigned even when pooled capacity allows it.
+update operational_settings set config=jsonb_set(config,'{capacity}','2');
+insert into cleaners(id,name) values('30000000-0000-4000-8000-000000000001','Fixture cleaner');
+select assign_cleaner('10000000-0000-4000-8000-000000000003',:'bob_booking','30000000-0000-4000-8000-000000000001');
+select transition_booking('10000000-0000-4000-8000-000000000003',:'bob_booking',1,'confirm');
+select (submit_booking('10000000-0000-4000-8000-000000000001','20000000-0000-4000-8000-000000000005',test_draft(),test_quote(),null)).id as cleaner_conflict_booking \gset
+select assign_cleaner('10000000-0000-4000-8000-000000000003',:'cleaner_conflict_booking','30000000-0000-4000-8000-000000000001');
+do $$ begin
+  begin perform transition_booking('10000000-0000-4000-8000-000000000003',(select id from bookings where idempotency_key='20000000-0000-4000-8000-000000000005'),1,'confirm');raise exception 'TEST FAILED: cleaner double-booking accepted';exception when others then if sqlerrm<>'CLEANER_CONFLICT' then raise;end if;end;
+end $$;
+update operational_settings set config=jsonb_set(config,'{capacity}','1');
 -- Two pending requests for the parallel conflict test.
 select submit_booking('10000000-0000-4000-8000-000000000001','20000000-0000-4000-8000-000000000003',test_draft()||jsonb_build_object('date',(now() at time zone 'Europe/London')::date+6),test_quote(),null);
 select submit_booking('10000000-0000-4000-8000-000000000002','20000000-0000-4000-8000-000000000004',test_draft()||jsonb_build_object('date',(now() at time zone 'Europe/London')::date+6),test_quote(),null);
