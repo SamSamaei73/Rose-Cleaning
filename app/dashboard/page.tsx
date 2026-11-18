@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, CalendarDays, Clock3, Sparkles } from "lucide-react";
+import { CalendarDays, Clock3, ClipboardList } from "lucide-react";
 import { requirePageSession } from "@/lib/server/auth";
 import { listBookings } from "@/lib/server/repository";
 import { BookingList } from "@/components/booking-list";
@@ -24,7 +24,7 @@ export default async function Dashboard() {
           <p>Your home, your plans and all the details. Right here.</p>
         </div>
         <Link href="/dashboard/book" className="btn">
-          Request a clean <ArrowUpRight size={16} />
+          Request a clean
         </Link>
       </div>
       <div className="metrics">
@@ -35,7 +35,7 @@ export default async function Dashboard() {
             value: upcoming.length,
             icon: CalendarDays,
           },
-          { label: "Past requests", value: past.length, icon: Sparkles },
+          { label: "Past requests", value: past.length, icon: ClipboardList },
         ].map(({ label, value, icon: Icon }) => (
           <div className="metric" key={label}>
             <span className="metric-label">

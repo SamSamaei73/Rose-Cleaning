@@ -1,24 +1,26 @@
 import Image from "next/image";
 import Link from "next/link";
-import { Sparkles } from "lucide-react";
 import { brand } from "@/lib/brand";
-export function Brand() {
+export function Brand({ compact = false }: { compact?: boolean }) {
   return (
     <Link
-      className="brand"
+      className={`brand${compact ? " brand-compact" : ""}`}
       href="/"
       aria-label="Rose Professional Cleaning home"
     >
-      {brand.logo ? (
-        <Image src={brand.logo} alt="" width={47} height={47} />
-      ) : (
-        <span className="brand-icon" aria-hidden="true">
-          R<Sparkles size={12} />
+      <Image
+        className="brand-image"
+        src={brand.logo}
+        alt="Rose Professional Cleaning — official logo"
+        width={brand.logoWidth}
+        height={brand.logoHeight}
+        sizes="(max-width: 640px) 76px, 100px"
+      />
+      {!compact && (
+        <span className="brand-word" aria-hidden="true">
+          Rose<small>Professional Cleaning</small>
         </span>
       )}
-      <span className="brand-word">
-        Rose<small>Professional Cleaning</small>
-      </span>
     </Link>
   );
 }

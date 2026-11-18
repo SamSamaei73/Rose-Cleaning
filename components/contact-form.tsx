@@ -1,16 +1,18 @@
 "use client";
 import { useRef, useState } from "react";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { serviceCatalogue } from "@/lib/service-catalogue";
 import { api, Message } from "./ui";
 export function ContactForm({
   office = false,
   demo = false,
   subject = "",
+  serviceId = "",
 }: {
   office?: boolean;
   demo?: boolean;
   subject?: string;
+  serviceId?: string;
 }) {
   const [busy, setBusy] = useState(false),
     [error, setError] = useState(""),
@@ -24,6 +26,9 @@ export function ContactForm({
         setBusy(true);
         setError("");
         const form = new FormData(e.currentTarget);
+        const selectedService = serviceCatalogue.find(
+          (service) => service.id === form.get("service"),
+        );
         key.current ||= crypto.randomUUID();
         try {
           const result = await api<{ message: string }>("contact", {
@@ -33,7 +38,7 @@ export function ContactForm({
             phone: form.get("phone") || "",
             company: form.get("company") || "",
             postcode: form.get("postcode") || "",
-            message: form.get("message"),
+            message: `${selectedService ? `Service requested: ${selectedService.name}\n\n` : ""}${form.get("message") || ""}`,
             website: form.get("website") || "",
             idempotencyKey: key.current,
           });
@@ -46,7 +51,11 @@ export function ContactForm({
       }}
     >
       <h2 style={{ fontSize: 24 }}>
-        {office ? "Tell us about your workspace" : "Send a message"}
+        {office
+          ? "Tell us about your workspace"
+          : serviceId
+            ? "Request a quote"
+            : "Send a message"}
       </h2>
       {demo && (
         <div className="notice">
@@ -58,6 +67,30 @@ export function ContactForm({
       {!message && (
         <>
           <div className="form-grid">
+            <div className="field span-2">
+              <label htmlFor="enquiry-service">Service</label>
+              <select
+                id="enquiry-service"
+                name="service"
+                defaultValue={serviceId}
+              >
+                {!office && <option value="">General enquiry</option>}
+                {serviceCatalogue
+                  .filter(
+                    (service) => !office || service.id === "office-cleaning",
+                  )
+                  .map((service) => (
+                    <option key={service.id} value={service.id}>
+                      {service.name}
+                    </option>
+                  ))}
+              </select>
+              {serviceId && (
+                <small>
+                  Price to be confirmed. Rose will agree the scope with you.
+                </small>
+              )}
+            </div>
             <div className="field">
               <label htmlFor="contact-name">Your name</label>
               <input
@@ -121,7 +154,7 @@ export function ContactForm({
                 name="message"
                 required
                 minLength={10}
-                maxLength={3000}
+                maxLength={2800}
                 defaultValue={subject}
               />
               <small>
@@ -149,10 +182,9 @@ export function ContactForm({
           <button className="btn" disabled={busy}>
             {busy
               ? "Saving your enquiry…"
-              : office
+              : office || serviceId
                 ? "Send quote request"
                 : "Send message"}
-            <ArrowUpRight size={16} />
           </button>
         </>
       )}

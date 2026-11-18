@@ -3,21 +3,28 @@ import { ContactForm } from "@/components/contact-form";
 import { PageHeading } from "@/components/public";
 import { brand } from "@/lib/brand";
 import { isDemo } from "@/lib/server/config";
+import { findPublicService } from "@/lib/service-catalogue";
 export const metadata = { title: "Get in touch" };
 export default async function Contact({
   searchParams,
 }: {
-  searchParams: Promise<{ subject?: string }>;
+  searchParams: Promise<{ subject?: string; service?: string }>;
 }) {
-  const { subject } = await searchParams;
+  const { subject, service: serviceId } = await searchParams;
+  const service = findPublicService(serviceId);
   return (
     <div className="container">
       <PageHeading
         eyebrow="Let’s talk"
-        title="A fresh start begins with hello."
+        title={
+          service
+            ? "Let’s talk about your clean."
+            : "A fresh start begins here."
+        }
       >
-        A question about your home, your request or a move? Speak with the Rose
-        team.
+        {service
+          ? `Ask Rose about ${service.name.toLowerCase()}. Price and scope will be confirmed with you.`
+          : "A question or a quote? Speak with the Rose team."}
       </PageHeading>
       <div className="contact-layout">
         <div className="stack">
@@ -33,6 +40,9 @@ export default async function Contact({
             >
               {brand.phone}
             </a>
+            <a className="text-link" href={brand.secondaryPhoneHref}>
+              {brand.secondaryPhone}
+            </a>
             <p className="small">
               For cleaning enquiries and questions about Rose Removals.
             </p>
@@ -42,10 +52,16 @@ export default async function Contact({
                 {brand.email}
               </a>
             )}
+            <a className="text-link" href={brand.instagramHref}>
+              {brand.instagram}
+            </a>
+            <a className="text-link" href={brand.website}>
+              {brand.websiteLabel}
+            </a>
           </div>
           <div className="card stack">
             <MapPin color="var(--rose)" />
-            <h3>Made for London homes.</h3>
+            <h3>Here for London.</h3>
             <p>
               Exact service areas are being confirmed. Include your postcode so
               we can review your location.
@@ -53,7 +69,11 @@ export default async function Contact({
             {brand.address && <p>{brand.address}</p>}
           </div>
         </div>
-        <ContactForm demo={isDemo()} subject={subject?.slice(0, 200) || ""} />
+        <ContactForm
+          demo={isDemo()}
+          subject={subject?.slice(0, 200) || ""}
+          serviceId={service?.id}
+        />
       </div>
     </div>
   );

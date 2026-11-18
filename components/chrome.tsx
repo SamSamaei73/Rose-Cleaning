@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { ArrowUpRight, Menu, Phone, MapPin } from "lucide-react";
+import { Phone } from "lucide-react";
+import { MobileNav } from "./mobile-nav";
 import { Brand } from "./brand";
 import { ActionButton } from "./ui";
 import { brand } from "@/lib/brand";
@@ -31,9 +32,9 @@ export async function Header() {
       <div className="container header-inner">
         <Brand />
         <nav className="header-nav" aria-label="Main navigation">
-          <Link href="/services">Our services</Link>
+          <Link href="/services">Services</Link>
           <Link href="/about">About Rose</Link>
-          <Link href="/contact">Get in touch</Link>
+          <Link href="/contact">Contact</Link>
         </nav>
         <div className="header-right">
           <a href={brand.phoneHref} className="header-contact">
@@ -53,33 +54,9 @@ export async function Header() {
             {session ? "My account" : "Log in"}
           </Link>
           <Link className="btn small" href="/book">
-            Request a clean <ArrowUpRight size={15} />
+            Request a clean
           </Link>
-          <details className="mobile-nav">
-            <summary aria-label="Open navigation">
-              <Menu size={23} />
-            </summary>
-            <nav aria-label="Mobile navigation">
-              <Link href="/">Home</Link>
-              <Link href="/services">Our services</Link>
-              <Link href="/about">About Rose</Link>
-              <Link href="/contact">Get in touch</Link>
-              <Link href="/office-quote">Office cleaning</Link>
-              <a href={brand.phoneHref}>{brand.phone}</a>
-              <Link className="btn" href="/book">
-                Request a clean
-              </Link>
-              {session && (
-                <ActionButton
-                  path="auth"
-                  body={{ action: "logout" }}
-                  className="btn secondary"
-                >
-                  Sign out
-                </ActionButton>
-              )}
-            </nav>
-          </details>
+          <MobileNav signedIn={Boolean(session)} />
         </div>
       </div>
     </header>
@@ -91,20 +68,13 @@ export function Footer() {
       <div className="container footer-grid">
         <div>
           <Brand />
-          <p style={{ maxWidth: 250, marginTop: 20 }}>
-            A fresh home. A little more room for life.
+          <p style={{ maxWidth: 270, marginTop: 20 }}>
+            Professional cleaning.
             <br />
-            Managed cleaning services in London.
+            Personal care. Across London.
           </p>
-          <p
-            style={{
-              marginTop: 14,
-              display: "flex",
-              alignItems: "center",
-              gap: 5,
-            }}
-          >
-            <MapPin size={13} /> Service areas to be confirmed
+          <p className="small" style={{ marginTop: 14 }}>
+            Exact service areas to be confirmed.
           </p>
         </div>
         <div className="footer-links">
@@ -117,6 +87,9 @@ export function Footer() {
         <div className="footer-links">
           <h3>Here to help</h3>
           <a href={brand.phoneHref}>{brand.phone}</a>
+          <a href={brand.secondaryPhoneHref}>{brand.secondaryPhone}</a>
+          <a href={`mailto:${brand.email}`}>{brand.email}</a>
+          <a href={brand.website}>{brand.websiteLabel}</a>
           <Link href="/contact">Contact the team</Link>
           <Link href="/dashboard">Your account</Link>
           <Link href="/staff">Staff sign in</Link>
@@ -126,16 +99,16 @@ export function Footer() {
           <Link href="/terms">Terms · draft</Link>
           <Link href="/privacy">Privacy · draft</Link>
           <Link href="/cancellation">Cancellation · draft</Link>
+          <a href={brand.instagramHref}>{brand.instagram}</a>
           <span className="small muted">No payment taken online</span>
         </div>
       </div>
       <div className="container footer-bottom">
         <span>© {new Date().getFullYear()} Rose Professional Cleaning</span>
         <span>
-          Provisional brand mark · Final logo and photography pending owner
-          approval
+          Stock photographs illustrate services; they do not depict Rose staff
+          or customer results.
         </span>
-        <span>Made for a little more peace of mind.</span>
       </div>
     </footer>
   );

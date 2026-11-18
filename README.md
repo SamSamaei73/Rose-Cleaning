@@ -80,9 +80,9 @@ The visitor booking draft is stored in `sessionStorage` in the current tab, rest
 
 | Route                                                   | Purpose                                                          |
 | ------------------------------------------------------- | ---------------------------------------------------------------- |
-| `/`                                                     | Complete homepage and provisional brand presentation             |
+| `/`                                                     | Official Rose brand, photographic homepage and cleaning reveal    |
 | `/about`                                                | Known business and service approach                              |
-| `/services`                                             | Four household categories and office quote link                  |
+| `/services`                                             | Fourteen services grouped into five categories                    |
 | `/contact`                                              | Validated, stored enquiry                                        |
 | `/office-quote`                                         | Validated, stored office quote request                           |
 | `/book`                                                 | Shared progressive cleaning request flow                         |
@@ -111,6 +111,8 @@ The visitor booking draft is stored in `sessionStorage` in the current tab, rest
 Private pages and API routes authenticate on the server. Supabase RLS also restricts reads. Customers can only read their own bookings, history, profiles, addresses and data requests. Public catalogue reads do not expose pricing drafts, customer records or internal notes.
 
 ## Booking and pricing behaviour
+
+The public presentation catalogue is in `lib/service-catalogue.ts`: names, concise descriptions, photographic references, alt text, categories and request destinations. Existing household service IDs and historical booking relationships are unchanged. Additional poster services use the existing contact/office quote forms with the selected service stored in the enquiry message. They introduce no prices, schemas or bookable packages. The existing one-off cleaning journey remains linked from the services page. Connected prices and options continue to come from the operational database catalogue.
 
 - Services and extras are catalogue rows. `pricing_versions.config` holds calculation rules; connected-mode values come from the database. Demo values exist only in `lib/catalogue.ts`’s clearly labelled fixture.
 - Rates use integer pence. Base minutes + bedroom minutes + bathroom minutes are priced at the configured hourly rate, rounded up to the next penny and subject to a configured minimum. Extras add their configured price and duration. Explicit adjustment lines form part of the complete total. No VAT status or promotion is inferred.
@@ -199,10 +201,19 @@ No non-essential tracking is included. Security headers restrict framing, browse
 
 - `app/`: server-rendered public pages, protected customer/staff routes, auth callback and API router.
 - `components/`: shared brand, layouts, request journey, calendar, account and staff controls.
+- `lib/brand.ts`, `lib/service-catalogue.ts`: shared official identity/contact details and public service presentation.
 - `lib/pricing.ts`, `lib/scheduling.ts`, `lib/validation.ts`: shared business calculations and validation.
 - `lib/server/`: server-only authentication, signing, data access, isolated demo state and email adapter.
 - `supabase/`: schema, permissions, transactional operations, safe seed and local configuration.
 - `tests/`, `scripts/`: unit, browser and actual database verification.
 - `docs/`: owner decisions, asset inventory and verification record.
 
-The workspace was empty at the start. No earlier `0001_initial_schema.sql`, pricing implementation, supplied posters, logo concepts or project documents were available to reuse. Business content follows the current brief.
+## Official brand and photography
+
+See [the design update record](docs/DESIGN-UPDATE.md) for changed files, focused verification and screenshot locations.
+
+The complete approved `img/Logo.jpeg` is copied intact to `public/brand/Logo.jpeg`. Shared branding uses that image; browser icons are faithful derivatives. Warm copper, burgundy and warm-white design tokens live in `app/globals.css`. The homepage cleaning reveal uses one stock photograph with a masked haze, passive scroll observation and no React state updates per frame. Reduced-motion users and unsupported browsers see the clean final image.
+
+New photographs are served locally, with sources and licences in `docs/PHOTOGRAPHY.md`. `docs/ASSETS.md` records the logo derivatives and remaining missing imagery. The supplied poster's transcribed service/contact details were used; the poster image and actual Rose Removals van photograph were not present. No poster promotions were activated.
+
+Displayed contact details now use `rosecleaning.uk`, `info@rosecleaning.uk`, both supplied phones and Instagram. The earlier domain was `www.roseprofessionalcleaning.co.uk`. This design update does not change DNS, hosting, Supabase callbacks or `NEXT_PUBLIC_SITE_URL`; configure those separately when authorised.

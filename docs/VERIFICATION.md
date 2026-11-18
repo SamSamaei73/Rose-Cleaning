@@ -1,5 +1,7 @@
 # Verification record
 
+This is the initial application verification record. See [DESIGN-UPDATE.md](DESIGN-UPDATE.md) for the later official-brand redesign checks and current screenshots; broad backend tests below were not rerun for that presentation update.
+
 Verified on 18 November 2026, using Node.js 22.23.2, Next.js 16.4.6, Vitest 5.1.1, Playwright 1.65.1, installed Google Chrome and an isolated PostgreSQL 16 server. The final browser suite ran against `next start`, not just the development server.
 
 ## Results

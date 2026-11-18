@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, CalendarDays, Sparkles } from "lucide-react";
+import { ArrowRight, CalendarDays } from "lucide-react";
 import type { Booking } from "@/lib/types";
 import { dateLabel } from "@/lib/scheduling";
 import { statusLabels } from "@/lib/status";
@@ -19,9 +19,6 @@ export function BookingList({
   if (!bookings.length)
     return (
       <div className="empty">
-        <span className="service-icon">
-          <Sparkles size={25} />
-        </span>
         <h3>{empty}</h3>
         <p>
           {staff
@@ -30,7 +27,7 @@ export function BookingList({
         </p>
         {!staff && (
           <Link className="btn" href="/dashboard/book">
-            Request a clean <ArrowRight size={15} />
+            Request a clean
           </Link>
         )}
       </div>

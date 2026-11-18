@@ -2,7 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Check, MapPin, RefreshCw } from "lucide-react";
+import { ArrowLeft, Check, MapPin, RefreshCw } from "lucide-react";
 import type {
   Address,
   ArrivalWindow,
@@ -754,7 +754,7 @@ export function BookingFlow({
                 onClick={next}
                 disabled={!loaded || busy}
               >
-                Continue <ArrowRight size={16} />
+                Continue
               </button>
             ) : signedIn ? (
               <button
@@ -764,7 +764,6 @@ export function BookingFlow({
                 onClick={submit}
               >
                 {busy ? "Sending request…" : "Send cleaning request"}
-                <ArrowRight size={16} />
               </button>
             ) : (
               <span className="small muted">Sign in to send</span>
