@@ -311,17 +311,20 @@ test("mobile navigation, all public routes and progressive form stay within the 
     expect(response?.status()).toBe(200);
     await expect(page.locator("h1")).toBeVisible();
     await noOverflow(page);
-    expect(
-      await page
-        .locator("img")
-        .evaluateAll((images) =>
-          images.every(
-            (i) =>
-              (i as HTMLImageElement).complete &&
-              (i as HTMLImageElement).naturalWidth > 0,
+    // Follow normal scrolling before checking lazy images. Responsive variants
+    // hidden by CSS are intentionally not downloaded on this viewport.
+    for (const image of await page.locator("img").all()) {
+      if (!(await image.isVisible())) continue;
+      await image.scrollIntoViewIfNeeded();
+      await expect
+        .poll(() =>
+          image.evaluate(
+            (element: HTMLImageElement) =>
+              element.complete && element.naturalWidth > 0,
           ),
-        ),
-    ).toBeTruthy();
+        )
+        .toBeTruthy();
+    }
   }
   await page.goto("/");
   await page.getByLabel("Open navigation").click();
