@@ -1,5 +1,7 @@
 import { AuthForm, type AuthKind } from "./auth-form";
 import { isConfigured, isDemo } from "@/lib/server/config";
+import { getSession } from "@/lib/server/auth";
+import { redirect } from "next/navigation";
 export async function AuthPage({
   kind,
   searchParams,
@@ -14,6 +16,8 @@ export async function AuthPage({
     !params.next.includes("\\")
       ? params.next
       : "/dashboard";
+  if ((kind === "login" || kind === "signup") && (await getSession()))
+    redirect(next);
   return (
     <AuthForm
       kind={kind}

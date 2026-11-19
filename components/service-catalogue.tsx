@@ -2,6 +2,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
+import { PhotoFrame } from "./photo-frame";
+import { customerEntryHref } from "@/lib/navigation";
 import {
   serviceCatalogue,
   serviceCategories,
@@ -10,7 +12,13 @@ import {
   type ServiceCategory,
 } from "@/lib/service-catalogue";
 
-export function ServiceCatalogue({ featured = false }: { featured?: boolean }) {
+export function ServiceCatalogue({
+  featured = false,
+  dashboardEntry,
+}: {
+  featured?: boolean;
+  dashboardEntry?: "signed-in" | "signed-out";
+}) {
   const [category, setCategory] = useState<ServiceCategory>("home");
   const [selectedId, setSelectedId] = useState("regular");
   const services = featured
@@ -79,15 +87,24 @@ export function ServiceCatalogue({ featured = false }: { featured?: boolean }) {
                 <p>{service.description}</p>
                 <Link
                   className="text-link"
-                  href={serviceDestination(service)}
-                  aria-label={`${service.journey === "booking" ? "Request a clean" : "Get a quote"}: ${service.name}`}
+                  href={
+                    dashboardEntry && service.journey === "booking"
+                      ? customerEntryHref(
+                          dashboardEntry === "signed-in",
+                          service.id,
+                        )
+                      : serviceDestination(service)
+                  }
+                  aria-label={`${service.journey === "booking" ? (dashboardEntry ? "Request Cleaning" : "Request a clean") : "Get a quote"}: ${service.name}`}
                 >
                   {service.journey === "booking"
-                    ? "Request a clean"
+                    ? dashboardEntry
+                      ? "Request Cleaning"
+                      : "Request a clean"
                     : "Get a quote"}
                 </Link>
                 {selected.id === service.id && (
-                  <div className="service-inline-photo">
+                  <PhotoFrame className="service-inline-photo">
                     <Image
                       src={serviceImage(service)}
                       alt={service.alt}
@@ -95,7 +112,7 @@ export function ServiceCatalogue({ featured = false }: { featured?: boolean }) {
                       sizes="(max-width: 640px) 90vw, 1px"
                       style={{ objectPosition: service.position }}
                     />
-                  </div>
+                  </PhotoFrame>
                 )}
               </div>
             </div>
@@ -106,7 +123,7 @@ export function ServiceCatalogue({ featured = false }: { featured?: boolean }) {
             </Link>
           )}
         </div>
-        <figure className="service-explorer-visual">
+        <PhotoFrame className="service-explorer-visual">
           <div className="service-explorer-photo" key={selected.id}>
             <Image
               src={serviceImage(selected)}
@@ -116,7 +133,7 @@ export function ServiceCatalogue({ featured = false }: { featured?: boolean }) {
               style={{ objectPosition: selected.position }}
             />
           </div>
-        </figure>
+        </PhotoFrame>
       </div>
     </div>
   );

@@ -53,12 +53,8 @@ async function noOverflow(page: Page) {
 test("public request draft survives sign-in; staff confirms; customer sees real status history", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/book");
   await expect(page.getByText("DEMO PREVIEW", { exact: true })).toBeVisible();
-  await page
-    .locator(".hero")
-    .getByRole("link", { name: "Request a clean" })
-    .click();
   await page.getByLabel("Property postcode").fill("sw1a1aa");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByLabel("Bedrooms", { exact: true }).selectOption("2");
@@ -333,7 +329,13 @@ test("mobile navigation, all public routes and progressive form stay within the 
   ).toBeVisible();
   await page
     .getByRole("navigation", { name: "Mobile navigation" })
-    .getByRole("link", { name: "Request a clean" })
+    .getByRole("link", { name: "Services", exact: true })
+    .click();
+  await page
+    .getByRole("link", {
+      name: "Request a clean: Regular Domestic Cleaning",
+      exact: true,
+    })
     .click();
   await page.getByLabel("Property postcode").fill("SW1A 1AA");
   await page.getByRole("button", { name: "Continue", exact: true }).click();

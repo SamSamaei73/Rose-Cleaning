@@ -184,9 +184,12 @@ test("the homepage remains readable when enhancement scripts fail to download", 
     page.getByRole("heading", { name: "Clean spaces Better every day" }),
   ).toBeVisible();
   await expect(
-    page.locator(".hero").getByRole("link", { name: "Request a clean" }),
-  ).toHaveAttribute("href", "/book");
+    page
+      .locator(".hero")
+      .getByRole("link", { name: "Request Cleaning", exact: true }),
+  ).toHaveAttribute("href", "/login?next=%2Fdashboard");
   await expect(page.locator(".signature-haze")).toBeHidden();
+  await expect(page.locator(".glass-condensation")).toBeHidden();
   await expect(page.locator(".process-step")).toHaveCount(3);
   for (const step of await page.locator(".process-step").all())
     await expect(step).toBeVisible();

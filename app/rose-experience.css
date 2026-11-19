@@ -70,7 +70,7 @@ html {
   font-size: 13px;
 }
 .mobile-nav.rose-menu {
-  display: block;
+  display: none;
 }
 .menu-trigger,
 .menu-close,
@@ -283,9 +283,8 @@ html {
 }
 .scene-photo {
   position: absolute;
-  overflow: hidden;
-  border-radius: 3px;
-  opacity: 0.8;
+  overflow: visible;
+  opacity: 1;
   box-shadow: 0 14px 45px color-mix(in srgb, var(--night) 35%, transparent);
 }
 .scene-photo img {
@@ -438,6 +437,9 @@ textarea {
   }
 }
 @media (max-width: 850px) {
+  .mobile-nav.rose-menu {
+    display: block;
+  }
   .site-header .header-nav {
     display: none;
   }
@@ -852,5 +854,408 @@ textarea {
   .aperture-frame img,
   .scene-photo {
     transform: none !important;
+  }
+}
+
+/* Reusable copper photographic frames: the photograph stays natural. */
+.photo-frame {
+  --frame-width: 8px;
+  position: relative;
+  isolation: isolate;
+  border: 1px solid var(--copper);
+  border-radius: 9px;
+  background: linear-gradient(
+    135deg,
+    var(--highlight),
+    var(--copper-light) 20%,
+    var(--copper) 55%,
+    var(--burgundy) 82%,
+    var(--copper-light)
+  );
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 20px 32px -20px color-mix(in srgb, var(--night) 65%, transparent),
+    0 3px 5px color-mix(in srgb, var(--night) 14%, transparent);
+}
+.photo-frame::before {
+  content: "";
+  position: absolute;
+  inset: 2px;
+  border: 1px solid color-mix(in srgb, var(--highlight) 55%, transparent);
+  border-right-color: color-mix(in srgb, var(--burgundy) 55%, transparent);
+  border-bottom-color: color-mix(in srgb, var(--burgundy) 55%, transparent);
+  border-radius: 7px;
+  pointer-events: none;
+}
+.photo-frame-inset {
+  position: absolute;
+  inset: var(--frame-width);
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--night) 55%, transparent);
+  border-radius: 3px;
+  background: var(--paper);
+  box-shadow:
+    0 1px 0 var(--highlight),
+    0 -1px 2px color-mix(in srgb, var(--night) 50%, transparent);
+}
+.photo-frame-inset img {
+  object-fit: cover;
+}
+.scene-photo.photo-frame {
+  position: absolute;
+}
+.rose-scene .hero-services-link {
+  border: 1px solid var(--copper-light);
+  border-radius: 30px;
+  background: color-mix(in srgb, var(--night) 55%, transparent);
+  color: var(--highlight);
+  padding: 12px 24px;
+  min-height: 50px;
+}
+.rose-scene .hero-services-link:hover {
+  background: var(--burgundy);
+}
+.service-explorer-layout {
+  gap: 7%;
+}
+.service-index-list {
+  display: grid;
+  gap: 10px;
+}
+.service-index-item,
+.service-index-item:last-of-type {
+  padding: 0 22px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: color-mix(in srgb, var(--paper) 80%, var(--pale));
+  transition:
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+.service-index-item[data-selected="true"] {
+  border-color: var(--copper);
+  background: linear-gradient(135deg, var(--paper), var(--pale));
+  box-shadow:
+    inset 0 1px 0 var(--highlight),
+    0 12px 25px -20px var(--burgundy);
+}
+.service-index-item > button {
+  font-size: clamp(22px, 2.05vw, 30px);
+  padding-block: 24px;
+}
+.service-index-detail {
+  padding-right: 0;
+}
+.service-explorer-visual.photo-frame {
+  --frame-width: 12px;
+  overflow: visible;
+  transform: rotate(1deg);
+}
+.service-explorer-photo {
+  animation-duration: 350ms;
+}
+.service-inline-photo.photo-frame {
+  --frame-width: 7px;
+  overflow: visible;
+}
+.service-index-page .service-explorer-visual {
+  top: 125px;
+}
+@media (hover: hover) and (prefers-reduced-motion: no-preference) {
+  .service-index-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 22px -18px var(--burgundy);
+  }
+}
+
+/* The early cleaning scene has no text or controls over its glass surface. */
+.glass-section {
+  padding: 35px 40px 65px;
+  background: var(--night);
+  scroll-margin-top: 100px;
+}
+.glass-photo-frame {
+  --frame-width: 12px;
+  max-width: 1360px;
+  height: min(70svh, 720px);
+  min-height: 500px;
+  margin: auto;
+}
+.glass-surface {
+  --glass-bands: 3;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  isolation: isolate;
+}
+.glass-surface > img {
+  object-fit: cover;
+  object-position: 50% 56%;
+}
+.glass-condensation,
+.glass-tool-track,
+.glass-polish {
+  display: none;
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.glass-surface[data-glass-ready="true"]
+  :is(.glass-condensation, .glass-tool-track, .glass-polish) {
+  display: block;
+}
+.glass-mist-band {
+  --clear: 0%;
+  position: absolute;
+  width: 100%;
+  height: calc(100% / var(--glass-bands));
+  top: 0;
+  background:
+    radial-gradient(
+        ellipse at 40% 30%,
+        color-mix(in srgb, var(--highlight) 45%, transparent) 0 1px,
+        transparent 2px
+      )
+      0 0 / 23px 31px,
+    linear-gradient(
+      120deg,
+      color-mix(in srgb, var(--paper) 50%, transparent),
+      color-mix(in srgb, var(--pale) 30%, transparent)
+    );
+  backdrop-filter: blur(4px);
+  clip-path: inset(0 0 0 clamp(0%, var(--clear), 100%));
+}
+.glass-mist-band[data-band="1"] {
+  top: calc(100% / var(--glass-bands));
+}
+.glass-mist-band[data-band="2"] {
+  top: calc(200% / var(--glass-bands));
+}
+.glass-tool-track {
+  --glass-x: -10%;
+  --glass-y: 0%;
+  transform: translate3d(var(--glass-x), var(--glass-y), 0);
+  opacity: 0;
+}
+.glass-squeegee {
+  position: absolute;
+  height: calc(100% / var(--glass-bands) / 0.9);
+  width: auto;
+  left: 0;
+  top: 0;
+  /* Blade starts at 5/80 in x and 8/160 in y, and covers 144/160 in y. */
+  transform: translate(-6.25%, -5%);
+  filter: drop-shadow(
+    3px 5px 3px color-mix(in srgb, var(--night) 30%, transparent)
+  );
+}
+.glass-polish {
+  opacity: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 30%,
+    color-mix(in srgb, var(--highlight) 60%, transparent) 48%,
+    var(--highlight) 50%,
+    transparent 70%
+  );
+}
+
+/* About is deliberately static and does not mount the homepage motion runtime. */
+.about-static {
+  max-width: 1240px;
+  padding-bottom: 85px;
+}
+.about-static-heading {
+  padding-block: 55px 60px;
+  max-width: 800px;
+}
+.about-static-heading h1 {
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 400;
+  margin-bottom: 18px;
+}
+.about-static-heading p {
+  font-size: 17px;
+}
+.about-static-intro {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  gap: 9%;
+}
+.about-portrait {
+  aspect-ratio: 1.06;
+}
+.about-static h2 {
+  font-size: clamp(28px, 3.2vw, 42px);
+  font-weight: 400;
+  margin-bottom: 24px;
+}
+.about-static-intro p {
+  margin-bottom: 22px;
+}
+.about-static-details {
+  margin-top: 80px;
+  padding-top: 55px;
+  border-top: 1px solid var(--border);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 9%;
+}
+.about-static-details h2 {
+  font-size: 30px;
+}
+.about-service-types {
+  display: flex;
+  gap: 8px 18px;
+  flex-wrap: wrap;
+  list-style: none;
+  padding: 0;
+  margin: 24px 0;
+  font-size: 14px;
+  color: var(--berry);
+}
+.about-service-area {
+  margin-top: 55px;
+  padding-top: 25px;
+  border-top: 1px solid var(--border);
+  font-size: 14px;
+}
+.portal-account-actions {
+  margin-top: 18px;
+}
+.dashboard-actions {
+  flex-shrink: 0;
+}
+.selected-service {
+  padding: 16px 20px;
+  background: var(--pale);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  font-size: 14px;
+}
+@media (max-width: 1000px) {
+  .dashboard-actions {
+    flex-shrink: 1;
+  }
+}
+@media (max-width: 850px) {
+  .portal-sidebar {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 8px;
+  }
+  .portal-account-actions {
+    margin: 0;
+  }
+  .portal-account-actions .btn {
+    padding-inline: 12px;
+  }
+}
+@media (max-width: 700px) {
+  .about-static-heading {
+    padding-block: 35px 40px;
+  }
+  .about-static-intro,
+  .about-static-details {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 35px;
+  }
+  .about-static-details {
+    margin-top: 45px;
+    padding-top: 35px;
+  }
+  .about-static {
+    padding-bottom: 55px;
+  }
+}
+@media (max-width: 640px) {
+  .photo-frame {
+    --frame-width: 6px;
+  }
+  .rose-scene .hero-lower .actions {
+    gap: 12px;
+  }
+  .rose-scene .hero-services-link {
+    padding-inline: 18px;
+  }
+  .service-index-item,
+  .service-index-item:last-of-type {
+    padding-inline: 17px;
+  }
+  .service-index-item > button,
+  .service-index-page .service-index-item > button {
+    font-size: 23px;
+  }
+  .service-index-detail p {
+    font-size: 14px;
+  }
+  .glass-section {
+    padding: 20px 16px 40px;
+  }
+  .glass-photo-frame {
+    --frame-width: 7px;
+    min-height: 330px;
+    height: 55svh;
+    max-height: 470px;
+  }
+  .glass-surface {
+    --glass-bands: 2;
+  }
+  .glass-mist-band {
+    backdrop-filter: none;
+  }
+  .glass-mist-band[data-band="2"] {
+    display: none;
+  }
+  .dashboard-actions {
+    width: 100%;
+  }
+  .dashboard-actions .btn {
+    flex: 1 1 auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .glass-surface[data-glass-ready="true"]
+    :is(.glass-condensation, .glass-tool-track, .glass-polish) {
+    display: none;
+  }
+}
+@media (max-width: 640px) {
+  .cinematic-hero.rose-scene {
+    min-height: max(820px, 100svh);
+  }
+  .rose-scene .cinematic-hero-content {
+    padding-top: 365px;
+  }
+  .scene-photo-one,
+  .scene-photo-two,
+  .scene-photo-three,
+  .scene-photo-four {
+    display: block;
+    width: 35%;
+    height: 105px;
+    bottom: auto;
+  }
+  .scene-photo-one {
+    left: 10%;
+    top: 110px;
+    transform: rotate(-3deg);
+  }
+  .scene-photo-two {
+    right: 10%;
+    top: 115px;
+    transform: rotate(3deg);
+  }
+  .scene-photo-three {
+    left: 10%;
+    top: 230px;
+    transform: rotate(2deg);
+  }
+  .scene-photo-four {
+    right: 10%;
+    top: 235px;
+    transform: rotate(-2deg);
   }
 }

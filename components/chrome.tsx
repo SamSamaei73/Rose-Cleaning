@@ -7,6 +7,7 @@ import { ActionButton } from "./ui";
 import { brand } from "@/lib/brand";
 import { getSession } from "@/lib/server/auth";
 import { isDemo } from "@/lib/server/config";
+import { customerEntryHref } from "@/lib/navigation";
 export function DemoBar() {
   if (!isDemo()) return null;
   return (
@@ -32,10 +33,11 @@ export async function Header() {
     <HeaderShell>
       <div className="container header-inner">
         <div className="header-left">
-          <MobileNav signedIn={Boolean(session)} />
+          <MobileNav />
           <nav className="header-nav" aria-label="Main navigation">
+            <NavLink href="/">Home</NavLink>
             <NavLink href="/services">Services</NavLink>
-            <NavLink href="/about">About Rose</NavLink>
+            <NavLink href="/about">About</NavLink>
             <NavLink href="/contact">Contact</NavLink>
           </nav>
         </div>
@@ -51,13 +53,10 @@ export async function Header() {
                 ? session.role === "staff"
                   ? "/staff"
                   : "/dashboard"
-                : "/login"
+                : customerEntryHref(false)
             }
           >
-            {session ? "My account" : "Log in"}
-          </Link>
-          <Link className="btn small" href="/book">
-            Request a clean
+            {session ? "Dashboard" : "Login"}
           </Link>
         </div>
       </div>
@@ -67,9 +66,6 @@ export async function Header() {
 export function Footer() {
   return (
     <footer className="site-footer">
-      <div className="container footer-signature" aria-hidden="true">
-        <span>Rose</span>
-      </div>
       <div className="container footer-grid">
         <div>
           <Brand />

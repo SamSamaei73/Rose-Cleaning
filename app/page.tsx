@@ -8,7 +8,10 @@ import {
 } from "@/components/cinematic-sections";
 import { ServiceCatalogue } from "@/components/service-catalogue";
 import { CleaningReveal } from "@/components/cleaning-reveal";
-import { RoseScene, RoseAperture } from "@/components/rose-scene";
+import { RoseScene } from "@/components/rose-scene";
+import { GlassReveal } from "@/components/glass-reveal";
+import { getSession } from "@/lib/server/auth";
+import { customerEntryHref } from "@/lib/navigation";
 const faqs = [
   [
     "Is my request confirmed straight away?",
@@ -27,11 +30,13 @@ const faqs = [
     "Yes. Registration is free; cleaning services are paid. No payment is collected through this website at this stage.",
   ],
 ];
-export default function Home() {
+export default async function Home() {
+  const signedIn = Boolean(await getSession());
+  const requestHref = customerEntryHref(signedIn);
   return (
     <CinematicMotion className="cinema-home">
-      <RoseScene />
-      <RoseAperture />
+      <RoseScene requestHref={requestHref} />
+      <GlassReveal />
       <RoseIntroduction />
       <section className="service-collection container" id="services">
         <div className="collection-heading" data-reveal>
@@ -41,10 +46,13 @@ export default function Home() {
             <em>The same care</em>
           </h2>
         </div>
-        <ServiceCatalogue featured />
+        <ServiceCatalogue
+          featured
+          dashboardEntry={signedIn ? "signed-in" : "signed-out"}
+        />
       </section>
       <CleaningReveal />
-      <CinematicProcess />
+      <CinematicProcess requestHref={requestHref} />
       <RoseApproach />
       <Removals />
       <section className="container cinematic-faq" aria-labelledby="faq-title">
@@ -63,7 +71,7 @@ export default function Home() {
           ))}
         </div>
       </section>
-      <Cta />
+      <Cta requestHref={requestHref} />
     </CinematicMotion>
   );
 }

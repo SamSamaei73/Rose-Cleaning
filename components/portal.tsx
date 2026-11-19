@@ -8,7 +8,6 @@ import {
   Users,
   Mail,
   SlidersHorizontal,
-  LogOut,
 } from "lucide-react";
 import { ActionButton } from "./ui";
 import { brand } from "@/lib/brand";
@@ -70,15 +69,15 @@ export function PortalShell({
         <div className="side-help">
           <p>Need a hand?</p>
           <a href={brand.phoneHref}>{brand.phone}</a>
-          <div style={{ marginTop: 25 }}>
-            <ActionButton
-              path="auth"
-              body={{ action: "logout" }}
-              className="text-link"
-            >
-              <LogOut size={14} /> Sign out
-            </ActionButton>
-          </div>
+        </div>
+        <div className="portal-account-actions">
+          <ActionButton
+            path="auth"
+            body={{ action: "logout" }}
+            className="btn secondary small"
+          >
+            Log out
+          </ActionButton>
         </div>
       </aside>
       <div className="portal-main">{children}</div>

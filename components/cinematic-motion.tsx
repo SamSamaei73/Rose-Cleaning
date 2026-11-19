@@ -56,40 +56,6 @@ export function CinematicMotion({
               );
             }
             element
-              .querySelectorAll<HTMLElement>("[data-aperture]")
-              .forEach((target) => {
-                if (!CSS.supports("clip-path", "inset(0% 0% round 50%)"))
-                  return;
-                gsap.fromTo(
-                  target,
-                  { clipPath: "inset(8% 20% 8% 20% round 48% 48% 48% 48%)" },
-                  {
-                    clipPath: "inset(0% 0% 0% 0% round 0% 0% 0% 0%)",
-                    ease: "none",
-                    scrollTrigger: {
-                      trigger: target,
-                      start: "top 92%",
-                      end: "center 48%",
-                      scrub: 0.6,
-                    },
-                  },
-                );
-                gsap.fromTo(
-                  target.querySelector("img"),
-                  { scale: 1.12 },
-                  {
-                    scale: 1,
-                    ease: "none",
-                    scrollTrigger: {
-                      trigger: target,
-                      start: "top bottom",
-                      end: "bottom top",
-                      scrub: 0.6,
-                    },
-                  },
-                );
-              });
-            element
               .querySelectorAll<HTMLElement>("[data-reveal]")
               .forEach((target) => {
                 // Never hide a section already visible when a restored page mounts.
@@ -185,6 +151,83 @@ export function CinematicMotion({
                 });
             };
           });
+          media.add(
+            {
+              motion: "(prefers-reduced-motion: no-preference)",
+              mobile: "(max-width: 640px)",
+              desktop: "(min-width: 641px)",
+            },
+            ({ conditions }) => {
+              if (
+                !conditions?.motion ||
+                !CSS.supports("clip-path", "inset(0 0 0 clamp(0%, 50%, 100%))")
+              )
+                return;
+              const surfaces = [
+                ...element.querySelectorAll<HTMLElement>("[data-glass]"),
+              ];
+              surfaces.forEach((surface) => {
+                const count = conditions.mobile ? 2 : 3;
+                const bands = [
+                  ...surface.querySelectorAll<HTMLElement>(".glass-mist-band"),
+                ].slice(0, count);
+                const tool = surface.querySelector(".glass-tool-track");
+                const polish = surface.querySelector(".glass-polish");
+                surface.dataset.glassReady = "true";
+                gsap.set(surface, { "--glass-bands": count });
+                const sweep = gsap.timeline({
+                  scrollTrigger: {
+                    trigger: surface,
+                    start: "top 80%",
+                    end: "bottom 65%",
+                    scrub: 0.5,
+                  },
+                });
+                // The blade height equals one band. Each band's mask and the
+                // tool use identical x positions, so only the swept path clears.
+                bands.forEach((band, index) => {
+                  const start = index * 1.08;
+                  sweep
+                    .set(
+                      tool,
+                      {
+                        "--glass-y": `${(index * 100) / count}%`,
+                        "--glass-x": "-10%",
+                        opacity: 0,
+                      },
+                      start,
+                    )
+                    .fromTo(
+                      band,
+                      { "--clear": "-10%" },
+                      { "--clear": "110%", duration: 1, ease: "none" },
+                      start,
+                    )
+                    .to(
+                      tool,
+                      { "--glass-x": "110%", duration: 1, ease: "none" },
+                      start,
+                    )
+                    .to(tool, { opacity: 1, duration: 0.07 }, start)
+                    .to(tool, { opacity: 0, duration: 0.08 }, start + 0.92);
+                });
+                const finish = count * 1.08;
+                sweep
+                  .fromTo(
+                    polish,
+                    { xPercent: -100, opacity: 0 },
+                    { xPercent: 100, duration: 0.55, ease: "power1.inOut" },
+                    finish,
+                  )
+                  .to(polish, { opacity: 0.3, duration: 0.1 }, finish)
+                  .to(polish, { opacity: 0, duration: 0.15 }, finish + 0.4);
+              });
+              return () =>
+                surfaces.forEach((surface) => {
+                  delete surface.dataset.glassReady;
+                });
+            },
+          );
           media.add(
             "(min-width: 1000px) and (min-height: 650px) and (prefers-reduced-motion: no-preference)",
             () => {

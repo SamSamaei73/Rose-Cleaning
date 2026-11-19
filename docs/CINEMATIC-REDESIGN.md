@@ -18,8 +18,9 @@ Rose adapts that editorial rhythm to real cleaning imagery and its own existing 
 
 | Existing section/route | New treatment | Preserved purpose |
 | --- | --- | --- |
-| Shared header | Transparent homepage overlay, fine navigation rules, active-route markers | Official logo, phone, account, booking and accessible mobile menu |
-| Homepage hero | Full-viewport existing living-room photograph, oversized type, gentle scroll zoom | Clear cleaning identity and request/service actions |
+| Shared header | Floating capsule, horizontal desktop links and a responsive modal menu | Official logo, phone and one Login/Dashboard account action |
+| Homepage hero | Four copper-framed photographs and oversized type | Clear cleaning identity and account/service actions |
+| Early glass reveal | Squeegee clears condensation across one photograph | Lightweight illustrative effect, with a clean reduced-motion fallback |
 | Company introduction | Asymmetric editorial statement with short company description | Rose manages its own staff and service |
 | Featured services | Three selectable editorial rows beside one large changing photograph | Existing service IDs and request destinations |
 | Complete `/services` catalogue | Five category selectors, expandable service descriptions and photographic presentation | All 14 services, office/enquiry destinations, one-off booking link |
@@ -28,8 +29,8 @@ Rose adapts that editorial rhythm to real cleaning imagery and its own existing 
 | Company approach | Large masked photograph and concise expandable explanations | Actual communication and service approach |
 | Rose Removals | Quiet editorial section and existing honest image placeholder | Sister-business relationship, no invented cleaning fleet |
 | FAQ | Two-column editorial heading and native accordions | Pricing, request status, area and free-account information |
-| Final action and footer | Large closing statement and typographic signature | Request, quote, official logo, all contact/legal/account links |
-| `/about` | Editorial introduction, photographic spread and service principles | Known company information only |
+| Final action and footer | Clear closing action and functional footer without the oversized wordmark | Request, quote, official logo, all contact/legal/account links |
+| `/about` | Separate static page with framed photography and concise service principles | Known company information only; no homepage effects |
 | `/contact`, `/office-quote` | Photo/contact column next to a calm form surface | Existing validation, service preselection and persistent submission handlers |
 | Auth/customer/staff pages | Refined shared navigation, spacing, headings, buttons and active sidebar states | Existing authentication, account and operations interfaces |
 
@@ -37,7 +38,7 @@ All photographs are existing local licensed WebP assets; sources remain in `PHOT
 
 ## Implementation
 
-- `components/cinematic-motion.tsx` dynamically imports GSAP 3.15.1 and ScrollTrigger on Home/About only for visitors who allow motion. Catalogue and enquiry pages use CSS interactions without importing the animation runtime. Effects are scoped to the mounted page and reverted on navigation, viewport changes and preference changes.
+- `components/cinematic-motion.tsx` dynamically imports GSAP 3.15.1 and ScrollTrigger on Home only for visitors who allow motion. About, catalogue and enquiry pages do not mount the animation runtime. Effects are scoped to the mounted page and reverted on navigation, viewport changes and preference changes.
 - Native scrolling is retained. There is no Lenis, wheel interception, WebGL or React state update on every scroll frame.
 - Hero movement is a transform; image masks and the wipe follow scroll progress. Below-fold text reveals run once. Essential controls sit outside decorative effects.
 - Pinning is restricted to screens at least 1000px wide and 650px high. The process photograph pins only for the height of the three normal-flow steps, with no artificial extra scrolling space. A visible link skips the story.
@@ -116,3 +117,31 @@ The follow-up reference is [Delta Cafés — About](https://deltacafes.com/en/ab
 - Chrome captures at desktop, tablet and 320–390px mobile widths passed overflow checks. The capture script verified keyboard entry, Escape, logo/favicon loading and no browser errors or failed responses. Landscape menu behaviour was also tested at 844×390. Screenshots are in ignored `.local/mobile-qa/` and `.local/cinematic-qa/`.
 
 The first focused test run caught the menu focus wrapping issue, which was fixed. The fast request test also encountered the existing stale-estimate safeguard; the test now waits for the latest server estimate before acknowledgement, with the safeguard unchanged. Final checks passed against the production demo build. Local preview remains `http://localhost:3005`; connected Supabase and live email remain unverified without credentials.
+
+## Navigation, framed photography and account entry refinement
+
+Verified on 19 November 2026:
+
+- Desktop shows Home, Services, About and Contact; the modal menu is limited to widths up to 850px. Resizing an open menu to desktop closes it, restores scrolling and moves focus to the visible navigation. The header has one Login/Dashboard action and no request button.
+- Homepage Request Cleaning actions use the existing safe login return path to `/dashboard`. Signed-in customers go straight there. Featured-service selections survive login/registration and continue into `/dashboard/book?service=…`; the full services catalogue retains all existing request and quote destinations. View Services is a bordered button.
+- `PhotoFrame` supplies the same copper edge, inset and shadow to all four hero photographs, service photography and the static About portrait. Phones show a simple two-by-two hero composition.
+- The new early glass scene uses one existing photograph, three finite horizontal passes on desktop and two simpler passes on phones. The blade and condensation mask share the same positions. It adds no pinning, dependency or React scroll-state updates. Reduced motion and failed enhancement downloads show the clean image. The existing middle kitchen wipe is unchanged.
+- About is a separate static page. Contact and its submission handlers are unchanged. The footer keeps its official logo and functional links without the oversized ROSE wordmark.
+- The protected dashboard now has a welcome, request entry, real account-owned request list/empty state, profile link and visible logout. Existing authenticated visitors bypass login/registration using the validated return path. No real account receives fictional bookings; authentication, RLS, API handlers, pricing, availability and notification code remain unchanged.
+
+Changed files:
+
+- Pages/styles: `app/page.tsx`, `app/about/page.tsx`, `app/dashboard/page.tsx`, `app/rose-experience.css`.
+- Shared UI: `components/chrome.tsx`, `header-shell.tsx`, `mobile-nav.tsx`, `auth-page.tsx`, `public.tsx`, `portal.tsx`, `cinematic-sections.tsx`, `cinematic-motion.tsx`, `service-catalogue.tsx`, `rose-scene.tsx`; new `components/photo-frame.tsx`, `components/glass-reveal.tsx`, `lib/navigation.ts`.
+- Verification: new `tests/e2e/account-entry.spec.ts`; updated `responsive.spec.ts`, `cinematic.spec.ts`, `journey.spec.ts` and this document.
+
+Validation: targeted ESLint and the production build (including TypeScript) passed. Eleven focused browser tests passed, then three existing regression journeys passed: public request draft through demo sign-in and staff confirmation, Contact submission to the demo inbox, and mobile public navigation/request entry. Browser checks include mask/blade alignment, all 14 catalogue destinations, account routing, protected-page redirects, logout, keyboard focus, resizing, reduced motion, unavailable-animation fallback and 320–1440px layouts. Real Chrome captures in `.local/focused-review/` showed no horizontal overflow, browser exceptions or failed HTTP responses.
+
+All account journeys were tested against the explicit isolated demo backend. A separate unconfigured connected-mode run verified disabled login fields, `/dashboard` redirecting to `/setup`, and auth returning HTTP 503 rather than simulating a session. Real Supabase sign-in cannot be verified until these are supplied:
+
+- `NEXT_PUBLIC_SUPABASE_URL`
+- `NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY`
+- `SUPABASE_SERVICE_ROLE_KEY`
+- `APP_SECRET` (at least 32 characters)
+
+The final production demo is open at `http://localhost:3005`, served from the same-source local copy at `/tmp/rose-cinematic-preview` to avoid workspace iCloud offloading. No deployment, push, real messages or payments occurred. The original `img/Logo.jpeg`, its transparent derivative, all palette tokens and backend configuration remain intact.

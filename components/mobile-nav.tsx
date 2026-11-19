@@ -6,9 +6,8 @@ import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Brand } from "./brand";
 import { brand } from "@/lib/brand";
-import { ActionButton } from "./ui";
 
-export function MobileNav({ signedIn }: { signedIn: boolean }) {
+export function MobileNav() {
   const dialog = useRef<HTMLDialogElement>(null);
   const trigger = useRef<HTMLButtonElement>(null);
   const [open, setOpen] = useState(false);
@@ -23,12 +22,21 @@ export function MobileNav({ signedIn }: { signedIn: boolean }) {
     };
   }, [open]);
 
+  useEffect(() => {
+    const desktop = matchMedia("(min-width: 851px)");
+    const closeOnDesktop = () => {
+      if (desktop.matches && dialog.current?.open) dialog.current.close();
+    };
+    desktop.addEventListener("change", closeOnDesktop);
+    return () => desktop.removeEventListener("change", closeOnDesktop);
+  }, []);
+
   const close = () => dialog.current?.close();
   const links = [
     ["/", "Home"],
-    ["/services", "Our services"],
-    ["/about", "About Rose"],
-    ["/contact", "Get in touch"],
+    ["/services", "Services"],
+    ["/about", "About"],
+    ["/contact", "Contact"],
     ["/office-quote", "Office cleaning"],
   ];
   return (
@@ -59,7 +67,13 @@ export function MobileNav({ signedIn }: { signedIn: boolean }) {
         aria-label="Rose navigation"
         onClose={() => {
           setOpen(false);
-          trigger.current?.focus();
+          if (trigger.current?.getClientRects().length) trigger.current.focus();
+          else
+            (
+              document.querySelector<HTMLElement>(
+                '.header-nav a[aria-current="page"]',
+              ) || document.querySelector<HTMLElement>(".header-nav a")
+            )?.focus();
         }}
         onClick={(event) => {
           if (event.target === event.currentTarget) close();
@@ -110,18 +124,6 @@ export function MobileNav({ signedIn }: { signedIn: boolean }) {
                   {label}
                 </Link>
               ))}
-              <Link href="/book" className="navigation-request">
-                Request a clean
-              </Link>
-              {signedIn && (
-                <ActionButton
-                  path="auth"
-                  body={{ action: "logout" }}
-                  className="navigation-signout"
-                >
-                  Sign out
-                </ActionButton>
-              )}
             </nav>
             <div className="navigation-photo">
               <Image

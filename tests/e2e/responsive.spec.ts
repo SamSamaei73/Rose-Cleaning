@@ -50,7 +50,7 @@ test("mobile pages, account navigation and form fields fit narrow screens", asyn
   await page.setViewportSize({ width: 320, height: 812 });
   for (const path of ["/dashboard", "/dashboard/book", "/dashboard/settings"]) {
     await page.goto(path);
-    await expect(page.locator(".header-login")).toHaveText("My account");
+    await expect(page.locator(".header-login")).toHaveText("Dashboard");
     await fits(page);
   }
   await page.request.post("/api/demo", {
@@ -68,11 +68,27 @@ test("mobile pages, account navigation and form fields fit narrow screens", asyn
   }
 });
 
-test("floating navigation remains usable, traps focus and restores it after closing", async ({
+test("desktop links and mobile navigation adapt, trap focus and restore scrolling on resize", async ({
   page,
 }) => {
+  for (const width of [1440, 1024, 851]) {
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("/");
+    const navigation = page.getByRole("navigation", {
+      name: "Main navigation",
+    });
+    for (const label of ["Home", "Services", "About", "Contact"])
+      await expect(
+        navigation.getByRole("link", { name: label, exact: true }),
+      ).toBeVisible();
+    await expect(page.getByLabel("Open navigation")).toBeHidden();
+    await expect(
+      page.locator("header").getByRole("link", { name: /Request/ }),
+    ).toHaveCount(0);
+    await expect(page.locator(".header-login")).toHaveText("Login");
+    await fits(page);
+  }
   for (const viewport of [
-    { width: 1440, height: 1000 },
     { width: 320, height: 640 },
     { width: 844, height: 390 },
   ]) {
@@ -97,39 +113,147 @@ test("floating navigation remains usable, traps focus and restores it after clos
     await expect(page.getByLabel("Open navigation")).toBeFocused();
     await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
     await page.getByLabel("Open navigation").click();
-    await dialog
-      .getByRole("link", { name: "Our services", exact: true })
-      .click();
+    await dialog.getByRole("link", { name: "Services", exact: true }).click();
     await expect(page).toHaveURL(/\/services$/);
     await expect(dialog).toBeHidden();
     await fits(page);
   }
+  await page.getByLabel("Open navigation").click();
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await expect(
+    page.getByRole("dialog", { name: "Rose navigation" }),
+  ).toBeHidden();
+  await expect(page.locator("body")).not.toHaveCSS("overflow", "hidden");
+  await expect(
+    page.locator('.header-nav a[aria-current="page"]'),
+  ).toBeFocused();
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByLabel("Open navigation").click();
+  await expect(
+    page.getByRole("dialog", { name: "Rose navigation" }),
+  ).toBeVisible();
 });
 
-test("photographic aperture follows scroll and restores the clean static state for reduced motion", async ({
+test("About is a separate static page with no homepage cleaning effects", async ({
   page,
 }) => {
-  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto("/");
+  await page
+    .locator(".header-nav")
+    .getByRole("link", { name: "About", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/about$/);
+  await expect(
+    page.getByRole("heading", { name: "About Rose", exact: true }),
+  ).toBeVisible();
+  await expect(
+    page.locator(
+      ".cinematic, .rose-scene, [data-glass], [data-wipe], .pin-spacer",
+    ),
+  ).toHaveCount(0);
+  await expect(page.locator(".about-portrait.photo-frame img")).toBeVisible();
+  await expect(page.locator(".footer-signature")).toHaveCount(0);
+  await expect(
+    page.locator("footer").getByRole("link", { name: "Privacy · draft" }),
+  ).toHaveAttribute("href", "/privacy");
+  await page.setViewportSize({ width: 320, height: 812 });
   await page.goto("/about");
-  await expect(page.locator(".cinematic")).toHaveAttribute(
-    "data-motion",
-    "ready",
-  );
-  const frame = page.locator("[data-aperture]");
-  const initial = await frame.evaluate((e) => getComputedStyle(e).clipPath);
-  await frame.evaluate((e) =>
-    window.scrollTo({
-      top: e.getBoundingClientRect().top + scrollY,
-      behavior: "instant",
-    }),
-  );
-  await expect
-    .poll(() => frame.evaluate((e) => getComputedStyle(e).clipPath))
-    .not.toBe(initial);
-  await page.emulateMedia({ reducedMotion: "reduce" });
-  await expect(frame).toHaveCSS("clip-path", "none");
-  await expect(page.locator(".pin-spacer")).toHaveCount(0);
-  await expect(frame.locator("img")).toHaveCSS("transform", "none");
+  await fits(page);
+});
+
+test("the early glass sweep clears only the squeegee path and reduces to a clean static image", async ({
+  page,
+}) => {
+  for (const width of [1440, 390]) {
+    await page.emulateMedia({ reducedMotion: "no-preference" });
+    await page.setViewportSize({ width, height: 1000 });
+    await page.goto("/");
+    const frames = page.locator(".rose-scene .scene-photo.photo-frame");
+    await expect(frames).toHaveCount(4);
+    for (const frame of await frames.all()) await expect(frame).toBeVisible();
+    const surface = page.locator("[data-glass]");
+    await expect(surface).toHaveAttribute("data-glass-ready", "true");
+    await expect(surface.locator("img")).toHaveCount(1);
+    const count = width < 641 ? 2 : 3;
+    const duration = count * 1.08 + 0.55;
+    for (let band = 0; band < count; band++) {
+      await surface.evaluate(
+        (element, progress) => {
+          const rect = element.getBoundingClientRect();
+          const start = rect.top + scrollY - innerHeight * 0.8;
+          const end = rect.bottom + scrollY - innerHeight * 0.65;
+          window.scrollTo({
+            top: start + (end - start) * progress,
+            behavior: "instant",
+          });
+        },
+        (band * 1.08 + 0.5) / duration,
+      );
+      const mist = surface.locator(".glass-mist-band").nth(band);
+      await expect
+        .poll(() =>
+          mist.evaluate((element) =>
+            parseFloat(getComputedStyle(element).getPropertyValue("--clear")),
+          ),
+        )
+        .toBeGreaterThan(40);
+      await expect
+        .poll(() =>
+          surface.evaluate((element, band) => {
+            const surface = element.getBoundingClientRect();
+            const mist = element.querySelectorAll(".glass-mist-band")[band];
+            const clear = parseFloat(
+              getComputedStyle(mist).getPropertyValue("--clear"),
+            );
+            const blade = element
+              .querySelector(".glass-squeegee > rect")!
+              .getBoundingClientRect();
+            return Math.abs(
+              blade.left - (surface.left + (surface.width * clear) / 100),
+            );
+          }, band),
+        )
+        .toBeLessThan(2);
+      await expect(surface.locator(".glass-tool-track")).toHaveCSS(
+        "opacity",
+        "1",
+      );
+      await expect(surface.locator(".glass-tool-track")).toHaveCSS(
+        "pointer-events",
+        "none",
+      );
+      if (band + 1 < count)
+        await expect(
+          surface.locator(".glass-mist-band").nth(band + 1),
+        ).toHaveCSS("--clear", "-10%");
+    }
+    await surface.evaluate((element) =>
+      window.scrollTo({
+        top: element.getBoundingClientRect().bottom + scrollY,
+        behavior: "instant",
+      }),
+    );
+    await expect
+      .poll(() =>
+        surface
+          .locator(".glass-mist-band")
+          .nth(count - 1)
+          .evaluate((element) =>
+            parseFloat(getComputedStyle(element).getPropertyValue("--clear")),
+          ),
+      )
+      .toBeGreaterThan(99);
+    await expect(surface.locator(".glass-tool-track")).toHaveCSS(
+      "opacity",
+      "0",
+    );
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await expect(surface.locator(".glass-condensation")).toBeHidden();
+    await expect(surface.locator(".glass-tool-track")).toBeHidden();
+    await expect(surface.locator(".glass-polish")).toBeHidden();
+    await expect(page.locator(".pin-spacer")).toHaveCount(0);
+    await fits(page);
+  }
 });
 
 test("a narrow-screen customer can complete the request form and calendar", async ({

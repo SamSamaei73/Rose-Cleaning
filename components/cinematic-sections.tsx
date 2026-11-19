@@ -44,7 +44,7 @@ const processSteps = [
     alt: "A bright, empty apartment with a clean tiled floor",
   },
 ];
-export function CinematicProcess() {
+export function CinematicProcess({ requestHref }: { requestHref: string }) {
   return (
     <section
       className="process-section container"
@@ -83,8 +83,8 @@ export function CinematicProcess() {
               <h3>{step.title}</h3>
               <p>{step.text}</p>
               {i === 2 && (
-                <Link href="/book" className="text-link">
-                  Request a clean
+                <Link href={requestHref} className="text-link">
+                  Request Cleaning
                 </Link>
               )}
             </article>
