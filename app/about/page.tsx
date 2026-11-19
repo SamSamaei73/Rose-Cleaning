@@ -8,20 +8,11 @@ export default function About() {
     <CinematicMotion className="about-page">
       <div className="container">
         <div className="editorial-page-heading" data-reveal>
-          <span className="overline">Hello, we’re Rose</span>
           <h1>
-            A little care.
+            A little care
             <br />
-            <em>A big difference.</em>
+            <em>A big difference</em>
           </h1>
-          <div className="heading-bottom">
-            <p>
-              Professional cleaning. Personal care.
-              <br />
-              For homes, workplaces and life in London.
-            </p>
-            <span>Our story starts with your space</span>
-          </div>
         </div>
         <section className="about-spread" aria-labelledby="about-company">
           <div className="about-spread-photo" data-mask>
@@ -34,21 +25,14 @@ export default function About() {
             />
           </div>
           <div className="about-spread-copy" data-reveal>
-            <span className="overline">Managed by Rose</span>
             <h2 id="about-company">
-              Your clean.
+              Your clean
               <br />
-              <em>Our responsibility.</em>
+              <em>Our responsibility</em>
             </h2>
             <p>
-              Rose Professional Cleaning brings cleaning services together under
-              one name. You book with Rose. We manage our staff and the delivery
-              of your service.
-            </p>
-            <p>
-              From the regular routine to a deeper clean or a move, we start by
-              understanding your space. Share your priorities and preferred
-              time; we’ll agree the scope and price before confirming.
+              You book with Rose. We manage our staff and agree your service,
+              time and price before confirming.
             </p>
             <p>
               We serve London. Exact service areas are being finalised, so
@@ -63,16 +47,11 @@ export default function About() {
       <section className="about-principles">
         <div className="container about-principles-inner">
           <div data-reveal>
-            <span className="overline">The Rose approach</span>
             <h2>
-              Thoughtful care.
+              Thoughtful care
               <br />
-              <em>Clear communication.</em>
+              <em>Clear communication</em>
             </h2>
-            <p>
-              One company to speak with, from your first enquiry to your
-              confirmed visit.
-            </p>
           </div>
           <Approach />
         </div>

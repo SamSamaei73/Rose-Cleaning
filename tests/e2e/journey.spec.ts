@@ -84,7 +84,7 @@ test("public request draft survives sign-in; staff confirms; customer sees real 
   await page.getByRole("link", { name: "Create free account" }).click();
   await page.getByRole("button", { name: "Explore the customer demo" }).click();
   await expect(
-    page.getByRole("heading", { name: "Your fresh start, all set out." }),
+    page.getByRole("heading", { name: "Your fresh start, all set out" }),
   ).toBeVisible();
   await expect(
     page.getByText("Flat 2, 14 Fictional Test Lane, London", { exact: false }),

@@ -94,23 +94,58 @@ export function CinematicMotion({
             element
               .querySelectorAll<HTMLElement>("[data-wipe]")
               .forEach((target) => {
-                gsap.fromTo(
-                  target,
-                  { "--wipe": "0%" },
-                  {
-                    "--wipe": "100%",
-                    ease: "none",
+                if (
+                  !CSS.supports("clip-path", "inset(0 0 0 clamp(0%, 50%, 100%))")
+                )
+                  return;
+                target.dataset.cleaningReveal = "active";
+                const sweep = target.querySelector(".signature-sweep");
+                const sheen = target.querySelector(".signature-sheen");
+                // One finite scroll-driven pass. The tool tracks the same edge
+                // as the mask; the final sheen only crosses the cleared image.
+                gsap
+                  .timeline({
                     scrollTrigger: {
                       trigger: target,
                       start: "top 85%",
                       end: "center 42%",
                       scrub: 0.45,
                     },
-                  },
-                );
+                  })
+                  .fromTo(
+                    target,
+                    { "--wipe": "-6%" },
+                    { "--wipe": "106%", duration: 0.78, ease: "none" },
+                    0,
+                  )
+                  .fromTo(
+                    sweep,
+                    { opacity: 0 },
+                    { opacity: 1, duration: 0.06 },
+                    0,
+                  )
+                  .to(sweep, { opacity: 0, duration: 0.06 }, 0.72)
+                  .fromTo(
+                    sheen,
+                    { xPercent: -100 },
+                    { xPercent: 100, duration: 0.22, ease: "power1.inOut" },
+                    0.78,
+                  )
+                  .fromTo(
+                    sheen,
+                    { opacity: 0 },
+                    { opacity: 0.35, duration: 0.07 },
+                    0.78,
+                  )
+                  .to(sheen, { opacity: 0, duration: 0.08 }, 0.92);
               });
             return () => {
               delete element.dataset.motion;
+              element
+                .querySelectorAll<HTMLElement>("[data-wipe]")
+                .forEach((target) => {
+                  delete target.dataset.cleaningReveal;
+                });
             };
           });
           media.add(

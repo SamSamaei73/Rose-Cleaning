@@ -5,7 +5,7 @@ export default function Setup() {
     <div className="container">
       <PageHeading
         eyebrow="Configuration required"
-        title="Connect Rose’s booking portal."
+        title="Connect Rose’s booking portal"
       >
         The public website is ready to explore. Account and booking features
         need a configured backend.

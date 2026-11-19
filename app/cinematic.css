@@ -265,7 +265,7 @@
   }
 }
 .editorial-intro {
-  padding-block: 100px 140px;
+  padding-block: 100px 110px;
   scroll-margin-top: 30px;
 }
 .intro-statement {
@@ -273,7 +273,7 @@
   grid-template-columns: 1.7fr 1fr;
   gap: 80px;
   align-items: end;
-  margin-top: 70px;
+  margin-top: 0;
 }
 .intro-statement h2 {
   font-size: clamp(36px, 4.5vw, 65px);
@@ -295,7 +295,7 @@
   justify-content: space-between;
   align-items: end;
   gap: 35px;
-  margin-block: 58px 62px;
+  margin-block: 0 54px;
 }
 .collection-heading h2,
 .process-heading h2,
@@ -315,7 +315,7 @@
   align-items: start;
 }
 .service-index-list {
-  padding-top: 32px;
+  padding-top: 0;
   min-width: 0;
 }
 .service-index-list > .overline {
@@ -335,7 +335,7 @@
   color: var(--muted);
   padding: 22px 0;
   display: grid;
-  grid-template-columns: 25px 1fr 20px;
+  grid-template-columns: 1fr 20px;
   align-items: baseline;
   text-align: left;
   gap: 16px;
@@ -361,7 +361,7 @@
   justify-self: end;
 }
 .service-index-detail {
-  padding: 0 18px 24px 41px;
+  padding: 0 18px 24px 0;
 }
 .service-index-detail[hidden] {
   display: none;
@@ -462,61 +462,77 @@
   object-fit: cover;
   object-position: 50% 58%;
 }
+/* Decorative layers never receive input; without enhancement the photo is clean. */
 .signature-haze,
-.signature-edge {
+.signature-sweep,
+.signature-sheen {
   display: none;
   pointer-events: none;
   position: absolute;
   inset: 0;
 }
-.cinematic[data-motion="ready"] .signature-haze {
+.cinematic[data-motion="ready"]
+  [data-cleaning-reveal="active"]
+  .signature-haze {
   display: block;
   background: linear-gradient(
     130deg,
-    color-mix(in srgb, var(--paper) 54%, transparent),
-    color-mix(in srgb, var(--pale) 38%, transparent)
+    color-mix(in srgb, var(--paper) 42%, transparent),
+    color-mix(in srgb, var(--pale) 30%, transparent)
   );
-  backdrop-filter: blur(4px) saturate(0.7);
-  clip-path: inset(0 0 0 var(--wipe));
+  backdrop-filter: blur(3px) saturate(0.8);
+  clip-path: inset(0 0 0 clamp(0%, var(--wipe), 100%));
 }
-.cinematic[data-motion="ready"] .signature-edge {
+.cinematic[data-motion="ready"]
+  [data-cleaning-reveal="active"]
+  .signature-sweep {
   display: block;
-  inset: 0 auto 0 var(--wipe);
+  transform: translate3d(var(--wipe), 0, 0);
+  opacity: 0;
+}
+.signature-edge {
+  position: absolute;
+  inset: 0 auto 0 0;
   width: 2px;
   background: linear-gradient(transparent, var(--copper-light), transparent);
-  box-shadow: 0 0 20px color-mix(in srgb, var(--copper-light) 40%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--copper-light) 30%, transparent);
 }
-.signature-caption {
+.signature-squeegee {
   position: absolute;
-  inset: auto 0 0;
-  display: flex;
-  justify-content: space-between;
-  gap: 24px;
-  padding: 75px 40px 28px;
-  color: var(--paper);
-  font-size: 12px;
-  background: linear-gradient(
-    transparent,
-    color-mix(in srgb, var(--night) 75%, transparent)
+  left: -7px;
+  top: 53%;
+  width: 68px;
+  height: 136px;
+  transform: translateY(-50%);
+  filter: drop-shadow(
+    3px 5px 3px color-mix(in srgb, var(--night) 25%, transparent)
   );
 }
-.signature-caption span:last-child {
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-}
-.signature-note {
-  font-size: 10px;
-  text-align: right;
-  padding-top: 14px;
-  padding-bottom: 18px;
+.cinematic[data-motion="ready"]
+  [data-cleaning-reveal="active"]
+  .signature-sheen {
+  display: block;
+  opacity: 0;
+  background: linear-gradient(
+    115deg,
+    transparent 34%,
+    color-mix(in srgb, var(--highlight) 22%, transparent) 46%,
+    var(--highlight) 50%,
+    color-mix(in srgb, var(--highlight) 22%, transparent) 54%,
+    transparent 66%
+  );
 }
 .process-section {
-  padding-block: 120px;
+  padding-block: 100px;
+}
+.process-navigation {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 24px;
 }
 .process-skip.text-link {
   text-transform: none;
-  font-size: 11px;
+  font-size: 13px;
   letter-spacing: 0;
   min-height: 30px;
 }
@@ -596,7 +612,7 @@
   display: grid;
   grid-template-columns: minmax(0, 0.95fr) minmax(0, 1.05fr);
   gap: 12%;
-  margin-top: 65px;
+  margin-top: 0;
   align-items: center;
 }
 .approach-photo {
@@ -616,7 +632,8 @@
   font-size: 14px;
 }
 .approach-copy .approach-list {
-  margin-top: 20px;
+  margin-top: 0;
+  padding-top: 0;
   margin-bottom: 24px;
 }
 .approach-list summary {
@@ -1063,18 +1080,18 @@ body:has(.portal, .auth-layout, .booking-layout) .footer-grid {
     gap: 5%;
   }
   .service-index-item > button {
-    grid-template-columns: 20px 1fr 12px;
+    grid-template-columns: 1fr 16px;
     gap: 10px;
     font-size: 24px;
   }
   .service-index-detail {
-    padding-left: 30px;
+    padding-left: 0;
   }
   .service-explorer-visual {
     aspect-ratio: 0.7;
   }
   .service-index-list {
-    padding-top: 15px;
+    padding-top: 0;
   }
   .service-index-list > .overline {
     margin-bottom: 22px;
@@ -1231,7 +1248,7 @@ body:has(.portal, .auth-layout, .booking-layout) .footer-grid {
     padding-block: 55px 75px;
   }
   .intro-statement {
-    margin-top: 40px;
+    margin-top: 0;
     gap: 28px;
   }
   .intro-statement h2 {
@@ -1247,7 +1264,7 @@ body:has(.portal, .auth-layout, .booking-layout) .footer-grid {
   .collection-heading,
   .process-heading {
     display: block;
-    margin-block: 38px;
+    margin-block: 0 32px;
   }
   .collection-heading h2,
   .process-heading h2,
@@ -1283,10 +1300,11 @@ body:has(.portal, .auth-layout, .booking-layout) .footer-grid {
     font-size: 26px;
     padding-block: 20px;
     gap: 13px;
-    grid-template-columns: 20px 1fr 16px;
+    grid-template-columns: 1fr 16px;
   }
   .service-index-detail {
-    padding-left: 33px;
+    padding-left: 0;
+    padding-right: 0;
     padding-bottom: 21px;
   }
   .service-index-detail p {
@@ -1298,7 +1316,7 @@ body:has(.portal, .auth-layout, .booking-layout) .footer-grid {
   .service-inline-photo {
     display: block;
     position: relative;
-    width: calc(100% + 18px);
+    width: 100%;
     aspect-ratio: 1.2;
     margin-top: 15px;
     background: var(--pale);
@@ -1335,25 +1353,19 @@ body:has(.portal, .auth-layout, .booking-layout) .footer-grid {
   .signature-photo > img {
     object-position: 60% 50%;
   }
-  .cinematic[data-motion="ready"] .signature-haze {
+  .cinematic[data-motion="ready"]
+    [data-cleaning-reveal="active"]
+    .signature-haze {
     backdrop-filter: none;
   }
-  .signature-caption {
-    padding: 45px 24px 20px;
-    font-size: 11px;
-  }
-  .signature-caption span:last-child {
+  .signature-squeegee {
     display: none;
-  }
-  .signature-note {
-    text-align: left;
-    font-size: 9px;
   }
   .process-section {
     padding-block: 65px;
   }
   .process-skip.text-link {
-    font-size: 10px;
+    font-size: 12px;
   }
   .process-story {
     display: block;
@@ -1390,7 +1402,7 @@ body:has(.portal, .auth-layout, .booking-layout) .footer-grid {
   }
   .approach-editorial {
     grid-template-columns: 1fr;
-    margin-top: 35px;
+    margin-top: 0;
     gap: 38px;
   }
   .approach-photo {
@@ -1598,7 +1610,8 @@ body:has(.portal, .auth-layout, .booking-layout) .footer-grid {
     clip-path: none !important;
   }
   .cinematic .signature-haze,
-  .cinematic .signature-edge {
+  .cinematic .signature-sweep,
+  .cinematic .signature-sheen {
     display: none !important;
   }
   .cinematic .cinematic-hero-image {
@@ -1612,4 +1625,9 @@ body:has(.portal, .auth-layout, .booking-layout) .footer-grid {
   .process-number {
     margin-bottom: 20px;
   }
+}
+
+.site-footer .footer-bottom,
+.site-footer .footer-grid .small {
+  font-size: 12px;
 }

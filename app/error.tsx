@@ -2,7 +2,7 @@
 export default function ErrorPage({ reset }: { reset: () => void }) {
   return (
     <div className="container section stack">
-      <h1 style={{ fontSize: 36 }}>We couldn’t load this page.</h1>
+      <h1 style={{ fontSize: 36 }}>We couldn’t load this page</h1>
       <p>
         Your information has not been replaced with demo data. Please try again,
         or check the backend configuration if you are setting up Rose.

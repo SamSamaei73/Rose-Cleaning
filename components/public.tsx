@@ -7,13 +7,11 @@ export function Cta() {
     <section className="closing-section">
       <div className="container cta">
         <div data-reveal>
-          <span className="overline">Leave the cleaning to Rose</span>
           <h2>
             Ready for
             <br />
             <em>a fresh start?</em>
           </h2>
-          <p>Tell us what you need. We’ll agree the details together.</p>
         </div>
         <div className="actions">
           <Link className="btn" href="/book">
@@ -32,9 +30,8 @@ export function Removals() {
     <section className="removals cinematic-removals">
       <div className="container removals-inner">
         <div>
-          <span className="eyebrow">Our sister business</span>
-          <h2>Moving home? Meet Rose Removals.</h2>
-          <p>Ask the team about cleaning and removals for your move.</p>
+          <h2>Moving home? Meet Rose Removals</h2>
+          <p>Ask about cleaning and moving with our sister business.</p>
           <Link href="/contact?subject=Moving%20home" className="text-link">
             Talk about your move
           </Link>
@@ -50,7 +47,6 @@ export function Removals() {
         ) : (
           <div className="removals-note">
             <span>Rose Removals</span>
-            <p>Separate services. A familiar name.</p>
             <small>Original Rose Removals van photograph to follow.</small>
           </div>
         )}
@@ -89,8 +85,7 @@ export function Process() {
       <div className="container section">
         <div className="section-heading">
           <div>
-            <span className="eyebrow">Simply arranged</span>
-            <h2>Your clean, in three steps.</h2>
+            <h2>Your clean, in three steps</h2>
           </div>
         </div>
         <div className="steps">
@@ -121,13 +116,13 @@ export function PageHeading({
   title,
   children,
 }: {
-  eyebrow: string;
+  eyebrow?: string;
   title: string;
   children?: React.ReactNode;
 }) {
   return (
     <div className="page-heading" data-reveal>
-      <span className="eyebrow">{eyebrow}</span>
+      {eyebrow && <span className="eyebrow">{eyebrow}</span>}
       <h1>{title}</h1>
       {children && <p>{children}</p>}
     </div>

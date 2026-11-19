@@ -17,24 +17,17 @@ export function CinematicHero() {
       </div>
       <div className="hero-shade" />
       <div className="cinematic-hero-content">
-        <p className="overline">
-          Rose Professional Cleaning <span>London</span>
-        </p>
         <h1 id="home-title">
           <span className="line-window">
-            <span data-hero-line>Clean spaces.</span>
+            <span data-hero-line>Clean spaces</span>
           </span>
           <span className="line-window">
-            <em data-hero-line>Better every day.</em>
+            <em data-hero-line>Better every day</em>
           </span>
         </h1>
         <div className="hero-lower">
           <div>
-            <p>
-              For the home you live in.
-              <br />
-              The spaces you work in. The life in between.
-            </p>
+            <p>Professional cleaning for homes and workplaces across London.</p>
             <div className="actions">
               <Link href="/book" className="btn">
                 Request a clean
@@ -53,9 +46,6 @@ export function CinematicHero() {
           </a>
         </div>
       </div>
-      <span className="hero-edition" aria-hidden="true">
-        Professional cleaning. Personal care.
-      </span>
     </section>
   );
 }
@@ -63,21 +53,13 @@ export function CinematicHero() {
 export function RoseIntroduction() {
   return (
     <section className="editorial-intro container" id="rose-intro">
-      <div className="section-index" data-reveal>
-        <span>01 / THE ROSE WAY</span>
-        <span>Care, considered.</span>
-      </div>
       <div className="intro-statement" data-reveal>
         <h2>
-          A little less to do.
+          A little less to do
           <br />
-          <em>A little more room for life.</em>
+          <em>A little more room for life</em>
         </h2>
         <div>
-          <p>
-            A fresh home. A welcoming workplace. Rose brings thoughtful cleaning
-            to the spaces that matter to you.
-          </p>
           <p>
             You book with Rose. We manage the team, the service and the details.
           </p>
@@ -92,19 +74,19 @@ export function RoseIntroduction() {
 
 const processSteps = [
   {
-    title: "Choose your clean.",
+    title: "Choose your clean",
     text: "Find the service that fits your space. Share your property details and the things you’d like us to focus on.",
     image: "regular.webp",
     alt: "A woman wiping a kitchen cabinet with a blue cloth",
   },
   {
-    title: "Make it your own.",
+    title: "Make it your own",
     text: "Request your preferred date and arrival window. Review the details and estimate before sending your request.",
     image: "one-off.webp",
     alt: "A person mopping a wooden floor beside a yellow bucket",
   },
   {
-    title: "Leave the details to Rose.",
+    title: "Leave the details to Rose",
     text: "We review the scope, time and price with you. Your visit is confirmed only when Rose confirms it; any alternative is yours to accept.",
     image: "end-of-tenancy.webp",
     alt: "A bright, empty apartment with a clean tiled floor",
@@ -116,8 +98,7 @@ export function CinematicProcess() {
       className="process-section container"
       aria-labelledby="process-title"
     >
-      <div className="section-index">
-        <span>03 / SIMPLY ARRANGED</span>
+      <div className="process-navigation">
         <a href="#after-process" className="text-link process-skip">
           Skip to about Rose
         </a>
@@ -126,13 +107,8 @@ export function CinematicProcess() {
         <h2 id="process-title">
           From a first hello
           <br />
-          <em>to a fresh start.</em>
+          <em>to a fresh start</em>
         </h2>
-        <p>
-          Three simple steps.
-          <br />
-          Clear details, agreed together.
-        </p>
       </div>
       <div className="process-story">
         <div className="process-visual" aria-hidden="true">
@@ -147,9 +123,6 @@ export function CinematicProcess() {
               />
             </div>
           ))}
-          <div className="process-image-caption">
-            Your space. Your priorities. Our care.
-          </div>
         </div>
         <div className="process-steps">
           {processSteps.map((step, i) => (
@@ -174,10 +147,6 @@ export function RoseApproach() {
   return (
     <section className="rose-approach" id="after-process">
       <div className="container">
-        <div className="section-index">
-          <span>04 / PERSONAL CARE</span>
-          <span>Managed by Rose</span>
-        </div>
         <div className="approach-editorial">
           <div className="approach-photo" data-mask>
             <Image
@@ -190,15 +159,10 @@ export function RoseApproach() {
           </div>
           <div className="approach-copy" data-reveal>
             <h2>
-              It’s personal.
+              It’s personal
               <br />
-              <em>It’s your space.</em>
+              <em>It’s your space</em>
             </h2>
-            <p>
-              Professional cleaning starts with understanding what matters to
-              you. With Rose, you have one company to speak with from your first
-              enquiry to your confirmed visit.
-            </p>
             <Approach />
             <Link href="/about" className="text-link">
               More about Rose

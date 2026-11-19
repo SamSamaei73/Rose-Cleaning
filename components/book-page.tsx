@@ -7,7 +7,7 @@ export async function BookPage({ service }: { service?: string }) {
   if (!isDemo() && !isConfigured())
     return (
       <div className="section stack">
-        <h1 style={{ fontSize: 38 }}>Your clean starts here.</h1>
+        <h1 style={{ fontSize: 38 }}>Your clean starts here</h1>
         <p>
           The booking portal needs backend configuration before it can calculate
           and save requests.

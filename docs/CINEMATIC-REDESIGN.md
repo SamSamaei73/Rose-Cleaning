@@ -90,3 +90,16 @@ Connected Supabase/Auth and live Resend cannot be verified without supplied cred
 ## Remaining owner inputs
 
 No new business decisions are required by this presentation update. The existing open items remain: approved prices/service details, service areas, operational windows/durations/capacity, approved policies and legal copy, and the original Rose Removals van photograph. No genuine testimonials or video assets were supplied; neither was fabricated. See `OWNER-INPUTS.md` for the complete launch list.
+
+## Focused copy and cleaning-sweep refinement
+
+Follow-up verified on 19 November 2026:
+
+- Removed trailing full stops from authored public, authentication, booking, customer and staff titles. Paragraph punctuation, questions, customer data and catalogue records remain intact.
+- Removed decorative overlines, photo captions, repeated service titles and filler copy; adjusted the resulting gaps. Form guidance, estimate qualifications, legal notices, stock attribution and request-confirmation information remain available.
+- The existing kitchen reveal now has a small rose-gold SVG squeegee following the clearing edge and a brief finishing sheen. It uses the existing GSAP runtime, stays within the photograph and cannot intercept pointer events. Phones use a simpler sweep; reduced motion, unsupported masks and failed animation downloads leave the clean photograph visible.
+- Updated files are the public page copy, shared presentation components, `app/cinematic.css`, title strings in auth/account/booking/error screens, and the two relevant browser test files. The approved logo, colour tokens, dependencies, database and server business logic are unchanged.
+- Targeted ESLint and the production build (including TypeScript) passed. All four cinematic browser tests passed, followed by the existing request-draft/sign-in/staff-confirmation journey. The title audit covers public, auth, legal, customer and staff screens; the catalogue test checks all 14 service destinations and a demo enquiry.
+- Real Chrome desktop (1440×1000) and mobile (375×812) captures showed no horizontal overflow, title-ending dots, page errors or failed HTTP responses. Sweep, sheen, reduced motion and static fallback were checked. Captures and the report are in ignored `.local/refinement-qa/`.
+
+Preview: `http://localhost:3005`. Verification used the same-source local copy at `/tmp/rose-cinematic-preview` and the explicit isolated demo backend. Connected Supabase authentication and live email were not retested without credentials; no real messages were sent.

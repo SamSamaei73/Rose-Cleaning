@@ -17,7 +17,6 @@ export function ServiceCatalogue({ featured = false }: { featured?: boolean }) {
     ? serviceCatalogue.filter((s) => s.featured)
     : serviceCatalogue.filter((s) => s.category === category);
   const selected = services.find((s) => s.id === selectedId) || services[0];
-  const index = services.indexOf(selected);
   const group = serviceCategories.find((c) => c.id === category)!;
   const prefix = featured ? "featured" : "catalogue";
   return (
@@ -47,15 +46,11 @@ export function ServiceCatalogue({ featured = false }: { featured?: boolean }) {
       {!featured && (
         <div className="category-intro">
           <h2 id="category-title">{group.name}</h2>
-          <p>{group.description}</p>
         </div>
       )}
       <div className="service-explorer-layout">
         <div className="service-index-list" id={`${prefix}-list`}>
-          <p className="overline">
-            {featured ? "Choose your fresh start" : "Explore this collection"}
-          </p>
-          {services.map((service, i) => (
+          {services.map((service) => (
             <div
               className="service-index-item"
               key={service.id}
@@ -71,7 +66,6 @@ export function ServiceCatalogue({ featured = false }: { featured?: boolean }) {
                   if (event.pointerType === "mouse") setSelectedId(service.id);
                 }}
               >
-                <span className="service-index-number">0{i + 1}</span>
                 <span>{service.name}</span>
                 <span className="service-index-toggle" aria-hidden="true">
                   {selected.id === service.id ? "−" : "+"}
@@ -122,12 +116,6 @@ export function ServiceCatalogue({ featured = false }: { featured?: boolean }) {
               style={{ objectPosition: selected.position }}
             />
           </div>
-          <figcaption>
-            <span>{selected.name}</span>
-            <span>
-              0{index + 1} / 0{services.length}
-            </span>
-          </figcaption>
         </figure>
       </div>
     </div>

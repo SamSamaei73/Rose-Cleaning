@@ -6,22 +6,22 @@ import { api, ActionButton, Message } from "./ui";
 export type AuthKind = "login" | "signup" | "forgot" | "reset";
 const copy = {
   login: {
-    title: "Log in to Rose.",
-    subtitle: "Your requests and visits, in one place.",
+    title: "Log in to Rose",
+    subtitle: null,
     button: "Log in",
   },
   signup: {
-    title: "Create your account.",
-    subtitle: "Free to join. A little easier to arrange your clean.",
+    title: "Create your account",
+    subtitle: "Registration is free; cleaning services are paid.",
     button: "Create account",
   },
   forgot: {
-    title: "Reset your password.",
+    title: "Reset your password",
     subtitle: "Enter your email to request a reset link.",
     button: "Request reset link",
   },
   reset: {
-    title: "Choose a new password.",
+    title: "Choose a new password",
     subtitle: "Use at least 12 characters.",
     button: "Update password",
   },
@@ -52,7 +52,7 @@ export function AuthForm({
           <Brand compact />
         </div>
         <h1>{c.title}</h1>
-        <p className="auth-subtitle">{c.subtitle}</p>
+        {c.subtitle && <p className="auth-subtitle">{c.subtitle}</p>}
         {demo && (
           <div className="notice auth-notice">
             Demo preview · Explore a fictional account below. Real sign-in

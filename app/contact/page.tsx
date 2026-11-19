@@ -16,11 +16,10 @@ export default async function Contact({
     <div className="cinematic enquiry-page">
       <div className="container">
         <PageHeading
-          eyebrow="Let’s talk"
           title={
             service
-              ? "Let’s talk about your clean."
-              : "A fresh start begins here."
+              ? "Let’s talk about your clean"
+              : "A fresh start begins here"
           }
         >
           {service
@@ -38,11 +37,6 @@ export default async function Contact({
                 loading="eager"
               />
             </div>
-            <h2>
-              A conversation
-              <br />
-              <em>is a good start.</em>
-            </h2>
             <div className="contact-details">
               <a href={brand.phoneHref}>{brand.phone}</a>
               <a href={brand.secondaryPhoneHref}>{brand.secondaryPhone}</a>
@@ -54,13 +48,12 @@ export default async function Contact({
             </div>
             {brand.hours && <p>{brand.hours}</p>}
             <div className="contact-area">
-              <h3>Here for London.</h3>
+              <h3>Here for London</h3>
               <p>
                 Include your postcode so we can review your location. Exact
                 service areas are being confirmed.
               </p>
               {brand.address && <p>{brand.address}</p>}
-              <p>For cleaning enquiries and questions about Rose Removals.</p>
             </div>
           </aside>
           <ContactForm

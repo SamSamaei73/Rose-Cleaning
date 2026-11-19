@@ -14,7 +14,7 @@ export default async function Staff() {
       <div className="portal-heading">
         <div>
           <span className="eyebrow">Rose operations</span>
-          <h1>A clear view of the day.</h1>
+          <h1>A clear view of the day</h1>
           <p>
             Review new requests, agree the details and look after each visit.
           </p>
@@ -36,12 +36,12 @@ export default async function Staff() {
         ))}
       </div>
       <h2 className="sub-heading">Ready for your review</h2>
-      <BookingList bookings={pending} staff empty="You’re up to date." />
+      <BookingList bookings={pending} staff empty="You’re up to date" />
       <h2 className="sub-heading">Upcoming confirmed visits</h2>
       <BookingList
         bookings={confirmed}
         staff
-        empty="No confirmed visits yet."
+        empty="No confirmed visits yet"
       />
       {proposals.length > 0 && (
         <>

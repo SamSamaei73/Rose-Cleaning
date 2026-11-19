@@ -10,7 +10,7 @@ export function Status({ status }: { status: Booking["status"] }) {
 export function BookingList({
   bookings,
   staff = false,
-  empty = "Your next fresh start begins here.",
+  empty = "Your next fresh start begins here",
 }: {
   bookings: Booking[];
   staff?: boolean;

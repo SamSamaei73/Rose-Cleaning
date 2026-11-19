@@ -11,20 +11,11 @@ export default function Services() {
     <div className="cinematic service-index-page">
       <div className="container">
         <div className="editorial-page-heading" data-reveal>
-          <span className="overline">The Rose collection</span>
           <h1>
             Care for every
             <br />
-            <em>kind of space.</em>
+            <em>kind of space</em>
           </h1>
-          <div className="heading-bottom">
-            <p>
-              For your everyday surroundings.
-              <br />
-              And the details that make a difference.
-            </p>
-            <span>Explore our cleaning services</span>
-          </div>
         </div>
         <ServiceCatalogue />
         <div className="catalogue-notes">

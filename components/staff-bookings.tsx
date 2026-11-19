@@ -132,7 +132,7 @@ export function StaffBookings({
         </div>
       ) : (
         <div className="empty">
-          <h3>No requests match these filters.</h3>
+          <h3>No requests match these filters</h3>
           <p>
             New requests will appear here after a customer submits their clean.
           </p>

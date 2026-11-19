@@ -20,7 +20,7 @@ export default async function Dashboard() {
       <div className="portal-heading">
         <div>
           <span className="eyebrow">A little more room for life</span>
-          <h1>Hello, {session.user.full_name.split(" ")[0] || "there"}.</h1>
+          <h1>Hello, {session.user.full_name.split(" ")[0] || "there"}</h1>
           <p>Your home, your plans and all the details. Right here.</p>
         </div>
         <Link href="/dashboard/book" className="btn">
@@ -51,11 +51,11 @@ export default async function Dashboard() {
       ) : (
         <>
           <h2 className="sub-heading">Pending requests & proposals</h2>
-          <BookingList bookings={pending} empty="Everything is up to date." />
+          <BookingList bookings={pending} empty="Everything is up to date" />
           <h2 className="sub-heading">Your confirmed visits</h2>
           <BookingList
             bookings={upcoming}
-            empty="No confirmed visits just yet."
+            empty="No confirmed visits just yet"
           />
           {past.length > 0 && (
             <>

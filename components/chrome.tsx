@@ -68,16 +68,13 @@ export function Footer() {
   return (
     <footer className="site-footer">
       <div className="container footer-signature" aria-hidden="true">
-        <span>Rose.</span>
-        <p>A little more room for life.</p>
+        <span>Rose</span>
       </div>
       <div className="container footer-grid">
         <div>
           <Brand />
           <p style={{ maxWidth: 270, marginTop: 20 }}>
-            Professional cleaning.
-            <br />
-            Personal care. Across London.
+            Professional cleaning across London.
           </p>
           <p className="small" style={{ marginTop: 14 }}>
             Exact service areas to be confirmed.

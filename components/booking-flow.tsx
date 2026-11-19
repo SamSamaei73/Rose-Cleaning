@@ -272,8 +272,7 @@ export function BookingFlow({
     <div className="booking-flow">
       <div className="flow-heading">
         <div>
-          <span className="eyebrow">Make room for a fresh start</span>
-          <h1>Request your clean.</h1>
+          <h1>Request your clean</h1>
         </div>
       </div>
       {demo && (
@@ -299,11 +298,11 @@ export function BookingFlow({
           <h2 ref={headingRef} tabIndex={-1}>
             {
               [
-                "Let’s find your kind of clean.",
-                "A few details about your home.",
-                "Make the clean your own.",
-                "A time that works for you.",
-                "Your fresh start, all set out.",
+                "Let’s find your kind of clean",
+                "A few details about your home",
+                "Make the clean your own",
+                "A time that works for you",
+                "Your fresh start, all set out",
               ][step]
             }
           </h2>
@@ -706,7 +705,7 @@ export function BookingFlow({
                   className="card stack"
                   style={{ background: "var(--pale)" }}
                 >
-                  <h3>Keep your request together.</h3>
+                  <h3>Keep your request together</h3>
                   <p className="small">
                     Sign in or create a free account to send your request. Your
                     draft will be kept in this browser tab.

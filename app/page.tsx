@@ -33,21 +33,12 @@ export default function Home() {
       <CinematicHero />
       <RoseIntroduction />
       <section className="service-collection container" id="services">
-        <div className="section-index">
-          <span>02 / YOUR KIND OF CLEAN</span>
-          <span>Homes, workplaces & more</span>
-        </div>
         <div className="collection-heading" data-reveal>
           <h2>
-            Different spaces.
+            Different spaces
             <br />
-            <em>The same care.</em>
+            <em>The same care</em>
           </h2>
-          <p>
-            From the everyday routine
-            <br />
-            to the start of a new chapter.
-          </p>
         </div>
         <ServiceCatalogue featured />
       </section>
@@ -57,8 +48,7 @@ export default function Home() {
       <Removals />
       <section className="container cinematic-faq" aria-labelledby="faq-title">
         <div data-reveal>
-          <span className="overline">A little clarity</span>
-          <h2 id="faq-title">Good to know.</h2>
+          <h2 id="faq-title">Good to know</h2>
           <Link href="/contact" className="text-link">
             Talk to the team
           </Link>
