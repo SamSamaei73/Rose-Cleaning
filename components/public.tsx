@@ -4,11 +4,15 @@ import { brand } from "@/lib/brand";
 export { ServiceCards } from "./service-cards";
 export function Cta() {
   return (
-    <section className="container">
-      <div className="cta">
-        <div>
-          <span className="eyebrow">Leave the cleaning to Rose</span>
-          <h2>Make space for a fresh start.</h2>
+    <section className="closing-section">
+      <div className="container cta">
+        <div data-reveal>
+          <span className="overline">Leave the cleaning to Rose</span>
+          <h2>
+            Ready for
+            <br />
+            <em>a fresh start?</em>
+          </h2>
           <p>Tell us what you need. We’ll agree the details together.</p>
         </div>
         <div className="actions">
@@ -25,7 +29,7 @@ export function Cta() {
 }
 export function Removals() {
   return (
-    <section className="removals">
+    <section className="removals cinematic-removals">
       <div className="container removals-inner">
         <div>
           <span className="eyebrow">Our sister business</span>
@@ -122,7 +126,7 @@ export function PageHeading({
   children?: React.ReactNode;
 }) {
   return (
-    <div className="page-heading">
+    <div className="page-heading" data-reveal>
       <span className="eyebrow">{eyebrow}</span>
       <h1>{title}</h1>
       {children && <p>{children}</p>}

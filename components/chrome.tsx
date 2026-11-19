@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { Phone } from "lucide-react";
 import { MobileNav } from "./mobile-nav";
+import { HeaderShell } from "./header-shell";
+import { NavLink } from "./nav-link";
 import { Brand } from "./brand";
 import { ActionButton } from "./ui";
 import { brand } from "@/lib/brand";
@@ -28,13 +30,13 @@ export function DemoBar() {
 export async function Header() {
   const session = await getSession();
   return (
-    <header className="site-header">
+    <HeaderShell>
       <div className="container header-inner">
         <Brand />
         <nav className="header-nav" aria-label="Main navigation">
-          <Link href="/services">Services</Link>
-          <Link href="/about">About Rose</Link>
-          <Link href="/contact">Contact</Link>
+          <NavLink href="/services">Services</NavLink>
+          <NavLink href="/about">About Rose</NavLink>
+          <NavLink href="/contact">Contact</NavLink>
         </nav>
         <div className="header-right">
           <a href={brand.phoneHref} className="header-contact">
@@ -59,12 +61,16 @@ export async function Header() {
           <MobileNav signedIn={Boolean(session)} />
         </div>
       </div>
-    </header>
+    </HeaderShell>
   );
 }
 export function Footer() {
   return (
     <footer className="site-footer">
+      <div className="container footer-signature" aria-hidden="true">
+        <span>Rose.</span>
+        <p>A little more room for life.</p>
+      </div>
       <div className="container footer-grid">
         <div>
           <Brand />

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
+import "./cinematic.css";
 
 // The shared header and demo indicator depend on the current session and
 // runtime configuration, including when a build was created without secrets.

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { NavLink } from "./nav-link";
 import {
   CalendarDays,
   ClipboardList,
@@ -61,10 +61,10 @@ export function PortalShell({
           aria-label={staff ? "Staff navigation" : "Account navigation"}
         >
           {links.map(({ href, label, icon: Icon }) => (
-            <Link href={href} key={href}>
+            <NavLink href={href} key={href}>
               <Icon size={18} strokeWidth={1.6} />
               {label}
-            </Link>
+            </NavLink>
           ))}
         </nav>
         <div className="side-help">

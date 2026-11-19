@@ -1,23 +1,33 @@
 import Link from "next/link";
-import { Cta, PageHeading } from "@/components/public";
 import { ServiceCatalogue } from "@/components/service-catalogue";
+import { Cta } from "@/components/public";
 export const metadata = {
   title: "Our cleaning services",
   description:
-    "Explore Rose's home, office, specialist, outdoor and vehicle cleaning services in London. Request a clean or get a quote.",
+    "Explore Rose's home, office, specialist, outdoor and vehicle cleaning services in London. Request a clean or ask Rose for a quote.",
 };
 export default function Services() {
   return (
-    <>
-      <div className="container services-page">
-        <PageHeading
-          eyebrow="Care for every space"
-          title="Find your kind of clean."
-        >
-          From your daily surroundings to the details that need extra attention.
-        </PageHeading>
+    <div className="cinematic service-index-page">
+      <div className="container">
+        <div className="editorial-page-heading" data-reveal>
+          <span className="overline">The Rose collection</span>
+          <h1>
+            Care for every
+            <br />
+            <em>kind of space.</em>
+          </h1>
+          <div className="heading-bottom">
+            <p>
+              For your everyday surroundings.
+              <br />
+              And the details that make a difference.
+            </p>
+            <span>Explore our cleaning services</span>
+          </div>
+        </div>
         <ServiceCatalogue />
-        <div className="catalogue-foot">
+        <div className="catalogue-notes">
           <p>
             Every request is reviewed by Rose. Scope, availability and price are
             agreed before confirmation.
@@ -29,17 +39,18 @@ export default function Services() {
             </Link>
           </p>
         </div>
-        <details className="service-guidance">
+        <details className="catalogue-scope">
           <summary>What is included, and how are prices agreed?</summary>
           <p>
-            Tell us about your space and priorities. Final options and prices
-            still require approval; newly listed services are quoted
-            individually. Garden services cover cleaning and tidying, not
-            landscaping. Any demo estimate is clearly labelled.
+            Tell Rose about your property, priorities and preferred time. Final
+            service options and prices require approval. Services without
+            configured prices use a quote request. Garden cleaning covers
+            cleaning and tidying outdoor areas, not landscaping. No online
+            payment is collected.
           </p>
         </details>
       </div>
       <Cta />
-    </>
+    </div>
   );
 }
