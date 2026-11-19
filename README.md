@@ -212,7 +212,7 @@ No non-essential tracking is included. Security headers restrict framing, browse
 
 See [the design update record](docs/DESIGN-UPDATE.md) for changed files, focused verification and screenshot locations.
 
-The complete approved `img/Logo.jpeg` is copied intact to `public/brand/Logo.jpeg`. Shared branding uses that image; browser icons are faithful derivatives. Warm copper, burgundy and warm-white design tokens live in `app/globals.css`. The homepage cleaning reveal uses one stock photograph with a masked haze, passive scroll observation and no React state updates per frame. Reduced-motion users and unsupported browsers see the clean final image.
+The complete approved `img/Logo.jpeg` is retained intact alongside an archival public copy. Shared branding uses `public/brand/Logo-transparent.png`, which preserves the original colour pixels with transparency outside the circular badge; browser icons are faithful derivatives. Warm copper, burgundy and warm-white design tokens live in `app/globals.css`. The homepage cleaning reveal uses one stock photograph with a masked haze, passive scroll observation and no React state updates per frame. Reduced-motion users and unsupported browsers see the clean final image.
 
 New photographs are served locally, with sources and licences in `docs/PHOTOGRAPHY.md`. `docs/ASSETS.md` records the logo derivatives and remaining missing imagery. The supplied poster's transcribed service/contact details were used; the poster image and actual Rose Removals van photograph were not present. No poster promotions were activated.
 

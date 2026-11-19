@@ -12,7 +12,8 @@ export const brand = {
   websiteLabel: "rosecleaning.uk",
   instagram: "@rose.professional.cleaning",
   instagramHref: "https://www.instagram.com/rose.professional.cleaning/",
-  logo: "/brand/Logo.jpeg",
+  // Original JPEG artwork with an alpha cutout outside the circular badge.
+  logo: "/brand/Logo-transparent.png",
   logoWidth: 1254,
   logoHeight: 1254,
   // Never represent a stock vehicle as Rose’s own van.
