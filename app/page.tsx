@@ -2,13 +2,13 @@ import Link from "next/link";
 import { Cta, Removals } from "@/components/public";
 import { CinematicMotion } from "@/components/cinematic-motion";
 import {
-  CinematicHero,
   CinematicProcess,
   RoseApproach,
   RoseIntroduction,
 } from "@/components/cinematic-sections";
 import { ServiceCatalogue } from "@/components/service-catalogue";
 import { CleaningReveal } from "@/components/cleaning-reveal";
+import { RoseScene, RoseAperture } from "@/components/rose-scene";
 const faqs = [
   [
     "Is my request confirmed straight away?",
@@ -30,7 +30,8 @@ const faqs = [
 export default function Home() {
   return (
     <CinematicMotion className="cinema-home">
-      <CinematicHero />
+      <RoseScene />
+      <RoseAperture />
       <RoseIntroduction />
       <section className="service-collection container" id="services">
         <div className="collection-heading" data-reveal>

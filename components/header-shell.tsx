@@ -4,7 +4,10 @@ import type { ReactNode } from "react";
 export function HeaderShell({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   return (
-    <header className="site-header" data-overlay={pathname === "/"}>
+    <header
+      className="site-header"
+      data-overlay={pathname === "/" || pathname === "/about"}
+    >
       {children}
     </header>
   );

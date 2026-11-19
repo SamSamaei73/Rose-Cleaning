@@ -2,23 +2,23 @@ import Image from "next/image";
 import Link from "next/link";
 import { Approach, Cta, Removals } from "@/components/public";
 import { CinematicMotion } from "@/components/cinematic-motion";
+import { RoseScene, RoseAperture } from "@/components/rose-scene";
 export const metadata = { title: "About Rose" };
 export default function About() {
   return (
     <CinematicMotion className="about-page">
+      <RoseScene about />
+      <RoseAperture about />
       <div className="container">
-        <div className="editorial-page-heading" data-reveal>
-          <h1>
-            A little care
-            <br />
-            <em>A big difference</em>
-          </h1>
-        </div>
-        <section className="about-spread" aria-labelledby="about-company">
+        <section
+          className="about-spread rose-company"
+          id="our-approach"
+          aria-labelledby="about-company"
+        >
           <div className="about-spread-photo" data-mask>
             <Image
-              src="/images/photography/regular.webp"
-              alt="A woman carefully wiping a wooden kitchen cabinet with a cloth"
+              src="/images/photography/windows.webp"
+              alt="A gloved hand cleaning a window with a green sponge"
               fill
               sizes="(max-width: 640px) 100vw, 55vw"
               style={{ objectPosition: "50% 40%" }}
@@ -44,7 +44,7 @@ export default function About() {
           </div>
         </section>
       </div>
-      <section className="about-principles">
+      <section className="about-principles rose-principles">
         <div className="container about-principles-inner">
           <div data-reveal>
             <h2>

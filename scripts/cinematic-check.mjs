@@ -143,7 +143,9 @@ await page.keyboard.press("Escape");
 const mobileEscape = await page
   .locator(".mobile-nav")
   .evaluate(
-    (e) => !e.open && document.activeElement === e.querySelector("summary"),
+    (e) =>
+      !e.querySelector("dialog").open &&
+      document.activeElement === e.querySelector(".menu-trigger"),
   );
 await page.emulateMedia({ reducedMotion: "reduce" });
 await page.setViewportSize({ width: 1440, height: 1000 });

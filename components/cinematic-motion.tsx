@@ -56,6 +56,40 @@ export function CinematicMotion({
               );
             }
             element
+              .querySelectorAll<HTMLElement>("[data-aperture]")
+              .forEach((target) => {
+                if (!CSS.supports("clip-path", "inset(0% 0% round 50%)"))
+                  return;
+                gsap.fromTo(
+                  target,
+                  { clipPath: "inset(8% 20% 8% 20% round 48% 48% 48% 48%)" },
+                  {
+                    clipPath: "inset(0% 0% 0% 0% round 0% 0% 0% 0%)",
+                    ease: "none",
+                    scrollTrigger: {
+                      trigger: target,
+                      start: "top 92%",
+                      end: "center 48%",
+                      scrub: 0.6,
+                    },
+                  },
+                );
+                gsap.fromTo(
+                  target.querySelector("img"),
+                  { scale: 1.12 },
+                  {
+                    scale: 1,
+                    ease: "none",
+                    scrollTrigger: {
+                      trigger: target,
+                      start: "top bottom",
+                      end: "bottom top",
+                      scrub: 0.6,
+                    },
+                  },
+                );
+              });
+            element
               .querySelectorAll<HTMLElement>("[data-reveal]")
               .forEach((target) => {
                 // Never hide a section already visible when a restored page mounts.
@@ -95,7 +129,10 @@ export function CinematicMotion({
               .querySelectorAll<HTMLElement>("[data-wipe]")
               .forEach((target) => {
                 if (
-                  !CSS.supports("clip-path", "inset(0 0 0 clamp(0%, 50%, 100%))")
+                  !CSS.supports(
+                    "clip-path",
+                    "inset(0 0 0 clamp(0%, 50%, 100%))",
+                  )
                 )
                   return;
                 target.dataset.cleaningReveal = "active";
@@ -151,6 +188,20 @@ export function CinematicMotion({
           media.add(
             "(min-width: 1000px) and (min-height: 650px) and (prefers-reduced-motion: no-preference)",
             () => {
+              element
+                .querySelectorAll<HTMLElement>("[data-float]")
+                .forEach((target) => {
+                  gsap.to(target, {
+                    yPercent: Number(target.dataset.float),
+                    ease: "none",
+                    scrollTrigger: {
+                      trigger: target.closest(".rose-scene"),
+                      start: "top top",
+                      end: "bottom top",
+                      scrub: 0.8,
+                    },
+                  });
+                });
               const story =
                 element.querySelector<HTMLElement>(".process-story");
               if (!story) return;

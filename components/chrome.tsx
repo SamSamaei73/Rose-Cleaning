@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Phone } from "lucide-react";
 import { MobileNav } from "./mobile-nav";
 import { HeaderShell } from "./header-shell";
 import { NavLink } from "./nav-link";
@@ -32,15 +31,17 @@ export async function Header() {
   return (
     <HeaderShell>
       <div className="container header-inner">
-        <Brand />
-        <nav className="header-nav" aria-label="Main navigation">
-          <NavLink href="/services">Services</NavLink>
-          <NavLink href="/about">About Rose</NavLink>
-          <NavLink href="/contact">Contact</NavLink>
-        </nav>
+        <div className="header-left">
+          <MobileNav signedIn={Boolean(session)} />
+          <nav className="header-nav" aria-label="Main navigation">
+            <NavLink href="/services">Services</NavLink>
+            <NavLink href="/about">About Rose</NavLink>
+            <NavLink href="/contact">Contact</NavLink>
+          </nav>
+        </div>
+        <Brand compact />
         <div className="header-right">
           <a href={brand.phoneHref} className="header-contact">
-            <Phone size={14} />
             {brand.phone}
           </a>
           <Link
@@ -58,7 +59,6 @@ export async function Header() {
           <Link className="btn small" href="/book">
             Request a clean
           </Link>
-          <MobileNav signedIn={Boolean(session)} />
         </div>
       </div>
     </HeaderShell>

@@ -2,57 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { Approach } from "./public";
 
-export function CinematicHero() {
-  return (
-    <section className="cinematic-hero hero" aria-labelledby="home-title">
-      <div className="cinematic-hero-image">
-        <Image
-          src="/images/photography/hero-home.webp"
-          alt="A light-filled living room with a cream sofa, wooden floor and large windows"
-          fill
-          sizes="100vw"
-          loading="eager"
-          fetchPriority="high"
-        />
-      </div>
-      <div className="hero-shade" />
-      <div className="cinematic-hero-content">
-        <h1 id="home-title">
-          <span className="line-window">
-            <span data-hero-line>Clean spaces</span>
-          </span>
-          <span className="line-window">
-            <em data-hero-line>Better every day</em>
-          </span>
-        </h1>
-        <div className="hero-lower">
-          <div>
-            <p>Professional cleaning for homes and workplaces across London.</p>
-            <div className="actions">
-              <Link href="/book" className="btn">
-                Request a clean
-              </Link>
-              <Link href="/services" className="hero-services-link">
-                View services
-              </Link>
-            </div>
-          </div>
-          <a className="scroll-cue" href="#rose-intro">
-            <span className="scroll-rule" aria-hidden="true" />
-            <span>Discover Rose</span>
-            <span className="scroll-arrow" aria-hidden="true">
-              ↓
-            </span>
-          </a>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 export function RoseIntroduction() {
   return (
-    <section className="editorial-intro container" id="rose-intro">
+    <section className="editorial-intro container">
       <div className="intro-statement" data-reveal>
         <h2>
           A little less to do
