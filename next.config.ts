@@ -1,5 +1,6 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
+  output: process.env.ROSE_BUILD_TARGET === "cpanel" ? "standalone" : undefined,
   poweredByHeader: false,
   devIndicators: false,
   turbopack: { root: process.cwd() },

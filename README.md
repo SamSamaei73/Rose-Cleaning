@@ -36,6 +36,12 @@ The visitor booking draft is stored in `sessionStorage` in the current tab, rest
 
 ## Connected setup
 
+For cPanel hosting, run `npm run build:cpanel` to generate the visible
+`build/rose-cpanel.zip` server package and `build/rose-public-html.zip` public
+website assets. Extract the public assets into `public_html` and keep the server
+package in the private Node application directory. See [the cPanel instructions](docs/CPANEL.md)
+for setup, environment variables and dependency installation.
+
 1. Copy `.env.example` to `.env.local` and leave `APP_MODE=connected`.
 2. Create a Supabase project, or use the Supabase CLI locally:
 
