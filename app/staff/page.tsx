@@ -6,7 +6,7 @@ export const metadata = { title: "Rose operations" };
 export default async function Staff() {
   const s = await requirePageSession(true);
   const all = await listBookings(s);
-  const pending = all.filter((b) => b.status === "pending"),
+  const pending = all.filter((b) => ["pending", "pending_confirmation"].includes(b.status)),
     confirmed = all.filter((b) => b.status === "confirmed"),
     proposals = all.filter((b) => b.status === "alternative_proposed");
   return (

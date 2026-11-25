@@ -1,5 +1,6 @@
 import type { BookingStatus, Role } from "./types";
 export const statusLabels: Record<BookingStatus, string> = {
+  pending_confirmation: "Awaiting confirmation",
   pending: "Pending confirmation",
   alternative_proposed: "Alternative proposed",
   confirmed: "Confirmed",
@@ -16,11 +17,22 @@ export function canTransition(
   if (role === "customer")
     return (
       (to === "cancelled" &&
-        ["pending", "alternative_proposed", "confirmed"].includes(from)) ||
+        [
+          "pending",
+          "pending_confirmation",
+          "alternative_proposed",
+          "confirmed",
+        ].includes(from)) ||
       (from === "alternative_proposed" && to === "confirmed")
     );
   return (
     {
+      pending_confirmation: [
+        "confirmed",
+        "alternative_proposed",
+        "rejected",
+        "cancelled",
+      ],
       pending: ["confirmed", "alternative_proposed", "rejected", "cancelled"],
       alternative_proposed: ["alternative_proposed", "rejected", "cancelled"],
       confirmed: ["completed", "cancelled", "alternative_proposed"],

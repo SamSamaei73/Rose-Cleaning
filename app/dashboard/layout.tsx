@@ -1,5 +1,6 @@
 import { requirePageSession } from "@/lib/server/auth";
 import { PortalShell } from "@/components/portal";
+import "./dashboard.css";
 export const metadata = { robots: { index: false, follow: false } };
 export default async function DashboardLayout({
   children,

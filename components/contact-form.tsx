@@ -23,6 +23,7 @@ export function ContactForm({
       className="form-panel stack"
       onSubmit={async (e) => {
         e.preventDefault();
+        if (busy || message) return;
         setBusy(true);
         setError("");
         const form = new FormData(e.currentTarget);
@@ -38,7 +39,8 @@ export function ContactForm({
             phone: form.get("phone") || "",
             company: form.get("company") || "",
             postcode: form.get("postcode") || "",
-            message: `${selectedService ? `Service requested: ${selectedService.name}\n\n` : ""}${form.get("message") || ""}`,
+            subject: selectedService?.name || (office ? "Office cleaning enquiry" : "General enquiry"),
+            message: form.get("message") || "",
             website: form.get("website") || "",
             idempotencyKey: key.current,
           });

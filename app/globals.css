@@ -1,4 +1,7 @@
 @import "tailwindcss";
+
+.verification-help { margin-top: 20px; font-size: 13px; line-height: 1.7; }
+.verification-help button { align-self: flex-start; text-align: left; }
 @theme inline {
   --color-rose: #8a4b3b;
   --color-berry: #522b29;

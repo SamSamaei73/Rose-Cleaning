@@ -1,9 +1,11 @@
 import { NextResponse } from "next/server";
-import { cookies } from "next/headers";
+import { authenticate } from "@/lib/server/auth-actions";
+import { submitCleaningRequest } from "@/lib/server/cleaning-requests";
+import { saveContact } from "@/lib/server/contact";
 import { randomUUID } from "node:crypto";
 import { z } from "zod";
 import { requireSession } from "@/lib/server/auth";
-import { isDemo, siteUrl } from "@/lib/server/config";
+import { isDemo } from "@/lib/server/config";
 import { demoIdentity, demoState, enterDemo } from "@/lib/server/demo";
 import { supabaseAdmin, supabaseServer } from "@/lib/server/supabase";
 import {
@@ -29,6 +31,7 @@ import {
   addressSchema,
   availabilitySchema,
   contactSchema,
+  cleaningRequestSchema,
   draftSchema,
   estimateSchema,
   pricingSchema,
@@ -173,127 +176,7 @@ export async function POST(
         ),
       });
     }
-    if (path === "auth") {
-      await rateLimit(request, "auth", 15);
-      const input = z
-        .object({
-          action: z.enum([
-            "login",
-            "signup",
-            "forgot",
-            "reset",
-            "magic",
-            "logout",
-          ]),
-          email: z.email().max(254).optional(),
-          password: z.string().max(200).optional(),
-          name: z.string().trim().min(2).max(120).optional(),
-          next: z.string().optional(),
-        })
-        .parse(body);
-      if (input.action === "logout") {
-        if (isDemo()) (await cookies()).delete("rose_demo");
-        else {
-          const { error } = await (await supabaseServer()).auth.signOut();
-          if (error)
-            throw new AppError("Unable to sign out. Please try again.");
-        }
-        return NextResponse.json({ redirect: "/" });
-      }
-      if (isDemo())
-        throw new AppError(
-          "Demo mode uses fictional accounts. Choose “Explore the customer demo”; no password or real email is needed.",
-        );
-      const db = await supabaseServer();
-      const redirectTo = `${siteUrl()}/auth/callback?next=${encodeURIComponent(safeNext(input.next))}`;
-      if (
-        ["signup", "reset"].includes(input.action) &&
-        (!input.password || input.password.length < 12)
-      )
-        throw new AppError("Use a password with at least 12 characters.");
-      if (input.action !== "reset" && !input.email)
-        throw new AppError("Enter your email address.");
-      if (input.action === "login") {
-        if (!input.password) throw new AppError("Enter your password.");
-        const { error } = await db.auth.signInWithPassword({
-          email: input.email!,
-          password: input.password,
-        });
-        if (error)
-          throw new AppError(
-            error.code === "email_not_confirmed"
-              ? "Please verify your email address before signing in."
-              : "We could not sign you in. Check your email and password.",
-          );
-        return NextResponse.json({ redirect: safeNext(input.next) });
-      }
-      if (input.action === "signup") {
-        const { data, error } = await db.auth.signUp({
-          email: input.email!,
-          password: input.password!,
-          options: {
-            data: { full_name: input.name || "" },
-            emailRedirectTo: redirectTo,
-          },
-        });
-        if (error)
-          throw new AppError(
-            "Unable to register. Check your details or try signing in.",
-          );
-        return NextResponse.json(
-          data.session
-            ? { redirect: safeNext(input.next) }
-            : {
-                message:
-                  "Check your inbox for the verification link. If this account already exists, sign in or reset your password.",
-              },
-        );
-      }
-      if (input.action === "forgot") {
-        const { error } = await db.auth.resetPasswordForEmail(input.email!, {
-          redirectTo: `${siteUrl()}/auth/callback?next=/reset-password`,
-        });
-        if (error)
-          throw new AppError(
-            "Unable to request a reset link right now. Please try again.",
-          );
-        return NextResponse.json({
-          message:
-            "If an account matches that email, a reset link has been requested. Check your inbox.",
-        });
-      }
-      if (input.action === "magic") {
-        const { error } = await db.auth.signInWithOtp({
-          email: input.email!,
-          options: { shouldCreateUser: false, emailRedirectTo: redirectTo },
-        });
-        if (error)
-          throw new AppError(
-            "Unable to request a sign-in link right now. Please try again.",
-          );
-        return NextResponse.json({
-          message:
-            "If an account matches that email, a sign-in link has been requested.",
-        });
-      }
-      if (input.action === "reset") {
-        const {
-          data: { user },
-        } = await db.auth.getUser();
-        if (!user) throw new Error("UNAUTHENTICATED");
-        const { error } = await db.auth.updateUser({
-          password: input.password,
-        });
-        if (error)
-          throw new AppError(
-            "Unable to update your password. Request a new reset link and try again.",
-          );
-        return NextResponse.json({
-          message: "Your password has been updated.",
-          redirect: "/dashboard",
-        });
-      }
-    }
+    if (path === "auth") return NextResponse.json(await authenticate(request, body));
     if (path === "estimate") {
       await rateLimit(request, "estimate", 300);
       const draft = estimateSchema.parse(body);
@@ -354,21 +237,18 @@ export async function POST(
             "Demo enquiry saved in this temporary workspace. No email was sent.",
         });
       }
-      const { error } = await supabaseAdmin().rpc("submit_contact", {
-        p_key: value.idempotencyKey,
-        p_value: value,
-      });
-      dbError(error);
-      // Submission success is independent of notification-provider availability.
-      await dispatchNotifications().catch(() => {});
-      return NextResponse.json({
-        message:
-          "Your enquiry has been saved for Rose to review. You can also call 07775 170005.",
-      });
+      return NextResponse.json(await saveContact(value), { status: 202 });
     }
+
     const session = await requireSession(
       path.startsWith("staff/") || path === "notifications/dispatch",
     );
+    if (path === "requests") {
+      await rateLimit(request, `request:${session.user.id}`, 20);
+      const booking = await submitCleaningRequest(session, cleaningRequestSchema.parse(body));
+      await dispatchNotifications().catch(() => {});
+      return NextResponse.json({ booking, message: "Request received — awaiting confirmation from Rose." });
+    }
     if (path === "bookings") {
       await rateLimit(request, `booking:${session.user.id}`, 20);
       const value = requestSchema.parse(body);
@@ -475,17 +355,18 @@ export async function POST(
             customer_id: session.user.id,
           });
       } else {
-        const db = await supabaseServer();
+        const db = supabaseAdmin();
         const result = value.id
           ? await db
               .from("addresses")
-              .update(value)
+              .update({ ...value, updated_at: new Date().toISOString() })
               .eq("id", value.id)
-              .eq("customer_id", session.user.id)
+              .eq("customer_id", session.user.id).select("id").maybeSingle()
           : await db
               .from("addresses")
-              .insert({ ...value, customer_id: session.user.id });
+              .insert({ ...value, customer_id: session.user.id }).select("id").single();
         dbError(result.error);
+        if (!result.data) throw new Error("NOT_FOUND");
       }
       return NextResponse.json({ message: "Address saved." });
     }
@@ -497,14 +378,13 @@ export async function POST(
           (a) => a.id !== id || a.customer_id !== session.user.id,
         );
       } else {
-        const { error } = await (
-          await supabaseServer()
-        )
+        const { data, error } = await supabaseAdmin()
           .from("addresses")
           .delete()
           .eq("id", id)
-          .eq("customer_id", session.user.id);
+          .eq("customer_id", session.user.id).select("id").maybeSingle();
         dbError(error);
+        if (!data) throw new Error("NOT_FOUND");
       }
       return NextResponse.json({ message: "Address removed." });
     }
@@ -729,6 +609,18 @@ export async function POST(
         message:
           "Request marked as under review. No records have been deleted.",
       });
+    }
+    if (path === "staff/notifications/retry") {
+      const { id } = z.object({ id: z.uuid() }).strict().parse(body);
+      if (isDemo()) throw new AppError("Demo previews do not send email.");
+      const db = supabaseAdmin();
+      const { data, error } = await db.from("notifications")
+        .update({ status: "queued", error: null }).eq("id", id)
+        .eq("status", "failed").select("id").maybeSingle();
+      dbError(error);
+      if (!data) throw new AppError("Only a failed send can be retried here. For uncertain sends, reconcile with the provider first.", 409);
+      await dispatchNotifications();
+      return NextResponse.json({ message: "Retry processed. Check the updated provider status below." });
     }
     if (path === "notifications/dispatch") {
       await dispatchNotifications();

@@ -31,6 +31,7 @@ export async function BookingDetail({
     throw e;
   });
   const { booking: b, events, notes } = data;
+  if (!staff && b.customer_id !== session.user.id) notFound();
   const catalogue = await getCatalogue();
   let cleaners = [];
   if (staff) {
@@ -62,7 +63,7 @@ export async function BookingDetail({
       >
         <ArrowLeft size={14} /> Back to {staff ? "requests" : "your account"}
       </Link>
-      {received && b.status === "pending" && (
+      {received && ["pending", "pending_confirmation"].includes(b.status) && (
         <div
           className="notice success"
           style={{
@@ -85,7 +86,7 @@ export async function BookingDetail({
           <span className="eyebrow">Reference {b.id.slice(0, 8)}</span>
           <h1>{b.quote.service}</h1>
           <p>
-            {dateLabel(b.draft.date)} · {w?.label ?? b.draft.windowId}{" "}
+            {dateLabel(b.draft.date)} · {w?.label ?? (b.draft.windowId === "flexible" ? "Flexible time" : b.draft.windowId)}{" "}
             {w ? `${w.start}–${w.end}` : ""} · Europe/London
           </p>
         </div>
@@ -119,7 +120,7 @@ export async function BookingDetail({
             <h2 style={{ fontSize: 22, marginBottom: 15 }}>The details</h2>
             <dl>
               <div className="review-row">
-                <dt>Property</dt>
+                <dt>Property details</dt>
                 <dd>{b.quote.property}</dd>
               </div>
               <div className="review-row">
@@ -167,9 +168,9 @@ export async function BookingDetail({
           </section>
           <section className="card stack">
             <h2 style={{ fontSize: 22 }}>What happens next</h2>
-            {b.status === "pending" && (
+            {["pending", "pending_confirmation"].includes(b.status) && (
               <p className="small">
-                Rose will review the service, property, estimate and time. This
+                Rose will review the service, property, price and preferred time. This
                 request is not a reservation yet.
               </p>
             )}

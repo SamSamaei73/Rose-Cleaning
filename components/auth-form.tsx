@@ -1,6 +1,6 @@
 "use client";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Brand } from "./brand";
 import { api, ActionButton, Message } from "./ui";
 export type AuthKind = "login" | "signup" | "forgot" | "reset";
@@ -43,6 +43,14 @@ export function AuthForm({
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
   const [magic, setMagic] = useState(false);
+  const [email, setEmail] = useState("");
+  const [verification, setVerification] = useState(false);
+  const [cooldown, setCooldown] = useState(0);
+  useEffect(() => {
+    if (!cooldown) return;
+    const timer = setTimeout(() => setCooldown(cooldown - 1), 1000);
+    return () => clearTimeout(timer);
+  }, [cooldown]);
   const c = copy[kind];
   const unavailable = demo || !configured;
   return (
@@ -77,18 +85,25 @@ export function AuthForm({
             setMessage("");
             const form = new FormData(event.currentTarget);
             try {
-              const result = await api<{ redirect?: string; message?: string }>(
-                "auth",
-                {
-                  action: magic ? "magic" : kind,
-                  email: form.get("email") || undefined,
-                  password: form.get("password") || undefined,
-                  name: form.get("name") || undefined,
-                  next,
-                },
-              );
+              const result = await api<{
+                redirect?: string;
+                message?: string;
+                verification?: boolean;
+              }>("auth", {
+                action: magic ? "magic" : kind,
+                email: form.get("email") || undefined,
+                password: form.get("password") || undefined,
+                name: form.get("name") || undefined,
+                next,
+              });
               if (result.redirect) window.location.assign(result.redirect);
-              else setMessage(result.message || "Your request was received.");
+              else {
+                setMessage(result.message || "Your request was received.");
+                if (result.verification) {
+                  setVerification(true);
+                  setCooldown(60);
+                }
+              }
             } catch (e) {
               setError((e as Error).message);
             } finally {
@@ -97,7 +112,10 @@ export function AuthForm({
           }}
         >
           <Message error={error} message={message} />
-          <fieldset className="stack" disabled={unavailable || busy}>
+          <fieldset
+            className="stack"
+            disabled={unavailable || busy || verification}
+          >
             <legend className="sr-only">
               {kind === "signup" ? "Account registration" : "Account access"}
             </legend>
@@ -121,6 +139,8 @@ export function AuthForm({
                   id="auth-email"
                   name="email"
                   type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
                   autoComplete="email"
                   required
                   maxLength={254}
@@ -177,7 +197,10 @@ export function AuthForm({
                 : "Explore the customer demo"}
             </ActionButton>
           ) : (
-            <button className="btn" disabled={busy || !configured}>
+            <button
+              className="btn"
+              disabled={busy || !configured || verification}
+            >
               {busy
                 ? "Please wait…"
                 : magic
@@ -199,6 +222,54 @@ export function AuthForm({
             </button>
           )}
         </form>
+        {!unavailable && (kind === "signup" || kind === "login") && (
+          <div className="verification-help stack">
+            {verification && (
+              <p role="status">
+                Check <strong>{email}</strong> for a verification link. Open it
+                to activate your account.
+              </p>
+            )}
+            <button
+              type="button"
+              className="text-link"
+              disabled={busy || cooldown > 0 || !email}
+              onClick={async () => {
+                setBusy(true);
+                setError("");
+                try {
+                  const result = await api<{ message: string }>("auth", {
+                    action: "resend",
+                    email,
+                  });
+                  setMessage(result.message);
+                  setCooldown(60);
+                } catch (e) {
+                  setError((e as Error).message);
+                  setCooldown(60);
+                } finally {
+                  setBusy(false);
+                }
+              }}
+            >
+              {cooldown > 0
+                ? `Resend available in ${cooldown}s`
+                : "Resend verification email"}
+            </button>
+            {verification && (
+              <button
+                type="button"
+                className="text-link"
+                onClick={() => {
+                  setVerification(false);
+                  setMessage("");
+                }}
+              >
+                Use a different email
+              </button>
+            )}
+          </div>
+        )}
         <div className="auth-bottom">
           {kind === "login" ? (
             <>

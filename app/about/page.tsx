@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
 import { PhotoFrame } from "@/components/photo-frame";
-import { serviceCategories } from "@/lib/service-catalogue";
 
 export const metadata = { title: "About Rose" };
 
@@ -9,8 +8,11 @@ export default function About() {
   return (
     <div className="about-static container">
       <header className="about-static-heading">
-        <h1>About Rose</h1>
-        <p>Professional cleaning for homes and workplaces across London.</p>
+        <h1>Elevating the Art of Cleaning</h1>
+        <p>
+          At Rose Cleaning, we believe a truly clean space is more than spotless
+          — it is a feeling of comfort, elegance and wellbeing.
+        </p>
       </header>
       <section className="about-static-intro" aria-labelledby="about-managed">
         <PhotoFrame className="about-portrait">
@@ -23,15 +25,13 @@ export default function About() {
           />
         </PhotoFrame>
         <div>
-          <h2 id="about-managed">Your clean, coordinated by Rose</h2>
+          <h2 id="about-managed">Tailored to your space</h2>
           <p>
-            You book with Rose Professional Cleaning. We manage our cleaning
-            staff and coordinate your service, from reviewing your request to
-            arranging your visit.
-          </p>
-          <p>
-            Share your space and priorities. We agree the scope, time and
-            complete price with you before confirming.
+            We provide a refined range of professional cleaning services tailored
+            to homes, offices and commercial spaces. From regular domestic
+            cleaning and deep cleaning to end-of-tenancy, move-in and move-out
+            services, our experienced team is committed to delivering exceptional
+            results with care and attention to every detail.
           </p>
           <Link href="/contact" className="btn">
             Contact Rose
@@ -43,32 +43,29 @@ export default function About() {
         aria-label="Our approach and services"
       >
         <article>
-          <h2>Clear communication</h2>
+          <h2>Our services</h2>
           <p>
-            Follow your request and confirmed visits in your account. If Rose
-            proposes a different time or price, you can review it before
-            accepting.
+            Our services include Office &amp; Commercial Cleaning, After-Builders
+            Cleaning, Oven Cleaning, Carpet Cleaning, Window Cleaning, Kitchen
+            &amp; Bathroom Deep Cleaning, Balcony Cleaning, Bin Cleaning, Garden
+            Cleaning and Mobile Car Cleaning.
           </p>
         </article>
         <article>
-          <h2>Care for different spaces</h2>
+          <h2>Exceptional care, every time</h2>
           <p>
-            From regular home cleaning and one-off refreshes to deep cleans, end
-            of tenancy and office enquiries, we help you find the right service.
+            Whether you require a one-off transformation or reliable ongoing
+            care, Rose Cleaning delivers a discreet, professional and
+            consistently high standard of service — leaving every space
+            beautifully clean, fresh and ready to enjoy.
           </p>
-          <ul className="about-service-types">
-            {serviceCategories.map((category) => (
-              <li key={category.id}>{category.name}</li>
-            ))}
-          </ul>
           <Link href="/services" className="btn secondary">
             View Services
           </Link>
         </article>
       </section>
       <p className="about-service-area">
-        We serve London. Exact service areas are being finalised, so please
-        include your postcode when you get in touch.
+        Your space deserves nothing less than exceptional.
       </p>
     </div>
   );

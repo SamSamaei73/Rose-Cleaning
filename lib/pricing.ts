@@ -26,17 +26,20 @@ export function calculateQuote(
   const priced =
     (pricing.demo || pricing.approved) &&
     rate &&
+    draft.bedrooms !== null &&
+    draft.bathrooms !== null &&
     extras.every((e) => pricing.extras[e.id]);
   const baseMinutes = priced
     ? rate.baseMinutes +
-      draft.bedrooms * rate.bedroomMinutes +
-      draft.bathrooms * rate.bathroomMinutes
-    : service.duration_minutes;
+      (draft.bedrooms ?? 0) * rate.bedroomMinutes +
+      (draft.bathrooms ?? 0) * rate.bathroomMinutes
+    : (service.duration_minutes ?? 0);
   const durationMinutes =
     baseMinutes +
     extras.reduce(
       (sum, e) =>
-        sum + (priced ? pricing.extras[e.id].minutes : e.duration_minutes),
+        sum +
+        (priced ? pricing.extras[e.id].minutes : (e.duration_minutes ?? 0)),
       0,
     );
   const baseTotal = priced
@@ -86,7 +89,11 @@ export function calculateQuote(
     version: pricing.version,
     kind: !priced ? "unpriced" : pricing.demo ? "demo" : "approved",
     service: service.name,
-    property: `${draft.bedrooms === 0 ? "Studio" : `${draft.bedrooms}-bedroom`} ${draft.propertyType} · ${draft.bathrooms} bathroom${draft.bathrooms === 1 ? "" : "s"}`,
+    property:
+      draft.propertyDetails ||
+      (draft.bedrooms === null || draft.bathrooms === null
+        ? "Property details to be confirmed"
+        : `${draft.bedrooms === 0 ? "Studio" : `${draft.bedrooms}-bedroom`} ${draft.propertyType} · ${draft.bathrooms} bathroom${draft.bathrooms === 1 ? "" : "s"}`),
     durationMinutes,
     teamSize: service.team_size,
     lines,

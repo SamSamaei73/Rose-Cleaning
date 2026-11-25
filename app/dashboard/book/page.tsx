@@ -1,3 +1,5 @@
+import { redirect } from "next/navigation";
+import { isDemo } from "@/lib/server/config";
 import { BookPage } from "@/components/book-page";
 export const metadata = { title: "Request a clean" };
 export default async function Book({
@@ -5,5 +7,7 @@ export default async function Book({
 }: {
   searchParams: Promise<{ service?: string }>;
 }) {
-  return <BookPage service={(await searchParams).service} />;
+  const { service } = await searchParams;
+  if (!isDemo()) redirect(`/dashboard/requests/new${service ? `?service=${encodeURIComponent(service)}` : ""}`);
+  return <BookPage service={service} />;
 }

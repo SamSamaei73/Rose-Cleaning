@@ -5,6 +5,8 @@ import { isDemo, siteUrl } from "./config";
 import { digest } from "./signing";
 import { supabaseAdmin } from "./supabase";
 const errors: Record<string, [number, string]> = {
+  IDEMPOTENCY_CONFLICT: [409, "This submission was already saved with different details. Start a new request to make changes."],
+  INVALID_REQUEST: [400, "Check your service, property details and preferred date."],
   CLEANER_CONFLICT: [
     409,
     "This cleaner is assigned to an overlapping reserved visit. Choose another cleaner or time.",

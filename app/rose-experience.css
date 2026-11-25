@@ -1105,15 +1105,8 @@ textarea {
 .about-static-details h2 {
   font-size: 30px;
 }
-.about-service-types {
-  display: flex;
-  gap: 8px 18px;
-  flex-wrap: wrap;
-  list-style: none;
-  padding: 0;
-  margin: 24px 0;
-  font-size: 14px;
-  color: var(--berry);
+.about-static-details .btn {
+  margin-top: 24px;
 }
 .about-service-area {
   margin-top: 55px;

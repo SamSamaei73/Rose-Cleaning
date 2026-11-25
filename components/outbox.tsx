@@ -42,6 +42,7 @@ export function Outbox({
                 {s.name}
                 {s.company ? ` · ${s.company}` : ""}
               </h3>
+              <p className="small">Submission reference: {s.id}</p>
               <p className="small">
                 <a className="text-link" href={`mailto:${s.email}`}>
                   {s.email}
@@ -94,6 +95,8 @@ export function Outbox({
                 </p>
               )}
               <pre>{n.body}</pre>
+              {n.submission_id && <p className="small">Submission: {n.submission_id}<br/>Reply-To: {n.reply_to}<br/>Processing attempts: {n.attempts ?? 0}</p>}
+              {n.status === "failed" && <ActionButton path="staff/notifications/retry" body={{id: n.id}}>Retry failed email</ActionButton>}
               {n.provider_id && (
                 <p className="small">Provider reference: {n.provider_id}</p>
               )}

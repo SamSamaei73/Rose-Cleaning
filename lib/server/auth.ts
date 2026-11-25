@@ -40,7 +40,7 @@ export async function requireSession(staff = false) {
   return session;
 }
 export async function requirePageSession(staff = false) {
-  if (!isDemo() && !isConfigured()) redirect("/setup");
+  if (!isDemo() && !isConfigured()) redirect("/login");
   const session = await getSession();
   if (!session) redirect(`/login?next=${staff ? "/staff" : "/dashboard"}`);
   if (staff && session.role !== "staff") redirect("/dashboard");
