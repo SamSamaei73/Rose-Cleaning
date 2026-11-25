@@ -1,9 +1,10 @@
 # Rose infrastructure audit — 25 November 2026
 
 Status: deployment automation is prepared and locally tested. The existing site
-is live, but this work has not yet been deployed. GitHub publication access,
-missing production backend configuration and SSH activation still prevent a
-verified full release. Krystal compatibility and host identity are now confirmed.
+is live, but this work has not yet been deployed. GitHub write access is now
+working and the prepared branch is published. Missing production backend
+configuration and SSH activation still prevent a verified full release. Krystal
+compatibility and host identity are confirmed; Linux CI validation is underway.
 
 ## Verified infrastructure
 
@@ -96,11 +97,21 @@ live application.
 These checks do not prove a Linux artifact or the unpublished release works on
 the real Passenger host. GitHub validation and first production activation
 remain separate completion conditions. Terminal `git push` was rejected by
-automatic approval review. The connected GitHub API also rejected `create_tree`
-with HTTP 403, “Resource not accessible by integration”. The prepared branch is
-committed locally as `codex/krystal-deployment-20261125`; no remote branch, pull
-request, Actions run or application deployment was created. Publication needs
-GitHub Contents/Workflows write access or an authorized manual push from VS Code.
+automatic approval review, so publication used the GitHub connector after its
+repository grant was corrected. Branch `codex/krystal-deployment-20261125` is now
+published and [draft PR #1](https://github.com/SamSamaei73/Rose-Cleaning/pull/1)
+is open. GitHub publication commit `1befa189ae5ea5ae06837e5596b45de4f236ebe6`
+has exactly the same Git tree as local commit
+`60a38ca8a2d67474942af5156e61e82c1169805f`; the existing local history is preserved.
+
+The [first Linux run](https://github.com/SamSamaei73/Rose-Cleaning/actions/runs/45604254788)
+correctly blocked deployment at `npm ci`: the previous lockfile had been resolved
+with the local user's global `legacy-peer-deps=true`, while CI uses normal peer
+resolution. The lockfile was regenerated with the runner's npm 10.9.9 and normal
+peer resolution, preserving dependency versions while correcting `picomatch`
+placement. Repository `.npmrc` now explicitly selects `legacy-peer-deps=false`
+without changing the user's global npm settings. Linux validation must pass on
+the repaired commit before activation.
 
 ## Support and access
 
@@ -129,16 +140,14 @@ key scan matched it exactly. The verified known-hosts entry is saved locally in
 the ignored deployment directory and documented in the runbook. The deployment
 script pins this fingerprint and algorithm with strict host checking enabled.
 
-The GitHub branch remained absent remotely on recheck and the integration still
-returned HTTP 403 for an empty tree permission probe. After the user completed
-GitHub's “Confirm access” authentication, the Authorized GitHub Apps page and
-connector installation list showed that the Codex Connector is installed only
-on a different account, not the owner of Rose-Cleaning. A new installation was
-prepared for **SamSamaei73/Rose-Cleaning only**, with code, Actions and workflows
-write access; final authorization is pending action-time confirmation. Supabase
-is now signed in as the expected GitHub user, but its organizations dashboard
-shows no organizations or projects. The intended production project has not yet
-been identified.
+GitHub initially returned HTTP 403 because the Codex Connector was installed only
+on a different account. After the user completed GitHub verification and approved
+the installation, **SamSamaei73/Rose-Cleaning only** was granted code, Actions and
+workflows write access. Publication through the connector succeeded. Supabase is
+signed in as the expected GitHub user, but its organizations dashboard shows no
+organizations or projects. A focused search of the connected Gmail account also
+found no matching Supabase project/invitation messages. The intended production
+project has not yet been identified.
 
 Official hosting references:
 
