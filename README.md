@@ -2,8 +2,9 @@
 
 Customer accounts and dashboard setup: [docs/CUSTOMER-SETUP.md](docs/CUSTOMER-SETUP.md). Use connected mode for real registration, persistent cleaning requests and owner contact forwarding. See [docs/CPANEL.md](docs/CPANEL.md) for the Node.js deployment package.
 
+Production runs on Krystal at [rosecleaning.uk](https://rosecleaning.uk), with GitHub Actions deployment from `main`. See the [current production status](docs/PRODUCTION-STATUS.md) and [deployment/rollback runbook](docs/DEPLOYMENT.md) before operating the live environment. Email setup and complete customer authentication verification remain outstanding.
 
-A Next.js App Router application for Rose’s public website, customer cleaning requests and initial staff operations. TypeScript, React, Tailwind CSS, Supabase Postgres/Auth, a pluggable email adapter, Vitest and Playwright. Designed for Vercel’s Node.js runtime.
+A Next.js App Router application for Rose’s public website, customer cleaning requests and initial staff operations. TypeScript, React, Tailwind CSS, Supabase Postgres/Auth, a pluggable email adapter, Vitest and Playwright. Runs on a Node.js server.
 
 **A submission is a request until Rose confirms it. No payments are collected.** There are no marketplace accounts, cleaner sign-ups, recurring booking generation, subscriptions or payment integrations.
 

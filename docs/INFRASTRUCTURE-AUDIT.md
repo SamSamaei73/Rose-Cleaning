@@ -1,10 +1,15 @@
 # Rose infrastructure audit — 25 November 2026
 
-Status: deployment automation is prepared and locally tested. The existing site
-is live, but this work has not yet been deployed. GitHub write access is now
-working and the prepared branch is published. Missing production backend
-configuration and SSH activation still prevent a verified full release. Krystal
-compatibility and host identity are confirmed; Linux CI validation is underway.
+Status: the customer application and automatic deployment pipeline are live at
+https://rosecleaning.uk. PR #1 was merged as
+`9f11da0c4acec093c4251394c815d722d2646787`. GitHub Actions run
+[45638451621](https://github.com/SamSamaei73/Rose-Cleaning/actions/runs/45638451621)
+successfully validated and deployed that commit twice. Production health reports
+the matching revision, and readiness confirms Supabase connectivity.
+
+The detailed observations below record the initial audit. The current activation
+and verification evidence, outstanding email configuration, and account-access
+handoffs are in [PRODUCTION-STATUS.md](PRODUCTION-STATUS.md).
 
 ## Verified infrastructure
 

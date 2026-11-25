@@ -1,9 +1,11 @@
 # Rose production deployment
 
 This runbook describes the repository's GitHub Actions deployment to the existing
-Krystal Node application. The audit and activation status are in
-[INFRASTRUCTURE-AUDIT.md](INFRASTRUCTURE-AUDIT.md). The workflows are prepared;
-they must not be described as live until a successful production run is verified.
+Krystal Node application. The pipeline is live: the first production run deployed
+commit `9f11da0c4acec093c4251394c815d722d2646787` on 25 November 2026.
+See [PRODUCTION-STATUS.md](PRODUCTION-STATUS.md) for current verification and
+remaining configuration, and [INFRASTRUCTURE-AUDIT.md](INFRASTRUCTURE-AUDIT.md)
+for the original audit and support findings.
 
 ## Pipeline
 
@@ -26,13 +28,18 @@ Official GitHub actions are pinned to inspected commit SHAs.
 
 ## One-time activation prerequisites
 
+The SSH key, host pin, production environment, Supabase schema/Auth URLs and
+GitHub deployment configuration below have been provisioned. Outbound email and
+the required-check branch rule still need completion; see the status report.
+Keep this checklist for recovery or provisioning another authorized environment.
+
 1. Confirm the existing production Supabase project and apply all reviewed
    migrations in order, with a database backup first. Do not reset a production
    database or run test fixtures against it. Follow
    [CUSTOMER-SETUP.md](CUSTOMER-SETUP.md) for Auth URLs, verification/recovery,
    owner access and email provider configuration.
 2. Enable SSH on the existing Krystal service and authorize the dedicated deploy
-   public key, after the outstanding access approval. Use `restrict` on its
+   public key, with the owner's approval. Use `restrict` on its
    `authorized_keys` entry where supported (no interactive PTY, forwarding or
    agent forwarding). The deploy key still has the cPanel account's filesystem
    access; protect the repository and revoke the key when no longer needed.
