@@ -89,9 +89,14 @@ Only the public Supabase URL and publishable key are supplied to browser builds.
 | Public homepage asset requests | All 22 distinct image/script/style URLs passed |
 | HTTP and www redirects | 301 redirects reach HTTPS apex; path and query preserved |
 | Anonymous dashboard | Redirects to login; Chrome follows the streamed Next.js redirect |
-| Desktop Chrome inspection | Homepage, supplied About copy and connected login form verified; no application console errors observed |
+| Desktop Chrome inspection | Homepage, supplied About copy and connected login form verified; see the console limitation below |
 | Successful production customer sign-in/request | Not yet verified; no controlled production account exists |
 | Email acceptance and delivery | Not verified; sending remains disabled |
+
+During the final tab reattachment, Chrome logged one asynchronous message-channel
+error. The message is typical of browser-extension messaging, but its originating
+extension was not identified. The production console is not claimed to be fully
+silent; the page, assets, health and automated Chromium checks passed.
 
 The current browser viewport override did not change Chrome's measured width.
 Fresh mobile visual inspection on the actual domain is therefore not claimed.
