@@ -144,7 +144,7 @@ test("About is a separate static page with no homepage cleaning effects", async 
     .click();
   await expect(page).toHaveURL(/\/about$/);
   await expect(
-    page.getByRole("heading", { name: "About Rose", exact: true }),
+    page.getByRole("heading", { name: "Elevating the Art of Cleaning", exact: true }),
   ).toBeVisible();
   await expect(
     page.locator(

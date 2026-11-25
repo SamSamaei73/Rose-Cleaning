@@ -63,7 +63,7 @@ export default async function CalendarPage({
           const items = all.filter(
             (b) =>
               b.draft.date === day &&
-              ["pending", "confirmed", "alternative_proposed"].includes(
+              ["pending", "pending_confirmation", "confirmed", "alternative_proposed"].includes(
                 b.status,
               ),
           );

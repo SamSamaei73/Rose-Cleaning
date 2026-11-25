@@ -1,0 +1,34 @@
+name: Roll back Rose
+
+on:
+  workflow_dispatch:
+    inputs:
+      release:
+        description: 'Previously deployed release ID (commit-run-attempt), from the deployment log'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  rollback:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    environment:
+      name: production
+      url: https://rosecleaning.uk
+    concurrency:
+      group: rose-production
+      cancel-in-progress: false
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      - name: Restore and verify a previous release
+        env:
+          ROSE_RELEASE_ID: ${{ inputs.release }}
+          KRYSTAL_SSH_PRIVATE_KEY: ${{ secrets.KRYSTAL_SSH_PRIVATE_KEY }}
+          KRYSTAL_SSH_KNOWN_HOSTS: ${{ vars.KRYSTAL_SSH_KNOWN_HOSTS }}
+        run: bash scripts/deploy-via-ssh.sh rollback "$ROSE_RELEASE_ID"

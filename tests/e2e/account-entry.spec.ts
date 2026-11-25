@@ -35,15 +35,16 @@ test("homepage account actions lead through login to a simple protected dashboar
   await page.getByRole("button", { name: "Explore the customer demo" }).click();
   await expect(page).toHaveURL(/\/dashboard$/);
   await expect(
-    page.getByRole("heading", { name: "No requests yet", exact: true }),
+    page.getByRole("heading", { name: "Your first fresh start awaits", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByRole("link", { name: "Request a Clean", exact: true }).last(),
+    page.locator(".dashboard-welcome").getByRole("link", { name: "Request a clean", exact: true }),
   ).toHaveAttribute("href", "/dashboard/book");
   await page
-    .getByRole("link", { name: "Account & profile", exact: true })
+    .getByRole("navigation", { name: "Account navigation" })
+    .getByRole("link", { name: "Profile & address", exact: true })
     .click();
-  await expect(page).toHaveURL(/\/dashboard\/settings$/);
+  await expect(page).toHaveURL(/\/dashboard\/profile$/);
   await page.goto("/login");
   await expect(page).toHaveURL(/\/dashboard$/);
   await page.goto("/staff");
@@ -55,7 +56,7 @@ test("homepage account actions lead through login to a simple protected dashboar
     await expect(action).toHaveAttribute("href", "/dashboard");
   await account.click();
   await page.getByRole("button", { name: "Log out", exact: true }).click();
-  await expect(page).toHaveURL(/\/$/);
+  await expect(page).toHaveURL(/\/login$/);
   await expect(account).toHaveText("Login");
   await page.goto("/dashboard");
   await expect(page).toHaveURL(/\/login\?next=/);
@@ -78,8 +79,8 @@ test("a homepage service selection survives login and opens the existing request
   await expect(page).toHaveURL(/\/dashboard\?service=deep$/);
   await expect(page.getByText("Selected service: Deep Cleaning")).toBeVisible();
   await page
-    .locator(".dashboard-actions")
-    .getByRole("link", { name: "Request a Clean", exact: true })
+    .locator(".dashboard-welcome")
+    .getByRole("link", { name: "Request a clean", exact: true })
     .click();
   await expect(page).toHaveURL(/\/dashboard\/book\?service=deep$/);
   await expect(

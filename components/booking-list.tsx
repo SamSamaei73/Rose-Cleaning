@@ -26,7 +26,7 @@ export function BookingList({
             : "Choose a service and a preferred time. We’ll keep your request and all its updates together here."}
         </p>
         {!staff && (
-          <Link className="btn" href="/dashboard/book">
+          <Link className="btn" href="/dashboard/requests/new">
             Request a clean
           </Link>
         )}
@@ -47,7 +47,7 @@ export function BookingList({
               }}
             >
               <CalendarDays size={14} />
-              {dateLabel(b.draft.date)} · {b.draft.windowId}
+              {dateLabel(b.draft.date)} · {b.draft.windowId === "flexible" ? "Flexible time" : b.draft.windowId}
             </p>
             <p>
               {staff ? `${b.customer_name} · ` : ""}
@@ -58,7 +58,7 @@ export function BookingList({
             <Status status={b.status} />
             <span style={{ fontSize: 13 }}>{money(b.quote.totalPence)}</span>
             <Link
-              href={`${staff ? "/staff" : "/dashboard"}/bookings/${b.id}`}
+              href={`${staff ? "/staff/bookings" : "/dashboard/requests"}/${b.id}`}
               className="text-link"
             >
               View details <ArrowRight size={14} />

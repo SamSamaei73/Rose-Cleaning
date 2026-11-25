@@ -21,7 +21,7 @@ export function BookingActions({
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false);
   const router = useRouter();
-  const active = ["pending", "alternative_proposed", "confirmed"].includes(
+  const active = ["pending", "pending_confirmation", "alternative_proposed", "confirmed"].includes(
     booking.status,
   );
   const base = { revision: booking.revision };
@@ -29,7 +29,7 @@ export function BookingActions({
     <div className="stack">
       <Message error={error} message={message} />
       <div className="actions">
-        {staff && booking.status === "pending" && (
+        {staff && ["pending", "pending_confirmation"].includes(booking.status) && (
           <ActionButton
             path={`bookings/${booking.id}/action`}
             body={{ ...base, action: "confirm" }}
@@ -47,7 +47,7 @@ export function BookingActions({
           </button>
         )}
         {staff &&
-          ["pending", "alternative_proposed"].includes(booking.status) && (
+          ["pending", "pending_confirmation", "alternative_proposed"].includes(booking.status) && (
             <ActionButton
               path={`bookings/${booking.id}/action`}
               body={{ ...base, action: "reject" }}

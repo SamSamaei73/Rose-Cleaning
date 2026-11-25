@@ -431,7 +431,7 @@ export function BookingFlow({
                   <label htmlFor="bedrooms">Bedrooms</label>
                   <select
                     id="bedrooms"
-                    value={draft.bedrooms}
+                    value={draft.bedrooms ?? ""}
                     onChange={(e) => update("bedrooms", Number(e.target.value))}
                   >
                     {Array.from({ length: 11 }, (_, i) => (
@@ -445,7 +445,7 @@ export function BookingFlow({
                   <label htmlFor="bathrooms">Bathrooms</label>
                   <select
                     id="bathrooms"
-                    value={draft.bathrooms}
+                    value={draft.bathrooms ?? ""}
                     onChange={(e) =>
                       update("bathrooms", Number(e.target.value))
                     }

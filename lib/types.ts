@@ -1,6 +1,7 @@
 export type Mode = "demo" | "connected";
 export type Role = "customer" | "staff";
 export type BookingStatus =
+  | "pending_confirmation"
   | "pending"
   | "alternative_proposed"
   | "confirmed"
@@ -14,7 +15,7 @@ export type Service = {
   detail: string;
   kind: "service" | "extra";
   active: boolean;
-  duration_minutes: number;
+  duration_minutes: number | null;
   team_size: number;
   sort_order: number;
 };
@@ -37,9 +38,10 @@ export type Pricing = {
 export type BookingDraft = {
   postcode: string;
   serviceId: string;
-  propertyType: "flat" | "house";
-  bedrooms: number;
-  bathrooms: number;
+  propertyType: "flat" | "house" | "other";
+  propertyDetails?: string;
+  bedrooms: number | null;
+  bathrooms: number | null;
   address: string;
   extras: string[];
   date: string;
@@ -158,6 +160,10 @@ export type Notification = {
   provider_id: string | null;
   created_at: string;
   error: string | null;
+  reply_to?: string | null;
+  submission_id?: string | null;
+  attempts?: number;
+  attempted_at?: string | null;
 };
 export type Submission = {
   id: string;

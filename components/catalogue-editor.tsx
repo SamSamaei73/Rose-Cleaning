@@ -184,7 +184,7 @@ export function CatalogueEditor({
                   id="catalogue-duration"
                   type="number"
                   name="duration"
-                  defaultValue={selected.duration_minutes}
+                  defaultValue={selected.duration_minutes ?? ""}
                   min={15}
                   max={720}
                   required

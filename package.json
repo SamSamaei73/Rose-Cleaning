@@ -11,10 +11,12 @@
     "start:demo": "APP_MODE=demo next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+    "test": "vitest run && node --test scripts/deployment.test.mjs",
+    "package:release": "node scripts/package-release.mjs",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
-    "test:db": "bash scripts/test-db.sh"
+    "test:db": "bash scripts/test-db.sh",
+    "test:connected": "node --env-file=.env.local scripts/test-connected.mjs"
   },
   "dependencies": {
     "gsap": "3.15.1",

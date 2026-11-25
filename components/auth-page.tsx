@@ -17,7 +17,9 @@ export async function AuthPage({
       ? params.next
       : "/dashboard";
   if ((kind === "login" || kind === "signup") && (await getSession()))
-    redirect(next);
+    redirect("/dashboard");
+  if (kind === "reset" && !(await getSession()))
+    redirect("/forgot-password?error=link-expired");
   return (
     <AuthForm
       kind={kind}

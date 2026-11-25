@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { NavLink } from "./nav-link";
 import {
   CalendarDays,
@@ -37,20 +38,20 @@ export function PortalShell({
       ]
     : [
         { href: "/dashboard", label: "Overview", icon: House },
-        { href: "/dashboard/book", label: "Request a clean", icon: Plus },
+        { href: "/dashboard/requests/new", label: "Request a clean", icon: Plus },
         {
-          href: "/dashboard/bookings",
-          label: "Your requests",
+          href: "/dashboard/requests",
+          label: "My requests",
           icon: CalendarDays,
         },
         {
-          href: "/dashboard/settings",
-          label: "Account & addresses",
+          href: "/dashboard/profile",
+          label: "Profile & address",
           icon: Settings,
         },
       ];
   return (
-    <div className="portal">
+    <div className={`portal${staff ? "" : " customer-portal"}`}>
       <aside className="portal-sidebar">
         <p className="side-label">
           {staff ? "Rose operations" : "Your Rose account"}
@@ -68,6 +69,7 @@ export function PortalShell({
         </nav>
         <div className="side-help">
           <p>Need a hand?</p>
+          <Link href="/contact" className="text-link">Contact Rose</Link>
           <a href={brand.phoneHref}>{brand.phone}</a>
         </div>
         <div className="portal-account-actions">

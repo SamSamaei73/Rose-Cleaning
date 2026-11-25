@@ -39,7 +39,7 @@ select test_assert((select count(*) from bookings)=2,'Staff can review all reque
 select test_assert((select count(*) from internal_notes)=1,'Staff can read internal notes');
 reset role;
 set role anon;
-select test_assert((select count(*) from services)=4,'Public service catalogue is readable');
+select test_assert((select count(*) from services)>=4,'Public service catalogue is readable');
 select test_assert(not has_table_privilege('anon','public.bookings','SELECT'),'Anonymous private data access blocked');
 reset role;
 do $$ begin

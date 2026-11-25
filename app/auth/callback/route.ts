@@ -4,7 +4,7 @@ import type { EmailOtpType } from "@supabase/supabase-js";
 import { siteUrl } from "@/lib/server/config";
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const next = url.searchParams.get("next") || "/dashboard";
+  const next = url.searchParams.get("type") === "recovery" ? "/reset-password" : url.searchParams.get("next") || "/dashboard";
   const safe =
     /^\/(dashboard|book|reset-password)(\/|\?|$)/.test(next) &&
     !next.includes("\\")

@@ -11,7 +11,11 @@ export function NavLink({
 }) {
   const path = usePathname();
   const exact = href === "/dashboard" || href === "/staff";
-  const active = path === href || (!exact && path.startsWith(`${href}/`));
+  const active =
+    path === href ||
+    (!exact &&
+      path.startsWith(`${href}/`) &&
+      !(href === "/dashboard/requests" && path === "/dashboard/requests/new"));
   return (
     <Link href={href} aria-current={active ? "page" : undefined}>
       {children}

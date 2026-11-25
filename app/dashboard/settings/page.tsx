@@ -5,7 +5,7 @@ import { demoState } from "@/lib/server/demo";
 import { supabaseServer } from "@/lib/server/supabase";
 import { dbError } from "@/lib/server/http";
 import { AccountSettings } from "@/components/account-settings";
-export const metadata = { title: "Account & addresses" };
+export const metadata = { title: "Profile & address" };
 export default async function Settings() {
   const s = await requirePageSession();
   let status: string | null = null;
@@ -30,7 +30,7 @@ export default async function Settings() {
     <>
       <div className="portal-heading">
         <div>
-          <h1>Your account</h1>
+          <h1>Profile & address</h1>
           <p>Keep your details up to date, so we can take care of the rest.</p>
         </div>
       </div>

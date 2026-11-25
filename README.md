@@ -1,10 +1,17 @@
 # Rose Professional Cleaning
 
+Customer accounts and dashboard setup: [docs/CUSTOMER-SETUP.md](docs/CUSTOMER-SETUP.md). Use connected mode for real registration, persistent cleaning requests and owner contact forwarding. See [docs/CPANEL.md](docs/CPANEL.md) for the Node.js deployment package.
+
+
 A Next.js App Router application for Rose’s public website, customer cleaning requests and initial staff operations. TypeScript, React, Tailwind CSS, Supabase Postgres/Auth, a pluggable email adapter, Vitest and Playwright. Designed for Vercel’s Node.js runtime.
 
 **A submission is a request until Rose confirms it. No payments are collected.** There are no marketplace accounts, cleaner sign-ups, recurring booking generation, subscriptions or payment integrations.
 
-## Quick local preview
+## Connected customer setup
+
+Start with [CUSTOMER-SETUP.md](docs/CUSTOMER-SETUP.md) for real Supabase accounts, the dashboard, cleaning requests, Contact Us forwarding and verification commands.
+
+## Separate fictional demo preview
 
 Use Node.js 22 LTS and npm. Install from the lockfile:
 
@@ -135,18 +142,19 @@ The public presentation catalogue is in `lib/service-catalogue.ts`: names, conci
 
 `lib/server/email.ts` defines a small adapter contract, a preview adapter and a Resend implementation. Database mutations enqueue separate request-received, confirmation, proposal, change/cancellation and enquiry messages in the same transaction as the relevant record. Unique event keys prevent duplicates.
 
-The default is **preview**, even in connected mode. Messages are visible only to staff at `/staff/outbox`. To initiate real email later, configure all of:
+Booking notifications default to **preview**. Contact forwarding instead records a failed processing state when sending is disabled or credentials are missing, while retaining the message. Messages and processing details are visible only to staff at `/staff/outbox`. To enable real email, configure all of:
 
 ```text
 EMAIL_PROVIDER=resend
 EMAIL_SEND_ENABLED=true
 RESEND_API_KEY=<server-only key>
 EMAIL_FROM=<owner-approved address on a verified sending domain>
+CONTACT_TO_EMAIL=rose.cleaning.uk@icloud.com
 ```
 
 Do not enable this for development against real customer records. No business sender email has been invented.
 
-Each message is claimed atomically before sending, with the event key sent as Resend’s idempotency key. `submitted` means the provider accepted the API request; it does **not** claim delivery. `preview` means not sent. Timeouts become `uncertain`; a process crash may leave `sending`. Inspect the provider before any manual retry, particularly after its 24-hour idempotency window. Automatic retries of uncertain messages are deliberately omitted to avoid duplicate customer emails. A failed notification never changes a saved request into a failed booking response.
+Each message is claimed atomically before sending, with the event key sent as Resend’s idempotency key. `submitted` means the provider accepted the API request; it does **not** claim delivery. `preview` means not sent. Timeouts become `uncertain`; stale `sending` claims become `uncertain` on the next dispatch after five minutes. Inspect the provider before any manual retry, particularly after its 24-hour idempotency window. Automatic retries of uncertain messages are deliberately omitted to avoid duplicate customer emails. A failed notification never changes a saved request into a failed booking response.
 
 Staff can process queued records in the outbox. An external scheduler may POST to `/api/notifications/dispatch` with `Authorization: Bearer <CRON_SECRET>` when explicitly configured. No scheduled job is created by this repository. Development previews are never automatically converted into real sends.
 

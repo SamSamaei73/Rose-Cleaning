@@ -173,6 +173,7 @@ function demoEvent(
   message: string,
 ) {
   const titles = {
+    pending_confirmation: "Request received — awaiting confirmation from Rose",
     pending: "Request received — awaiting confirmation from Rose",
     confirmed: "Your clean is confirmed",
     alternative_proposed: "Rose has proposed an alternative for your clean",
@@ -425,9 +426,7 @@ export async function updateProfile(
     Object.assign((await demoState()).profile, value);
     return;
   }
-  const { error } = await (
-    await supabaseServer()
-  )
+  const { error } = await supabaseAdmin()
     .from("profiles")
     .update(value)
     .eq("id", session.user.id);

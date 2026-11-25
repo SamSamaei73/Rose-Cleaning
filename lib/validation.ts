@@ -25,9 +25,10 @@ export const draftSchema = z
   .object({
     postcode: postcodeSchema,
     serviceId: z.string().min(1).max(50),
-    propertyType: z.enum(["flat", "house"]),
-    bedrooms: z.number().int().min(0).max(10),
-    bathrooms: z.number().int().min(1).max(10),
+    propertyType: z.enum(["flat", "house", "other"]),
+    propertyDetails: safeNotes(500).optional(),
+    bedrooms: z.number().int().min(0).max(10).nullable(),
+    bathrooms: z.number().int().min(1).max(10).nullable(),
     address: z
       .string()
       .trim()
@@ -74,6 +75,12 @@ export const contactSchema = z
     kind: z.enum(["contact", "office"]),
     name: z.string().trim().min(2).max(120),
     email: z.email().max(254),
+    subject: z
+      .string()
+      .trim()
+      .max(150)
+      .regex(/^[^\r\n]*$/)
+      .default("General enquiry"),
     phone: z.string().max(30),
     message: safeNotes(3000).refine(
       (v) => v.length >= 10,
@@ -84,6 +91,7 @@ export const contactSchema = z
     website: z.string().max(0, "Unable to submit."),
     idempotencyKey: z.uuid(),
   })
+  .strict()
   .superRefine((v, ctx) => {
     if (v.kind === "office") {
       if (v.company.trim().length < 2)
@@ -100,6 +108,77 @@ export const contactSchema = z
         });
     }
   });
+
+// A preference-only request. Ownership, status, price and assignment are never inputs.
+export const cleaningRequestSchema = draftSchema
+  .pick({
+    serviceId: true,
+    address: true,
+    postcode: true,
+    date: true,
+    windowId: true,
+    propertyType: true,
+    propertyDetails: true,
+    notes: true,
+  })
+  .extend({
+    propertyDetails: safeNotes(500).refine(
+      (v) => v.length >= 3,
+      "Tell us a little about the property.",
+    ),
+    idempotencyKey: z.uuid(),
+  })
+  .strict();
+export type CleaningRequestInput = z.infer<typeof cleaningRequestSchema>;
+
+export const authSchema = z.discriminatedUnion("action", [
+  z
+    .object({
+      action: z.literal("signup"),
+      name: z.string().trim().min(2).max(120),
+      email: z.email().max(254),
+      password: z.string().min(12).max(200),
+      next: z.string().max(500).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      action: z.literal("login"),
+      email: z.email().max(254),
+      password: z.string().min(1).max(200),
+      next: z.string().max(500).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      action: z.literal("forgot"),
+      email: z.email().max(254),
+      next: z.string().max(500).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      action: z.literal("resend"),
+      email: z.email().max(254),
+      next: z.string().max(500).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      action: z.literal("magic"),
+      email: z.email().max(254),
+      next: z.string().max(500).optional(),
+    })
+    .strict(),
+  z
+    .object({
+      action: z.literal("reset"),
+      password: z.string().min(12).max(200),
+      next: z.string().max(500).optional(),
+    })
+    .strict(),
+  z.object({ action: z.literal("logout") }).strict(),
+]);
 export const profileSchema = z
   .object({
     full_name: z.string().trim().min(2).max(120),
