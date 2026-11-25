@@ -24,6 +24,12 @@ completed validation and deployment successfully on both attempts:
 | 1 | `9f11da0c4acec093c4251394c815d722d2646787-45638451621-1` |
 | 2 | `9f11da0c4acec093c4251394c815d722d2646787-45638451621-2` |
 
+The `main` branch protection rule is active. It requires a pull request, an
+up-to-date passing GitHub Actions `validate` check and no administrator bypass.
+The owner completed GitHub's access confirmation and the saved rule was verified
+in repository settings. Reviewer approval is not required for this single-owner
+workflow; failing validation still blocks merging and deployment.
+
 Each release was built on Linux, uploaded with a checksum, preflighted on the
 server, activated through the deployment-owned symlink and verified through
 public HTTPS health/readiness endpoints. The server retains the legacy backup,
@@ -109,10 +115,6 @@ Production evidence lives in `rose-deploy/deployments.jsonl` and `state.json`.
   no Resend API key or verified sender is configured. Finish domain verification,
   obtain the required approval for a scoped sending key, configure the server
   and Supabase Auth SMTP, then verify acceptance and delivery separately.
-- A `main` protection rule is prepared to require a pull request, an up-to-date
-  passing GitHub Actions `validate` check and no administrator bypass. Saving
-  requires GitHub's fresh access confirmation, so the rule is **not yet active**.
-  Deployment itself already depends on the successful `validate` job.
 - Complete controlled signup, verification, login, recovery, dashboard, request
   and contact-forwarding checks after the account/email setup is available.
   Obtain the owner's approval for production test records; do not run the local

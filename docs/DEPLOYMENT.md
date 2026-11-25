@@ -29,8 +29,9 @@ Official GitHub actions are pinned to inspected commit SHAs.
 ## One-time activation prerequisites
 
 The SSH key, host pin, production environment, Supabase schema/Auth URLs and
-GitHub deployment configuration below have been provisioned. Outbound email and
-the required-check branch rule still need completion; see the status report.
+GitHub deployment configuration below have been provisioned. Main now requires a
+pull request and an up-to-date passing `validate` check, including for admins.
+Outbound email still needs completion; see the status report.
 Keep this checklist for recovery or provisioning another authorized environment.
 
 1. Confirm the existing production Supabase project and apply all reviewed
