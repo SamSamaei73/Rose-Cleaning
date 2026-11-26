@@ -17,7 +17,7 @@ export default function About() {
       <section className="about-static-intro" aria-labelledby="about-managed">
         <PhotoFrame className="about-portrait">
           <Image
-            src="/images/photography/regular.webp"
+            src="/images/photography/regular-whatsapp.webp"
             alt="A kitchen cabinet being carefully cleaned with a cloth"
             fill
             sizes="(max-width: 700px) 90vw, 45vw"

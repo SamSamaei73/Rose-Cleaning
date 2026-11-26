@@ -12,7 +12,7 @@ export function RoseScene({ requestHref }: { requestHref: string }) {
       <div className="scene-orbit" aria-hidden="true" />
       <div className="cinematic-hero-image scene-collage" aria-hidden="true">
         {[
-          ["regular", "scene-photo-one"],
+          ["regular-whatsapp", "scene-photo-one"],
           ["kitchen", "scene-photo-two"],
           ["windows", "scene-photo-three"],
           ["hero-home", "scene-photo-four"],

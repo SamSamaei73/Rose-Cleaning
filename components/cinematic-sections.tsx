@@ -28,7 +28,7 @@ const processSteps = [
   {
     title: "Choose your clean",
     text: "Find the service that fits your space. Share your property details and the things you’d like us to focus on.",
-    image: "regular.webp",
+    image: "regular-whatsapp.webp",
     alt: "A woman wiping a kitchen cabinet with a blue cloth",
   },
   {
