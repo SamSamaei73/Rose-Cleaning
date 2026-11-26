@@ -1,4 +1,4 @@
-# Rose infrastructure audit — 25 November 2026
+# Rose infrastructure audit — 25–26 November 2026
 
 Status: the customer application and automatic deployment pipeline are live at
 https://rosecleaning.uk. PR #1 was merged as
@@ -11,7 +11,39 @@ The detailed observations below record the initial audit. The current activation
 email configuration and verification evidence, including remaining live customer
 tests, are in [PRODUCTION-STATUS.md](PRODUCTION-STATUS.md).
 
-## Verified infrastructure
+## Completion audit — 26 November
+
+- Published the exact tree of local documentation commit `d18f74a` through the
+  authorised GitHub connector as `be4c077fbb125eed7e1eeeb77ee2fc0764f33dce`.
+  The original local commit and branch remain intact; no force-push was used.
+- Rechecked SSH authentication, the independently pinned ED25519 fingerprint,
+  the dedicated `restrict` key, runtime file mode 0600 and directory mode 0700.
+  Production public/server Supabase keys match the existing project.
+- Read-only database inspection confirmed all 15 public tables have RLS.
+  Sensitive tables reject anonymous reads. Browser roles cannot execute the
+  privileged mutation/notification RPCs; `is_staff` is the intended boolean
+  policy helper. No Storage buckets are configured or needed by current assets.
+- Verified actual signup/confirmation, profile/address persistence, cleaning
+  request/history, cancellation, account export, customer/staff isolation and
+  password recovery using a uniquely labelled owner-controlled synthetic account.
+- Corrected stale Passenger email overrides. Real SMTP, Auth, request and
+  cancellation messages arrived in the owner's Gmail inbox. The contact enquiry
+  to the existing business iCloud address has a provider Delivered event.
+- Identified script-readable Supabase session cookies. The completion release
+  uses a shared HttpOnly, Secure-on-HTTPS, SameSite=Lax policy in route handlers
+  and the refresh proxy. The controlled production browser test checks the flags.
+- Added a separate live browser gate and retained all 18 existing demo journeys.
+  Preview reports/screenshots are saved for PRs. Public preview code cannot be
+  securely isolated from production secrets under the same shared-hosting UID;
+  use the documented local demo/CI preview process instead.
+- Zoho MX priorities/targets and website DNS remain unchanged. Resend DNS verifies
+  signing and delivery. No paid service or hosting upgrade was purchased.
+
+The sections below are a historical record of the initial audit, including
+blockers that have since been resolved. [PRODUCTION-STATUS.md](PRODUCTION-STATUS.md)
+is the current handover; historical approval requests below are not outstanding.
+
+## Initial verified infrastructure
 
 | Area | Observation |
 | --- | --- |

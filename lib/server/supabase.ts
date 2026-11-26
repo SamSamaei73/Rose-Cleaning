@@ -3,6 +3,7 @@ import { createServerClient } from "@supabase/ssr";
 import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { requireConfiguration } from "./config";
+import { authCookieOptions } from "../auth-cookie-options";
 export async function supabaseServer() {
   requireConfiguration();
   const jar = await cookies();
@@ -10,6 +11,7 @@ export async function supabaseServer() {
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
+      cookieOptions: authCookieOptions,
       cookies: {
         getAll: () => jar.getAll(),
         setAll: (values) => {

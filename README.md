@@ -2,7 +2,7 @@
 
 Customer accounts and dashboard setup: [docs/CUSTOMER-SETUP.md](docs/CUSTOMER-SETUP.md). Use connected mode for real registration, persistent cleaning requests and owner contact forwarding. See [docs/CPANEL.md](docs/CPANEL.md) for the Node.js deployment package.
 
-Production runs on Krystal at [rosecleaning.uk](https://rosecleaning.uk), with GitHub Actions deployment from `main`. See the [current production status](docs/PRODUCTION-STATUS.md) and [deployment/rollback runbook](docs/DEPLOYMENT.md) before operating the live environment. Resend and Supabase SMTP are configured; live email delivery and the complete customer journey still need controlled verification.
+Production runs on Krystal at [rosecleaning.uk](https://rosecleaning.uk), with GitHub Actions deployment from `main`. See the [current production status](docs/PRODUCTION-STATUS.md) and [deployment/rollback runbook](docs/DEPLOYMENT.md) before operating the live environment. Production signup, verification, login, recovery, request persistence, cancellation and real email delivery were verified on 26 November 2026 using owner-authorised synthetic data. See [CI/CD and previews](docs/CI-CD.md), [environment variables](docs/ENVIRONMENT.md) and [troubleshooting](docs/TROUBLESHOOTING.md).
 
 A Next.js App Router application for Rose’s public website, customer cleaning requests and initial staff operations. TypeScript, React, Tailwind CSS, Supabase Postgres/Auth, a pluggable email adapter, Vitest and Playwright. Runs on a Node.js server.
 
@@ -51,7 +51,7 @@ package in the private Node application directory. See [the cPanel instructions]
 for setup, environment variables and dependency installation.
 
 1. Copy `.env.example` to `.env.local` and leave `APP_MODE=connected`.
-2. Create a Supabase project, or use the Supabase CLI locally:
+2. Production already uses the Rose Cleaning Supabase project (`tsnbceddjcdtjvijldpf`); do not create a replacement. For a separate disposable local environment, use the Supabase CLI:
 
    ```sh
    npx supabase start

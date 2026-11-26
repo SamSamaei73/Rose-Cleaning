@@ -10,7 +10,7 @@ export default defineConfig({
   use: {
     baseURL: "http://localhost:3005",
     trace: "retain-on-failure",
-    screenshot: "only-on-failure",
+    screenshot: "on",
   },
   projects: [
     {

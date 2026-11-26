@@ -79,11 +79,11 @@ jobs:
             build/*.tar.gz.sha256
           if-no-files-found: error
           retention-days: 14
-      - name: Preserve browser failure evidence
-        if: failure()
+      - name: Preserve browser preview and failure evidence
+        if: always()
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
         with:
-          name: browser-failure-${{ github.run_id }}-${{ github.run_attempt }}
+          name: browser-preview-${{ github.run_id }}-${{ github.run_attempt }}
           path: |
             playwright-report/
             test-results/
@@ -120,3 +120,26 @@ jobs:
           echo 'Verified https://rosecleaning.uk' >> "$GITHUB_STEP_SUMMARY"
           echo 'Commit: ${{ github.sha }}' >> "$GITHUB_STEP_SUMMARY"
           echo 'Release: ${{ github.sha }}-${{ github.run_id }}-${{ github.run_attempt }}' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/setup-node@949feb2413d6458794dcd2491c4babbbce0c15c1 # v7.1.0
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - name: Install production smoke browser
+        run: npx playwright install --with-deps chromium
+      - name: Verify the exact live release in a browser
+        env:
+          ROSE_EXPECTED_SHA: ${{ github.sha }}
+        # The controlled account journey is run separately with temporary owner-authorised fixtures.
+        run: npm run test:production -- --grep-invert '18 synthetic customer'
+      - name: Preserve production verification evidence
+        if: always()
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7.0.2
+        with:
+          name: production-verification-${{ github.run_id }}-${{ github.run_attempt }}
+          path: |
+            playwright-report/production/
+            test-results/production/
+            test-results/production-results.json
+          if-no-files-found: ignore
+          retention-days: 7

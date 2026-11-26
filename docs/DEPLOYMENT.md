@@ -4,7 +4,7 @@ This runbook describes the repository's GitHub Actions deployment to the existin
 Krystal Node application. The pipeline is live: the first production run deployed
 commit `9f11da0c4acec093c4251394c815d722d2646787` on 25 November 2026.
 See [PRODUCTION-STATUS.md](PRODUCTION-STATUS.md) for current verification and
-remaining configuration, and [INFRASTRUCTURE-AUDIT.md](INFRASTRUCTURE-AUDIT.md)
+verification evidence, and [INFRASTRUCTURE-AUDIT.md](INFRASTRUCTURE-AUDIT.md)
 for the original audit and support findings.
 
 ## Pipeline
@@ -31,12 +31,14 @@ Official GitHub actions are pinned to inspected commit SHAs.
 The SSH key, host pin, production environment, Supabase schema/Auth URLs and
 GitHub deployment configuration below have been provisioned. Main now requires a
 pull request and an up-to-date passing `validate` check, including for admins.
-Outbound email still needs completion; see the status report.
+SMTP and application delivery have been verified; see the status report.
 Keep this checklist for recovery or provisioning another authorized environment.
 
 1. Confirm the existing production Supabase project and apply all reviewed
    migrations in order, with a database backup first. Do not reset a production
-   database or run test fixtures against it. Follow
+   database. Production fixtures require explicit owner authorisation, synthetic
+   data and a scoped cleanup manifest; the local connected test script must
+   never target production. Follow
    [CUSTOMER-SETUP.md](CUSTOMER-SETUP.md) for Auth URLs, verification/recovery,
    owner access and email provider configuration.
 2. Enable SSH on the existing Krystal service and authorize the dedicated deploy
@@ -56,7 +58,7 @@ Keep this checklist for recovery or provisioning another authorized environment.
 5. Add the repository configuration below, then run and inspect the first
    deployment. Krystal confirmed Passenger restart, same-account release
    symlinks, tar extraction and loopback preflight support in ticket 72384945;
-   their operation still needs to be verified with this application on the host.
+   these operations have been verified with this application on the host.
 6. Verify the public health/readiness endpoints, actual site in Chrome,
    navigation, assets, mobile layouts, login and a controlled customer request.
    Verify email provider acceptance and delivery separately. A passing build or
@@ -163,7 +165,7 @@ lock. Do not start a competing release to work around it.
    also require `npm run test:db` with a disposable PostgreSQL target.
 3. Commit and push the feature branch, open a pull request, and resolve failures
    in the required `validate` job before merging.
-4. Once activation is complete, a merge/push to `main` builds and deploys
+4. A merge/push to `main` builds and deploys
    automatically. Inspect the deployment summary and the actual production
    site; `/api/health` must report that main commit. Verify the changed user
    journey in Chrome after every release.
@@ -174,3 +176,24 @@ For local validation on the iCloud-backed workspace, use an ignored cache
 snapshot rather than moving the project or replacing the user's source files.
 The validation performed during the infrastructure audit used Node 22.23.2 and
 a Git-tree snapshot under `~/.cache/rose-deployment-validation-2026-11-25`.
+
+## Production browser gate and email configuration
+
+The deploy job now runs the read-only production browser suite against the exact
+`github.sha`, then uploads its report and screenshots. A failed browser gate makes
+the workflow fail; use the rollback workflow if the release needs reverting. The
+activation script itself automatically restores the previous release when its
+preflight, health or readiness checks fail. These are separate failure paths.
+
+Passenger's inherited variables take precedence over `production.env`. On
+26 November the selector still had `EMAIL_PROVIDER=preview` and
+`EMAIL_SEND_ENABLED=false`, despite the runtime file being correct. The existing
+selector settings were backed up, changed to `resend` and `true`, and restarted
+with the supported CloudLinux selector command. Request and cancellation emails
+then reached the owner's mailbox. Keep the selector and file consistent after
+configuration changes; a health check alone does not test outbound email.
+
+See [CI-CD.md](CI-CD.md) for previews and the live test command,
+[ENVIRONMENT.md](ENVIRONMENT.md) for configuration ownership,
+[ROLLBACK.md](ROLLBACK.md) for recovery and backup boundaries, and
+[TROUBLESHOOTING.md](TROUBLESHOOTING.md) for diagnosis.
