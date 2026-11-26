@@ -46,10 +46,7 @@ export default async function Home() {
             <em>The same care</em>
           </h2>
         </div>
-        <ServiceCatalogue
-          featured
-          dashboardEntry={signedIn ? "signed-in" : "signed-out"}
-        />
+        <ServiceCatalogue featured signedIn={signedIn} />
       </section>
       <CleaningReveal />
       <CinematicProcess requestHref={requestHref} />

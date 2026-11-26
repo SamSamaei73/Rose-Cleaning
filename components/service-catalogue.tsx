@@ -3,7 +3,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { PhotoFrame } from "./photo-frame";
-import { customerEntryHref } from "@/lib/navigation";
 import {
   serviceCatalogue,
   serviceCategories,
@@ -14,10 +13,10 @@ import {
 
 export function ServiceCatalogue({
   featured = false,
-  dashboardEntry,
+  signedIn = false,
 }: {
   featured?: boolean;
-  dashboardEntry?: "signed-in" | "signed-out";
+  signedIn?: boolean;
 }) {
   const [category, setCategory] = useState<ServiceCategory>("home");
   const [selectedId, setSelectedId] = useState("regular");
@@ -87,21 +86,10 @@ export function ServiceCatalogue({
                 <p>{service.description}</p>
                 <Link
                   className="text-link"
-                  href={
-                    dashboardEntry && service.journey === "booking"
-                      ? customerEntryHref(
-                          dashboardEntry === "signed-in",
-                          service.id,
-                        )
-                      : serviceDestination(service)
-                  }
-                  aria-label={`${service.journey === "booking" ? (dashboardEntry ? "Request Cleaning" : "Request a clean") : "Get a quote"}: ${service.name}`}
+                  href={serviceDestination(service, signedIn)}
+                  aria-label={`Request: ${service.name}`}
                 >
-                  {service.journey === "booking"
-                    ? dashboardEntry
-                      ? "Request Cleaning"
-                      : "Request a clean"
-                    : "Get a quote"}
+                  Request
                 </Link>
                 {selected.id === service.id && (
                   <PhotoFrame className="service-inline-photo">

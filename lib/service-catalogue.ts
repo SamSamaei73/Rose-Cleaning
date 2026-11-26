@@ -1,5 +1,6 @@
-/** Public presentation and destinations. Existing booking IDs are intentionally retained.
- * Quote-only categories use the existing persistent enquiry workflow, not invented rates.
+import { customerEntryHref } from "./navigation";
+
+/** Public presentation and account entry. Existing service IDs are retained.
  * Photography attribution is recorded in docs/PHOTOGRAPHY.md.
  */
 export const serviceCategories = [
@@ -191,14 +192,8 @@ export const serviceCatalogue: PublicService[] = [
 export function serviceImage(service: PublicService) {
   return `/images/photography/${service.image}.webp`;
 }
-export function serviceDestination(service: PublicService) {
-  const path =
-    service.journey === "booking"
-      ? "/book"
-      : service.journey === "office"
-        ? "/office-quote"
-        : "/contact";
-  return `${path}?service=${encodeURIComponent(service.id)}`;
+export function serviceDestination(service: PublicService, signedIn = false) {
+  return customerEntryHref(signedIn, service.id);
 }
 export const findPublicService = (id?: string) =>
   serviceCatalogue.find((service) => service.id === id);

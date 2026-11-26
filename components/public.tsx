@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { brand } from "@/lib/brand";
 export { ServiceCards } from "./service-cards";
-export function Cta({ requestHref = "/book" }: { requestHref?: string }) {
+export function Cta({ requestHref }: { requestHref: string }) {
   return (
     <section className="closing-section">
       <div className="container cta">
@@ -15,10 +15,7 @@ export function Cta({ requestHref = "/book" }: { requestHref?: string }) {
         </div>
         <div className="actions">
           <Link className="btn" href={requestHref}>
-            Request Cleaning
-          </Link>
-          <Link className="btn secondary" href="/contact">
-            Get a quote
+            Request
           </Link>
         </div>
       </div>

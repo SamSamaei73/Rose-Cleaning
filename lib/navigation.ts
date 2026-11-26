@@ -1,4 +1,4 @@
-/** Homepage requests enter the account area; a selected service survives sign-in. */
+/** Service requests enter the account area with the selected service. */
 export function customerEntryHref(signedIn: boolean, service?: string) {
   const dashboard = service
     ? `/dashboard?service=${encodeURIComponent(service)}`

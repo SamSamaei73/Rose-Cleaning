@@ -1,12 +1,15 @@
 import Link from "next/link";
 import { ServiceCatalogue } from "@/components/service-catalogue";
 import { Cta } from "@/components/public";
+import { getSession } from "@/lib/server/auth";
+import { customerEntryHref } from "@/lib/navigation";
 export const metadata = {
   title: "Our cleaning services",
   description:
-    "Explore Rose's home, office, specialist, outdoor and vehicle cleaning services in London. Request a clean or ask Rose for a quote.",
+    "Explore Rose's home, office, specialist, outdoor and vehicle cleaning services in London. Sign in to request a service from your dashboard.",
 };
-export default function Services() {
+export default async function Services() {
+  const signedIn = Boolean(await getSession());
   return (
     <div className="cinematic service-index-page">
       <div className="container">
@@ -17,7 +20,7 @@ export default function Services() {
             <em>kind of space</em>
           </h1>
         </div>
-        <ServiceCatalogue />
+        <ServiceCatalogue signedIn={signedIn} />
         <div className="catalogue-notes">
           <p>
             Every request is reviewed by Rose. Scope, availability and price are
@@ -25,8 +28,12 @@ export default function Services() {
           </p>
           <p>
             Need a one-off home clean?{" "}
-            <Link className="text-link" href="/book?service=one-off">
-              Request a one-off clean
+            <Link
+              className="text-link"
+              href={customerEntryHref(signedIn, "one-off")}
+              aria-label="Request: One-off cleaning"
+            >
+              Request
             </Link>
           </p>
         </div>
@@ -41,7 +48,7 @@ export default function Services() {
           </p>
         </details>
       </div>
-      <Cta />
+      <Cta requestHref={customerEntryHref(signedIn)} />
     </div>
   );
 }
