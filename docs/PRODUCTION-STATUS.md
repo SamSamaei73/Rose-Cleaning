@@ -1,9 +1,10 @@
 # Rose production status — 25 November 2026
 
 The customer application and automatic deployment pipeline are live at
-[rosecleaning.uk](https://rosecleaning.uk). Email sending and a complete production
-customer journey remain unfinished. A passing readiness check proves the current
-schema can be reached; it does not prove customer sign-in or email delivery.
+[rosecleaning.uk](https://rosecleaning.uk). Resend sending and Supabase Auth SMTP
+are configured. Live email delivery and the complete production customer journey
+remain unverified. A passing readiness check proves the current schema can be
+reached; it does not prove customer sign-in or email delivery.
 
 ## Infrastructure and activation
 
@@ -91,7 +92,10 @@ Only the public Supabase URL and publishable key are supplied to browser builds.
 | Anonymous dashboard | Redirects to login; Chrome follows the streamed Next.js redirect |
 | Desktop Chrome inspection | Homepage, supplied About copy and connected login form verified; see the console limitation below |
 | Successful production customer sign-in/request | Not yet verified; no controlled production account exists |
-| Email acceptance and delivery | Not verified; sending remains disabled |
+| Email acceptance and delivery | Not yet verified; runtime sending and Auth SMTP are enabled |
+| Resend sending domain | Verified at 15:58 UTC; DKIM and both sending CNAME records passed |
+| Encrypted SMTP authentication | Passed against `smtp.resend.com:465`, status 235; certificate verification enabled; no message sent |
+| Email runtime activation | Loopback preflight, public health/readiness and the seven-route/22-asset smoke check passed after restart |
 
 During the final tab reattachment, Chrome logged one asynchronous message-channel
 error. The message is typical of browser-extension messaging, but its originating
@@ -107,23 +111,43 @@ Local verification evidence is in ignored `.local/deployment/`, including
 `public-verification-20261125.json`, desktop captures and the initialization plan.
 Production evidence lives in `rose-deploy/deployments.jsonl` and `state.json`.
 
-## Remaining access and email work
+## Email activation and remaining verification
 
-- Krystal's authoritative DNS editor requests password re-verification. The
-  browser handoff is prepared. No additional DNS or email-routing changes were
-  made during this follow-up.
-- Resend is signed in and its `rosecleaning.uk` domain setup is awaiting DNS
-  verification. Its requested DKIM and sending CNAME records are absent from
-  public DNS. Receiving is disabled. Preserve Zoho MX and all existing records
-  when adding the reviewed sending records.
-- The runtime still has `EMAIL_PROVIDER=preview` and `EMAIL_SEND_ENABLED=false`;
-  no Resend API key or verified sender is configured. Finish domain verification,
-  obtain the required approval for a scoped sending key, configure the server
-  and Supabase Auth SMTP, then verify acceptance and delivery separately.
+- Krystal password re-verification completed after the previous verification URL
+  returned HTTP 404. Reopening DNS Records through the domain dashboard restored
+  the verification flow.
+- The authoritative zone now contains the requested `resend._domainkey` TXT,
+  `rsend` CNAME to `rsend-euw1.forge.rmta.net`, and `send` CNAME to
+  `send.forge.rmta.net`, each with TTL 3600. Krystal's nameserver returned all
+  three exact records. Resend reported the domain and all three records verified
+  at 15:58 UTC. The original website records and all three Zoho MX records remain
+  intact; Resend receiving is disabled. Before/after zone snapshots and the
+  verification screenshot are saved in ignored `.local/deployment/`.
+- The owner approved the restricted email key. The created key is named
+  `Rose production transactional email` and has sending access restricted to
+  `rosecleaning.uk`. Its value is stored only in private configuration, not in
+  Git or the deployment artifact.
+- Supabase custom SMTP is saved and was verified after a page reload: host
+  `smtp.resend.com`, port 465, username `resend`, sender name `Rose Cleaning`,
+  sender address `info@rosecleaning.uk`, with the stored password hidden. The
+  key authenticated successfully over certificate-verified TLS with status 235.
+  This proves SMTP authentication, not Supabase message acceptance or delivery.
+- At 16:56:23 UTC, Krystal runtime configuration was activated with
+  `EMAIL_PROVIDER=resend`, `EMAIL_SEND_ENABLED=true`, the approved key and
+  `EMAIL_FROM="Rose Cleaning <info@rosecleaning.uk>"`. The existing enquiry
+  recipient remains `rose.cleaning.uk@icloud.com`. Before activation there were
+  zero queued, sending or uncertain notifications. A private configuration
+  backup was retained, the change used the deployment lock and an atomic file
+  replacement, and permissions remain 0600. Loopback preflight and public
+  health/readiness passed; Passenger was restarted and the public smoke checks
+  passed again. No source release or customer data changed.
 - Complete controlled signup, verification, login, recovery, dashboard, request
-  and contact-forwarding checks after the account/email setup is available.
-  Obtain the owner's approval for production test records; do not run the local
-  connected-test suite against production or delete production data unapproved.
+  and contact-forwarding checks. Approval has been requested for one clearly
+  labelled TEST account, one unassigned TEST request and one TEST contact
+  message, with emails only to the business iCloud address. These records have
+  not been created. Do not run the local connected-test suite against production
+  or delete production data unapproved. Verify provider acceptance, recipient
+  delivery and the authenticated customer journey separately.
 - Owner-approved prices, coverage, operating capacity, policies and source
   imagery remain the separate product inputs in [OWNER-INPUTS.md](OWNER-INPUTS.md).
 

@@ -7,9 +7,9 @@ https://rosecleaning.uk. PR #1 was merged as
 successfully validated and deployed that commit twice. Production health reports
 the matching revision, and readiness confirms Supabase connectivity.
 
-The detailed observations below record the initial audit. The current activation
-and verification evidence, outstanding email configuration, and account-access
-handoffs are in [PRODUCTION-STATUS.md](PRODUCTION-STATUS.md).
+The detailed observations below record the initial audit. The current activation,
+email configuration and verification evidence, including remaining live customer
+tests, are in [PRODUCTION-STATUS.md](PRODUCTION-STATUS.md).
 
 ## Verified infrastructure
 
