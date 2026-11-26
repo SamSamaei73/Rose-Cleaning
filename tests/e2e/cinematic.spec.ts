@@ -2,64 +2,79 @@ import { test, expect } from "@playwright/test";
 import {
   serviceCatalogue,
   serviceCategories,
-  serviceDestination,
 } from "../../lib/service-catalogue";
 
-test("all service collections retain their request destinations and photography", async ({
+test("all service requests use login or the dashboard and retain their photography", async ({
   page,
 }) => {
-  await page.goto("/services");
+  await page.emulateMedia({ reducedMotion: "reduce" });
   const explorer = page.locator(".service-explorer");
-  for (const category of serviceCategories) {
-    await page
-      .getByRole("navigation", { name: "Service categories" })
-      .getByRole("button", { name: category.name, exact: true })
-      .click();
+  for (const signedIn of [false, true]) {
+    await page.goto("/services");
+    await expect(page.getByRole("link", { name: /get a quote/i })).toHaveCount(0);
     await expect(
-      page.getByRole("heading", { name: category.name, exact: true }),
-    ).toBeVisible();
-    for (const service of serviceCatalogue.filter(
-      (item) => item.category === category.id,
-    )) {
-      await explorer
-        .getByRole("button", {
-          name: new RegExp(service.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
-        })
+      page.locator(".closing-section").getByRole("link", { name: "Request", exact: true }),
+    ).toHaveAttribute("href", signedIn ? "/dashboard" : "/login?next=%2Fdashboard");
+    await expect(
+      page.getByRole("link", { name: "Request: One-off cleaning", exact: true }),
+    ).toHaveAttribute(
+      "href",
+      signedIn
+        ? "/dashboard?service=one-off"
+        : "/login?next=%2Fdashboard%3Fservice%3Done-off",
+    );
+    for (const category of serviceCategories) {
+      await page
+        .getByRole("navigation", { name: "Service categories" })
+        .getByRole("button", { name: category.name, exact: true })
         .click();
-      const action = explorer.getByRole("link", {
-        name: `${service.journey === "booking" ? "Request a clean" : "Get a quote"}: ${service.name}`,
-        exact: true,
-      });
-      await expect(action).toHaveAttribute("href", serviceDestination(service));
-      const photo = explorer.getByRole("img", {
-        name: service.alt,
-        exact: true,
-      });
-      await photo.scrollIntoViewIfNeeded();
-      await expect
-        .poll(() =>
-          photo.evaluate(
-            (image: HTMLImageElement) =>
-              image.complete && image.naturalWidth > 0,
-          ),
-        )
-        .toBeTruthy();
+      await expect(
+        page.getByRole("heading", { name: category.name, exact: true }),
+      ).toBeVisible();
+      for (const service of serviceCatalogue.filter(
+        (item) => item.category === category.id,
+      )) {
+        await explorer
+          .getByRole("button", {
+            name: new RegExp(service.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")),
+          })
+          .click();
+        // Keep scrolling to the photo from hovering a different service row.
+        await page.mouse.move(0, 0);
+        const action = explorer.getByRole("link", {
+          name: `Request: ${service.name}`,
+          exact: true,
+        });
+        const dashboard = `/dashboard?service=${service.id}`;
+        await expect(action).toHaveText("Request");
+        await expect(action).toHaveAttribute(
+          "href",
+          signedIn ? dashboard : `/login?next=${encodeURIComponent(dashboard)}`,
+        );
+        const photo = explorer.getByRole("img", {
+          name: service.alt,
+          exact: true,
+        });
+        await photo.scrollIntoViewIfNeeded();
+        await expect
+          .poll(() =>
+            photo.evaluate(
+              (image: HTMLImageElement) =>
+                image.complete && image.naturalWidth > 0,
+            ),
+          )
+          .toBeTruthy();
+      }
     }
+    await explorer
+      .getByRole("link", { name: "Request: Mobile Car Wash", exact: true })
+      .click();
+    if (!signedIn) {
+      await expect(page).toHaveURL(/\/login\?next=%2Fdashboard%3Fservice%3Dmobile-car-wash$/);
+      await page.getByRole("button", { name: "Explore the customer demo" }).click();
+    }
+    await expect(page).toHaveURL(/\/dashboard\?service=mobile-car-wash$/);
   }
-  await explorer
-    .getByRole("link", { name: "Get a quote: Mobile Car Wash", exact: true })
-    .click();
-  await expect(page).toHaveURL(/\/contact\?service=mobile-car-wash/);
-  await expect(page.getByText(/Ask Rose about mobile car wash/)).toBeVisible();
-  await page.getByLabel("Your name").fill("Service Link Fixture");
-  await page
-    .getByLabel("Email address", { exact: true })
-    .fill("service-link@example.test");
-  await page
-    .getByLabel("How can we help?")
-    .fill("A fictional mobile car wash enquiry from the catalogue.");
-  await page.getByRole("button", { name: "Send quote request" }).click();
-  await expect(page.getByRole("status")).toContainText("No email was sent.");
 });
 
 test("scroll story enhances the page and cleans up for reduced motion, mobile and navigation", async ({

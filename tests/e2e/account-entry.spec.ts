@@ -13,7 +13,7 @@ test("homepage account actions lead through login to a simple protected dashboar
   await expect(account).toHaveAttribute("href", "/login?next=%2Fdashboard");
   const actions = page
     .locator("main")
-    .getByRole("link", { name: "Request Cleaning", exact: true });
+    .getByRole("link", { name: /^(Request|Request Cleaning)$/ });
   expect(await actions.count()).toBeGreaterThan(1);
   for (const action of await actions.all())
     await expect(action).toHaveAttribute("href", "/login?next=%2Fdashboard");
@@ -70,7 +70,7 @@ test("a homepage service selection survives login and opens the existing request
   const catalogue = page.locator(".service-explorer");
   await catalogue.getByRole("button", { name: /Deep Cleaning/ }).click();
   await catalogue
-    .getByRole("link", { name: "Request Cleaning: Deep Cleaning", exact: true })
+    .getByRole("link", { name: "Request: Deep Cleaning", exact: true })
     .click();
   await expect(page).toHaveURL(/\/login\?next=%2Fdashboard%3Fservice%3Ddeep$/);
   await page.getByRole("link", { name: "Create account", exact: true }).click();

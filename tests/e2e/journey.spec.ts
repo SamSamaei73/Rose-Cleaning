@@ -333,10 +333,20 @@ test("mobile navigation, all public routes and progressive form stay within the 
     .click();
   await page
     .getByRole("link", {
-      name: "Request a clean: Regular Domestic Cleaning",
+      name: "Request: Regular Domestic Cleaning",
       exact: true,
     })
     .click();
+  await expect(page).toHaveURL(/\/login\?next=%2Fdashboard%3Fservice%3Dregular$/);
+  await page.getByRole("button", { name: "Explore the customer demo" }).click();
+  await expect(page).toHaveURL(/\/dashboard\?service=regular$/);
+  await page
+    .locator(".dashboard-welcome")
+    .getByRole("link", { name: "Request a clean", exact: true })
+    .click();
+  await expect(page).toHaveURL(/\/dashboard\/book\?service=regular$/);
+  // Wait for the saved draft to restore before entering new property details.
+  await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeEnabled();
   await page.getByLabel("Property postcode").fill("SW1A 1AA");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page

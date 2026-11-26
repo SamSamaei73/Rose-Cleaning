@@ -2,7 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { PhotoFrame } from "./photo-frame";
 
-/** Existing licensed photographs; these are illustrative, not Rose staff portraits. */
+/** Illustrative service imagery; source records are in docs/PHOTOGRAPHY.md. */
 export function RoseScene({ requestHref }: { requestHref: string }) {
   return (
     <section

@@ -6,7 +6,13 @@ import {
   type PublicService,
 } from "@/lib/service-catalogue";
 
-export function ServiceCards({ services }: { services: PublicService[] }) {
+export function ServiceCards({
+  services,
+  signedIn = false,
+}: {
+  services: PublicService[];
+  signedIn?: boolean;
+}) {
   return (
     <div className="photo-services-grid">
       {services.map((service) => (
@@ -25,12 +31,10 @@ export function ServiceCards({ services }: { services: PublicService[] }) {
             <p>{service.description}</p>
             <Link
               className="text-link"
-              href={serviceDestination(service)}
-              aria-label={`${service.journey === "booking" ? "Request a clean" : "Get a quote"}: ${service.name}`}
+              href={serviceDestination(service, signedIn)}
+              aria-label={`Request: ${service.name}`}
             >
-              {service.journey === "booking"
-                ? "Request a clean"
-                : "Get a quote"}
+              Request
             </Link>
           </div>
         </article>

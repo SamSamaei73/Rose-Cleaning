@@ -1,6 +1,6 @@
 {
-  "reviewed": "2026-11-18",
-  "note": "Real stock photography used illustratively. Do not claim pictured people, properties, equipment or vehicles belong to Rose.",
+  "reviewed": "2026-11-26",
+  "note": "Stock and user-supplied imagery used illustratively. Do not claim pictured people, properties, equipment or vehicles belong to Rose.",
   "photos": [
     {
       "key": "hero-home",
@@ -17,16 +17,16 @@
     },
     {
       "key": "regular",
-      "creator": "Liliana Drew",
-      "source": "https://www.pexels.com/photo/a-woman-wiping-the-surface-of-a-cabinet-9462233/",
-      "license": "https://www.pexels.com/license/",
+      "creator": "Not provided",
+      "source": "WhatsApp Image 2026-11-25 at 18.37.18.jpeg",
+      "license": "User-supplied image; licence not provided",
       "alt": "A woman wiping a kitchen cabinet with a blue cloth.",
       "objectPosition": "50% 45%",
-      "usage": "Regular Domestic Cleaning. Stock model, not a Rose employee.",
+      "usage": "User-supplied replacement for Regular Domestic Cleaning, homepage imagery, About and navigation.",
       "src": "/images/photography/regular.webp",
       "width": 1000,
-      "height": 1500,
-      "bytes": 95646
+      "height": 969,
+      "bytes": 84770
     },
     {
       "key": "one-off",

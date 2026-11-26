@@ -1,5 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
-import { serviceCatalogue, serviceCategories, serviceDestination } from "../../lib/service-catalogue";
+import { serviceCatalogue, serviceCategories } from "../../lib/service-catalogue";
 
 const publicRoutes = ["/", "/about", "/services", "/contact", "/office-quote", "/book", "/login", "/signup", "/forgot-password", "/terms", "/privacy", "/cancellation"];
 
@@ -54,7 +54,8 @@ test("05 all service collections retain destinations and photographs", async ({ 
     await page.getByRole("navigation", { name: "Service categories" }).getByRole("button", { name: category.name, exact: true }).click();
     for (const service of serviceCatalogue.filter(s => s.category === category.id)) {
       await explorer.getByRole("button", { name: new RegExp(service.name.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")) }).click();
-      await expect(explorer.getByRole("link", { name: `${service.journey === "booking" ? "Request a clean" : "Get a quote"}: ${service.name}`, exact: true })).toHaveAttribute("href", serviceDestination(service));
+      await page.mouse.move(0, 0);
+      await expect(explorer.getByRole("link", { name: `Request: ${service.name}`, exact: true })).toHaveAttribute("href", `/login?next=${encodeURIComponent(`/dashboard?service=${service.id}`)}`);
       const photo = explorer.getByRole("img", { name: service.alt, exact: true });
       await photo.scrollIntoViewIfNeeded();
       await expect.poll(() => photo.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBeTruthy();

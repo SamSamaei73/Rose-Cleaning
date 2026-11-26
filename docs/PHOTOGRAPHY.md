@@ -2,7 +2,9 @@
 
 Reviewed and downloaded on 18 November 2026. Files live in `public/images/photography/` and are served from `/images/photography/`. No runtime hotlinks or new image dependencies are required.
 
-These are real stock photographs used to illustrate services. They are not Rose employees, customer properties, before-and-after evidence or company-owned vehicles. The supplied official logo is separate and is not modified by this asset set.
+These images illustrate services. Except for the user-supplied replacement recorded below, they are stock photographs, not Rose employees, customer properties, before-and-after evidence or company-owned vehicles. The supplied official logo is separate and is not modified by this asset set.
+
+On 26 November 2026, `regular.webp` was replaced with the supplied `WhatsApp Image 2026-11-25 at 18.37.18.jpeg`. The shared filename is retained so the new image appears everywhere the old asset was used. Its creator and licence were not provided.
 
 ## Source and licence record
 
@@ -11,7 +13,7 @@ Pexels, Unsplash and Pixabay permit commercial website use under their linked li
 | Local file            | Creator                                | Original source page                                                                                           | Licence                                                 | Output              | Intended use and limitations                                                                                                                             |
 | --------------------- | -------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- | ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `hero-home.webp`      | Curtis Adams                           | [Source photo](https://www.pexels.com/photo/modern-living-room-with-stylish-decor-and-natural-light-37760315/) | [Licence](https://www.pexels.com/license/)              | 1800 × 1200; 202 KB | Homepage hero. Stock interior; do not describe it as a Rose customer property.                                                                           |
-| `regular.webp`        | Liliana Drew                           | [Source photo](https://www.pexels.com/photo/a-woman-wiping-the-surface-of-a-cabinet-9462233/)                  | [Licence](https://www.pexels.com/license/)              | 1000 × 1500; 93 KB  | Regular Domestic Cleaning. Stock model, not a Rose employee.                                                                                             |
+| `regular.webp`        | Not provided                           | User-supplied `WhatsApp Image 2026-11-25 at 18.37.18.jpeg`                                                  | Not provided                                         | 1000 × 969; 83 KB   | Regular Domestic Cleaning, homepage imagery, About and navigation.                                                                                     |
 | `one-off.webp`        | SHVETS production                      | [Source photo](https://www.pexels.com/photo/crop-housewife-cleaning-wooden-floor-at-home-7513158/)             | [Licence](https://www.pexels.com/license/)              | 1000 × 667; 55 KB   | Existing one-off cleaning service, retained separately from the new poster catalogue.                                                                    |
 | `deep.webp`           | RDNE Stock project                     | [Source photo](https://www.pexels.com/photo/responsible-woman-wiping-an-electric-stove-clean-8581039/)         | [Licence](https://www.pexels.com/license/)              | 1000 × 667; 49 KB   | Deep Cleaning. Stock model, not a Rose employee.                                                                                                         |
 | `end-of-tenancy.webp` | Louie Alma                             | [Source photo](https://www.pexels.com/photo/spacious-unfurnished-minimalist-apartment-interior-33197279/)      | [Licence](https://www.pexels.com/license/)              | 1000 × 667; 9 KB    | End of Tenancy Cleaning. Illustrative vacant property, not a completed Rose job.                                                                         |
@@ -27,11 +29,15 @@ Pexels, Unsplash and Pixabay permit commercial website use under their linked li
 | `wheelie-bin.webp`    | bluebudgie                             | [Source photo](https://pixabay.com/photos/wheelie-bin-garbage-rubbish-waste-2270582/)                          | [Licence](https://pixabay.com/service/license-summary/) | 1000 × 666; 100 KB  | Wheelie Bin Cleaning. Related stock bins illustrate the service; the photograph does not show washing. Owner bin-washing photography is still requested. |
 | `car-wash.webp`       | Kaboompics                             | [Source photo](https://www.pexels.com/photo/person-washing-a-car-with-sponge-4870727/)                         | [Licence](https://www.pexels.com/license/)              | 1000 × 1500; 156 KB | Mobile Car Wash. Stock vehicle; do not describe it as owned by Rose or as the removals van.                                                              |
 
+The previous `regular.webp`, replaced on 26 November 2026, was [a photograph by Liliana Drew](https://www.pexels.com/photo/a-woman-wiping-the-surface-of-a-cabinet-9462233/) under the [Pexels licence](https://www.pexels.com/license/). This historical attribution does not apply to the replacement.
+
 The bathroom and dusting attributions were cross-referenced using the [Remodel Cost Hub photo credits](https://remodelcosthub.com/photo-credits/); downloads came directly from the Pexels CDN, not that website. Direct automated access to those two Pexels detail pages was unavailable. The primary image IDs and original source URLs above are retained for owner reference.
 
 ## Optimisation and crops
 
 Assets were downloaded from the providers' image CDNs and encoded locally with Sharp as WebP at quality 82. Hero and kitchen/reveal images are at most 1800px wide; service card images are at most 1000px wide. Orientation is preserved. Front-garden and back-garden photographs have faithful crops around the cleaning action; nothing was generated, composited or retouched. Source originals were not added to the repository. All downloaded files and a 3:2 card contact sheet were visually inspected.
+
+The user-supplied replacement was also encoded with Sharp at WebP quality 82, resized proportionally from 1536 × 1488 to 1000 × 969 without cropping or retouching. Its original JPEG is retained in the project.
 
 ## Alt text and suggested card focus
 
