@@ -1,5 +1,6 @@
 import { createServerClient } from "@supabase/ssr";
 import { NextResponse, type NextRequest } from "next/server";
+import { authCookieOptions } from "./lib/auth-cookie-options";
 export async function proxy(request: NextRequest) {
   let response = NextResponse.next({ request });
   if (
@@ -12,6 +13,7 @@ export async function proxy(request: NextRequest) {
     process.env.NEXT_PUBLIC_SUPABASE_URL,
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY,
     {
+      cookieOptions: authCookieOptions,
       cookies: {
         getAll: () => request.cookies.getAll(),
         setAll: (values) => {
