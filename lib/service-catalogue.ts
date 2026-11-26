@@ -48,7 +48,7 @@ export const serviceCatalogue: PublicService[] = [
     name: "Regular Domestic Cleaning",
     description: "A regular clean to keep your home feeling cared for.",
     category: "home",
-    image: "regular",
+    image: "regular-whatsapp",
     alt: "A woman wiping a kitchen cabinet with a blue cloth.",
     position: "50% 45%",
     journey: "booking",

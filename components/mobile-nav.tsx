@@ -127,7 +127,7 @@ export function MobileNav() {
             </nav>
             <div className="navigation-photo">
               <Image
-                src="/images/photography/regular.webp"
+                src="/images/photography/regular-whatsapp.webp"
                 alt="A kitchen cabinet being carefully wiped with a cloth"
                 fill
                 sizes="(max-width: 850px) 1px, 40vw"
