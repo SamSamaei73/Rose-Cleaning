@@ -2,6 +2,14 @@ import { AuthForm, type AuthKind } from "./auth-form";
 import { isConfigured, isDemo } from "@/lib/server/config";
 import { getSession } from "@/lib/server/auth";
 import { redirect } from "next/navigation";
+const authErrors: Record<string, string> = {
+  "google-sign-in":
+    "Google sign-in was not completed. Please try again or use your email and password.",
+  "google-cancelled":
+    "Google sign-in was cancelled. You can try again or use your email and password.",
+  "google-session-expired":
+    "Your Google sign-in session expired. Please start again from this page.",
+};
 export async function AuthPage({
   kind,
   searchParams,
@@ -17,7 +25,7 @@ export async function AuthPage({
       ? params.next
       : "/dashboard";
   if ((kind === "login" || kind === "signup") && (await getSession()))
-    redirect("/dashboard");
+    redirect(next);
   if (kind === "reset" && !(await getSession()))
     redirect("/forgot-password?error=link-expired");
   return (
@@ -28,7 +36,8 @@ export async function AuthPage({
       next={next}
       error={
         params.error
-          ? "That email link is invalid or has expired. Request a new link and try again."
+          ? authErrors[params.error] ||
+            "That email link is invalid or has expired. Request a new link and try again."
           : undefined
       }
     />

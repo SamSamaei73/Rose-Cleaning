@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { Approach } from "./public";
 
 export function RoseIntroduction() {
@@ -15,7 +15,7 @@ export function RoseIntroduction() {
           <p>
             You book with Rose. We manage the team, the service and the details.
           </p>
-          <Link href="/about" className="text-link">
+          <Link href="/about" className="btn secondary small action-link">
             Get to know Rose
           </Link>
         </div>
@@ -51,7 +51,7 @@ export function CinematicProcess({ requestHref }: { requestHref: string }) {
       aria-labelledby="process-title"
     >
       <div className="process-navigation">
-        <a href="#after-process" className="text-link process-skip">
+        <a href="#after-process" className="btn secondary small action-link process-skip">
           Skip to about Rose
         </a>
       </div>
@@ -83,7 +83,7 @@ export function CinematicProcess({ requestHref }: { requestHref: string }) {
               <h3>{step.title}</h3>
               <p>{step.text}</p>
               {i === 2 && (
-                <Link href={requestHref} className="text-link">
+                <Link href={requestHref} className="btn secondary small action-link">
                   Request Cleaning
                 </Link>
               )}
@@ -116,7 +116,7 @@ export function RoseApproach() {
               <em>It’s your space</em>
             </h2>
             <Approach />
-            <Link href="/about" className="text-link">
+            <Link href="/about" className="btn secondary small action-link">
               More about Rose
             </Link>
           </div>

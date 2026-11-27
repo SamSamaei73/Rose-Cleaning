@@ -1,6 +1,8 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { CleaningLoader } from "./cleaning-loader";
+import Link from "./app-link";
+import { useState, useTransition } from "react";
+import { useRouter } from "./navigation-provider";
 import type { Booking, Catalogue, Cleaner } from "@/lib/types";
 import { ActionButton, api, Message } from "./ui";
 import { money } from "@/lib/pricing";
@@ -19,25 +21,32 @@ export function BookingActions({
   const [proposing, setProposing] = useState(false),
     [error, setError] = useState(""),
     [message, setMessage] = useState(""),
-    [busy, setBusy] = useState(false);
+    [submitting, setBusy] = useState(false);
+  const [refreshing, startRefresh] = useTransition();
+  const busy = submitting || refreshing;
   const router = useRouter();
-  const active = ["pending", "pending_confirmation", "alternative_proposed", "confirmed"].includes(
-    booking.status,
-  );
+  const active = [
+    "pending",
+    "pending_confirmation",
+    "alternative_proposed",
+    "confirmed",
+  ].includes(booking.status);
   const base = { revision: booking.revision };
   return (
     <div className="stack">
       <Message error={error} message={message} />
+      <CleaningLoader active={busy} label="Updating this request…" />
       <div className="actions">
-        {staff && ["pending", "pending_confirmation"].includes(booking.status) && (
-          <ActionButton
-            path={`bookings/${booking.id}/action`}
-            body={{ ...base, action: "confirm" }}
-            className="btn"
-          >
-            Confirm request
-          </ActionButton>
-        )}
+        {staff &&
+          ["pending", "pending_confirmation"].includes(booking.status) && (
+            <ActionButton
+              path={`bookings/${booking.id}/action`}
+              body={{ ...base, action: "confirm" }}
+              className="btn"
+            >
+              Confirm request
+            </ActionButton>
+          )}
         {staff && active && (
           <button
             className="btn secondary"
@@ -47,7 +56,9 @@ export function BookingActions({
           </button>
         )}
         {staff &&
-          ["pending", "pending_confirmation", "alternative_proposed"].includes(booking.status) && (
+          ["pending", "pending_confirmation", "alternative_proposed"].includes(
+            booking.status,
+          ) && (
             <ActionButton
               path={`bookings/${booking.id}/action`}
               body={{ ...base, action: "reject" }}
@@ -89,9 +100,9 @@ export function BookingActions({
       {!staff && active && (
         <p className="small">
           To request a change,{" "}
-          <a href="/contact" className="text-link">
+          <Link href="/contact" className="btn secondary small action-link">
             contact Rose
-          </a>{" "}
+          </Link>{" "}
           with reference {booking.id.slice(0, 8)}. Rose can propose an
           alternative here for you to review.
         </p>
@@ -117,7 +128,7 @@ export function BookingActions({
                 },
               });
               setProposing(false);
-              router.refresh();
+              startRefresh(() => router.refresh());
             } catch (e) {
               setError((e as Error).message);
             } finally {
@@ -220,7 +231,7 @@ export function BookingActions({
                   cleanerId: form.get("cleaner") || null,
                 });
                 setMessage(result.message);
-                router.refresh();
+                startRefresh(() => router.refresh());
               } catch (e) {
                 setError((e as Error).message);
               } finally {
@@ -265,7 +276,7 @@ export function BookingActions({
                   body: form.get("note"),
                 });
                 element.reset();
-                router.refresh();
+                startRefresh(() => router.refresh());
               } catch (e) {
                 setError((e as Error).message);
               } finally {

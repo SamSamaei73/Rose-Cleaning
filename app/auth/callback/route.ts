@@ -2,11 +2,17 @@ import { NextResponse } from "next/server";
 import { supabaseServer } from "@/lib/server/supabase";
 import type { EmailOtpType } from "@supabase/supabase-js";
 import { siteUrl } from "@/lib/server/config";
+import { finishGoogleSignIn } from "@/lib/server/google-auth";
 export async function GET(request: Request) {
   const url = new URL(request.url);
-  const next = url.searchParams.get("type") === "recovery" ? "/reset-password" : url.searchParams.get("next") || "/dashboard";
+  if (url.searchParams.get("provider") === "google")
+    return NextResponse.redirect(await finishGoogleSignIn(url));
+  const next =
+    url.searchParams.get("type") === "recovery"
+      ? "/reset-password"
+      : url.searchParams.get("next") || "/dashboard";
   const safe =
-    /^\/(dashboard|book|reset-password)(\/|\?|$)/.test(next) &&
+    /^\/(dashboard|book|staff|reset-password)(\/|\?|$)/.test(next) &&
     !next.includes("\\")
       ? next
       : "/dashboard";

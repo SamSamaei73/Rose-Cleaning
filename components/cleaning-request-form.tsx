@@ -1,5 +1,6 @@
 "use client";
-import { useRouter } from "next/navigation";
+import { CleaningLoader } from "./cleaning-loader";
+import { useRouter } from "./navigation-provider";
 import { useRef, useState } from "react";
 import { ArrowRight, MapPin } from "lucide-react";
 import type { Address, Catalogue } from "@/lib/types";
@@ -59,6 +60,7 @@ export function CleaningRequestForm({
       }}
     >
       <Message error={error} />
+      <CleaningLoader active={busy} label="Saving your cleaning request…" />
       <fieldset disabled={busy} className="stack">
         <legend className="sr-only">Your cleaning preferences</legend>
         <div className="field">

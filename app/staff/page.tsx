@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { requirePageSession } from "@/lib/server/auth";
 import { listBookings } from "@/lib/server/repository";
 import { BookingList } from "@/components/booking-list";

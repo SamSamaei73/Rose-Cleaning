@@ -1,6 +1,7 @@
 "use client";
+import { CleaningLoader } from "./cleaning-loader";
 import { useRef, useState } from "react";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { serviceCatalogue } from "@/lib/service-catalogue";
 import { api, Message } from "./ui";
 export function ContactForm({
@@ -39,7 +40,9 @@ export function ContactForm({
             phone: form.get("phone") || "",
             company: form.get("company") || "",
             postcode: form.get("postcode") || "",
-            subject: selectedService?.name || (office ? "Office cleaning enquiry" : "General enquiry"),
+            subject:
+              selectedService?.name ||
+              (office ? "Office cleaning enquiry" : "General enquiry"),
             message: form.get("message") || "",
             website: form.get("website") || "",
             idempotencyKey: key.current,
@@ -66,6 +69,7 @@ export function ContactForm({
         </div>
       )}
       <Message error={error} message={message} />
+      <CleaningLoader active={busy} label="Saving your enquiry…" />
       {!message && (
         <>
           <div className="form-grid">
@@ -176,7 +180,7 @@ export function ContactForm({
           </div>
           <p className="small">
             Your details are used to respond to your enquiry. The{" "}
-            <Link className="text-link" href="/privacy">
+            <Link className="btn secondary small action-link inline-action" href="/privacy">
               privacy notice is a draft
             </Link>{" "}
             pending owner completion.

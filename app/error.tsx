@@ -1,4 +1,5 @@
 "use client";
+import Link from "@/components/app-link";
 export default function ErrorPage({ reset }: { reset: () => void }) {
   return (
     <div className="container section stack">
@@ -12,9 +13,9 @@ export default function ErrorPage({ reset }: { reset: () => void }) {
           Try again
         </button>
       </div>
-      <a className="text-link" href="/setup">
+      <Link className="btn secondary small action-link" href="/setup">
         Setup instructions
-      </a>
+      </Link>
     </div>
   );
 }

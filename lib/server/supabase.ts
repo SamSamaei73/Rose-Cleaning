@@ -4,7 +4,9 @@ import { createClient } from "@supabase/supabase-js";
 import { cookies } from "next/headers";
 import { requireConfiguration } from "./config";
 import { authCookieOptions } from "../auth-cookie-options";
-export async function supabaseServer() {
+import { fetchWithTimeout } from "../network";
+import { cache } from "react";
+export const supabaseServer = cache(async () => {
   requireConfiguration();
   const jar = await cookies();
   return createServerClient(
@@ -12,6 +14,7 @@ export async function supabaseServer() {
     process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY!,
     {
       cookieOptions: authCookieOptions,
+      global: { fetch: fetchWithTimeout },
       cookies: {
         getAll: () => jar.getAll(),
         setAll: (values) => {
@@ -26,12 +29,15 @@ export async function supabaseServer() {
       },
     },
   );
-}
+});
 export function supabaseAdmin() {
   requireConfiguration();
   return createClient(
     process.env.NEXT_PUBLIC_SUPABASE_URL!,
     process.env.SUPABASE_SERVICE_ROLE_KEY!,
-    { auth: { autoRefreshToken: false, persistSession: false } },
+    {
+      auth: { autoRefreshToken: false, persistSession: false },
+      global: { fetch: fetchWithTimeout },
+    },
   );
 }

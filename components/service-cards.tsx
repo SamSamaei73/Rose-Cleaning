@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import {
   serviceDestination,
   serviceImage,
@@ -30,7 +30,7 @@ export function ServiceCards({
             <h3>{service.name}</h3>
             <p>{service.description}</p>
             <Link
-              className="text-link"
+              className="btn secondary small action-link"
               href={serviceDestination(service, signedIn)}
               aria-label={`Request: ${service.name}`}
             >

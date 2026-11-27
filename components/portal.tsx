@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { NavLink } from "./nav-link";
 import {
   CalendarDays,
@@ -38,7 +38,11 @@ export function PortalShell({
       ]
     : [
         { href: "/dashboard", label: "Overview", icon: House },
-        { href: "/dashboard/requests/new", label: "Request a clean", icon: Plus },
+        {
+          href: "/dashboard/requests/new",
+          label: "Request a clean",
+          icon: Plus,
+        },
         {
           href: "/dashboard/requests",
           label: "My requests",
@@ -69,8 +73,12 @@ export function PortalShell({
         </nav>
         <div className="side-help">
           <p>Need a hand?</p>
-          <Link href="/contact" className="text-link">Contact Rose</Link>
-          <a href={brand.phoneHref}>{brand.phone}</a>
+          <Link href="/contact" className="btn secondary small action-link">
+            Contact Rose
+          </Link>
+          <a className="btn secondary small" href={brand.phoneHref}>
+            {brand.phone}
+          </a>
         </div>
         <div className="portal-account-actions">
           <ActionButton

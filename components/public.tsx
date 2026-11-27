@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { brand } from "@/lib/brand";
 export { ServiceCards } from "./service-cards";
 export function Cta({ requestHref }: { requestHref: string }) {
@@ -29,7 +29,7 @@ export function Removals() {
         <div>
           <h2>Moving home? Meet Rose Removals</h2>
           <p>Ask about cleaning and moving with our sister business.</p>
-          <Link href="/contact?subject=Moving%20home" className="text-link">
+          <Link href="/contact?subject=Moving%20home" className="btn secondary small action-link">
             Talk about your move
           </Link>
         </div>

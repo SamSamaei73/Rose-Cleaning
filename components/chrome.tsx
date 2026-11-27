@@ -1,4 +1,5 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
+import Image from "next/image";
 import { MobileNav } from "./mobile-nav";
 import { HeaderShell } from "./header-shell";
 import { NavLink } from "./nav-link";
@@ -8,6 +9,7 @@ import { brand } from "@/lib/brand";
 import { getSession } from "@/lib/server/auth";
 import { isDemo } from "@/lib/server/config";
 import { customerEntryHref } from "@/lib/navigation";
+import type { Session } from "@/lib/types";
 export function DemoBar() {
   if (!isDemo()) return null;
   return (
@@ -17,10 +19,18 @@ export function DemoBar() {
         availability · Temporary server state · No messages or payments
       </p>
       <div className="role-controls">
-        <ActionButton path="demo" body={{ role: "customer" }} className="">
+        <ActionButton
+          path="demo"
+          body={{ role: "customer" }}
+          className="btn secondary small"
+        >
           Customer demo
         </ActionButton>
-        <ActionButton path="demo" body={{ role: "staff" }} className="">
+        <ActionButton
+          path="demo"
+          body={{ role: "staff" }}
+          className="btn secondary small"
+        >
           Staff demo
         </ActionButton>
       </div>
@@ -29,16 +39,46 @@ export function DemoBar() {
 }
 export async function Header() {
   const session = await getSession();
+  return <HeaderFrame session={session} />;
+}
+export function HeaderFallback() {
+  return (
+    <HeaderShell>
+      <div className="container header-inner" aria-hidden="true" inert>
+        <div />
+        <div className="header-placeholder-logo">
+          <Image
+            src={brand.logo}
+            alt=""
+            width={brand.logoWidth}
+            height={brand.logoHeight}
+            sizes="92px"
+          />
+        </div>
+        <div />
+      </div>
+    </HeaderShell>
+  );
+}
+function HeaderFrame({ session }: { session: Session | null }) {
   return (
     <HeaderShell>
       <div className="container header-inner">
         <div className="header-left">
           <MobileNav />
           <nav className="header-nav" aria-label="Main navigation">
-            <NavLink href="/">Home</NavLink>
-            <NavLink href="/services">Services</NavLink>
-            <NavLink href="/about">About</NavLink>
-            <NavLink href="/contact">Contact</NavLink>
+            <NavLink href="/" appearance="text">
+              Home
+            </NavLink>
+            <NavLink href="/services" appearance="text">
+              Services
+            </NavLink>
+            <NavLink href="/about" appearance="text">
+              About
+            </NavLink>
+            <NavLink href="/contact" appearance="text">
+              Contact
+            </NavLink>
           </nav>
         </div>
         <Brand compact />
@@ -78,27 +118,75 @@ export function Footer() {
         </div>
         <div className="footer-links">
           <h3>Explore Rose</h3>
-          <Link href="/services">Our cleaning services</Link>
-          <Link href="/about">About us</Link>
-          <Link href="/office-quote">Office cleaning</Link>
-          <Link href="/book">Request a clean</Link>
+          <Link className="btn secondary small footer-action" href="/services">
+            Our cleaning services
+          </Link>
+          <Link className="btn secondary small footer-action" href="/about">
+            About us
+          </Link>
+          <Link
+            className="btn secondary small footer-action"
+            href="/office-quote"
+          >
+            Office cleaning
+          </Link>
+          <Link className="btn secondary small footer-action" href="/book">
+            Request a clean
+          </Link>
         </div>
         <div className="footer-links">
           <h3>Here to help</h3>
-          <a href={brand.phoneHref}>{brand.phone}</a>
-          <a href={brand.secondaryPhoneHref}>{brand.secondaryPhone}</a>
-          <a href={`mailto:${brand.email}`}>{brand.email}</a>
-          <a href={brand.website}>{brand.websiteLabel}</a>
-          <Link href="/contact">Contact the team</Link>
-          <Link href="/dashboard">Your account</Link>
-          <Link href="/staff">Staff sign in</Link>
+          <a
+            className="btn secondary small footer-action"
+            href={brand.phoneHref}
+          >
+            {brand.phone}
+          </a>
+          <a
+            className="btn secondary small footer-action"
+            href={brand.secondaryPhoneHref}
+          >
+            {brand.secondaryPhone}
+          </a>
+          <a
+            className="btn secondary small footer-action"
+            href={`mailto:${brand.email}`}
+          >
+            {brand.email}
+          </a>
+          <a className="btn secondary small footer-action" href={brand.website}>
+            {brand.websiteLabel}
+          </a>
+          <Link className="btn secondary small footer-action" href="/contact">
+            Contact the team
+          </Link>
+          <Link className="btn secondary small footer-action" href="/dashboard">
+            Your account
+          </Link>
+          <Link className="btn secondary small footer-action" href="/staff">
+            Staff sign in
+          </Link>
         </div>
         <div className="footer-links">
           <h3>The details</h3>
-          <Link href="/terms">Terms · draft</Link>
-          <Link href="/privacy">Privacy · draft</Link>
-          <Link href="/cancellation">Cancellation · draft</Link>
-          <a href={brand.instagramHref}>{brand.instagram}</a>
+          <Link className="btn secondary small footer-action" href="/terms">
+            Terms · draft
+          </Link>
+          <Link className="btn secondary small footer-action" href="/privacy">
+            Privacy · draft
+          </Link>
+          <Link
+            className="btn secondary small footer-action"
+            href="/cancellation"
+          >
+            Cancellation · draft
+          </Link>
+          <a
+            className="btn secondary small footer-action"
+            href={brand.instagramHref}
+          >
+            {brand.instagram}
+          </a>
           <span className="small muted">No payment taken online</span>
         </div>
       </div>

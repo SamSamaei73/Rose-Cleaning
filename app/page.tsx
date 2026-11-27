@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { Cta, Removals } from "@/components/public";
 import { CinematicMotion } from "@/components/cinematic-motion";
 import {
@@ -55,7 +55,7 @@ export default async function Home() {
       <section className="container cinematic-faq" aria-labelledby="faq-title">
         <div data-reveal>
           <h2 id="faq-title">Good to know</h2>
-          <Link href="/contact" className="text-link">
+          <Link href="/contact" className="btn secondary small action-link">
             Talk to the team
           </Link>
         </div>

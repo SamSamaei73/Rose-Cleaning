@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { CleaningLoader } from "./cleaning-loader";
+import { useState, useTransition } from "react";
+import { useRouter } from "./navigation-provider";
 import type { Catalogue, Pricing, Service } from "@/lib/types";
 import { api, Message } from "./ui";
 const rateFields = [
@@ -22,7 +23,9 @@ export function CatalogueEditor({
     [pricing, setPricing] = useState<Pricing>(catalogue.pricing),
     [error, setError] = useState(""),
     [message, setMessage] = useState(""),
-    [busy, setBusy] = useState(false);
+    [submitting, setBusy] = useState(false);
+  const [refreshing, startRefresh] = useTransition();
+  const busy = submitting || refreshing;
   const router = useRouter();
   async function save(kind: string, value: unknown) {
     setBusy(true);
@@ -34,7 +37,7 @@ export function CatalogueEditor({
         value,
       });
       setMessage(r.message);
-      router.refresh();
+      startRefresh(() => router.refresh());
     } catch (e) {
       setError((e as Error).message);
     } finally {
@@ -63,6 +66,7 @@ export function CatalogueEditor({
         </button>
       </div>
       <Message error={error} message={message} />
+      <CleaningLoader active={busy} label="Saving your service settings…" />
       {tab === "services" ? (
         <div className="stack" style={{ marginTop: 20 }}>
           <div className="field">
@@ -429,7 +433,7 @@ export function CatalogueEditor({
                   />
                   <button
                     type="button"
-                    className="text-link"
+                    className="btn secondary small action-link"
                     onClick={() =>
                       setPricing((p) => ({
                         ...p,

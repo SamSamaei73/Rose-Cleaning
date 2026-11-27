@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, CheckCircle2 } from "lucide-react";
 import {
@@ -58,7 +58,7 @@ export async function BookingDetail({
   return (
     <>
       <Link
-        className="text-link"
+        className="btn secondary small action-link"
         href={staff ? "/staff/bookings" : "/dashboard"}
       >
         <ArrowLeft size={14} /> Back to {staff ? "requests" : "your account"}
@@ -153,7 +153,7 @@ export async function BookingDetail({
                       {b.customer_name}
                       <br />
                       <a
-                        className="text-link"
+                        className="btn secondary small action-link"
                         href={`mailto:${b.customer_email}`}
                       >
                         {b.customer_email}
@@ -187,7 +187,7 @@ export async function BookingDetail({
               {notes.length ? (
                 notes.map((n) => (
                   <div key={n.id}>
-                    <p style={{ whiteSpace: "pre-wrap", fontSize: 13 }}>
+                    <p style={{ whiteSpace: "pre-wrap", fontSize: 15 }}>
                       {n.body}
                     </p>
                     <span className="small muted">

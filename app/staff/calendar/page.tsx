@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { requirePageSession } from "@/lib/server/auth";
 import { getCatalogue, listBookings } from "@/lib/server/repository";
 import { dateLabel, londonDate } from "@/lib/scheduling";

@@ -309,7 +309,10 @@ test("mobile navigation, all public routes and progressive form stay within the 
     await noOverflow(page);
     // Follow normal scrolling before checking lazy images. Responsive variants
     // hidden by CSS are intentionally not downloaded on this viewport.
-    for (const image of await page.locator("img").all()) {
+    // The temporary 3D poster is replaced on visibility; its fallback is checked separately.
+    for (const image of await page
+      .locator('img:not([src^="/images/cleaner/"])')
+      .all()) {
       if (!(await image.isVisible())) continue;
       await image.scrollIntoViewIfNeeded();
       await expect
@@ -337,7 +340,9 @@ test("mobile navigation, all public routes and progressive form stay within the 
       exact: true,
     })
     .click();
-  await expect(page).toHaveURL(/\/login\?next=%2Fdashboard%3Fservice%3Dregular$/);
+  await expect(page).toHaveURL(
+    /\/login\?next=%2Fdashboard%3Fservice%3Dregular$/,
+  );
   await page.getByRole("button", { name: "Explore the customer demo" }).click();
   await expect(page).toHaveURL(/\/dashboard\?service=regular$/);
   await page
@@ -346,7 +351,9 @@ test("mobile navigation, all public routes and progressive form stay within the 
     .click();
   await expect(page).toHaveURL(/\/dashboard\/book\?service=regular$/);
   // Wait for the saved draft to restore before entering new property details.
-  await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeEnabled();
+  await expect(
+    page.getByRole("button", { name: "Continue", exact: true }),
+  ).toBeEnabled();
   await page.getByLabel("Property postcode").fill("SW1A 1AA");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
@@ -367,9 +374,12 @@ test("profile, saved address and deletion request persist with truthful account 
 }) => {
   await post(page.request, "demo", { role: "customer" });
   await page.goto("/dashboard/settings");
+  // Wait for hydration: fill() does not honour CSS interactivity like real keyboard input.
+  await expect(page.locator("#application")).not.toHaveCSS("interactivity", "inert");
+  await expect(page.locator("#global-loading-overlay")).toBeHidden();
   await page.getByLabel("Full name", { exact: true }).fill("Jordan Fictional");
   await page.getByRole("button", { name: "Save profile", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("Profile saved.");
+  await expect(page.locator("main").getByRole("status")).toContainText("Profile saved.");
   await page.getByLabel("Address name").fill("Fictional home");
   await page.getByLabel("Postcode", { exact: true }).fill("SW1A 1AA");
   await page
@@ -414,6 +424,9 @@ test("office quotes reach the staff inbox and staff pages fit a small screen", a
 }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/office-quote");
+  // Playwright fill can set values even while CSS interactivity makes the page inert.
+  await expect(page.locator("#application")).not.toHaveCSS("interactivity", "inert");
+  await expect(page.locator("#global-loading-overlay")).toBeHidden();
   await page.getByLabel("Your name").fill("Robin Office Fixture");
   await page
     .getByLabel("Email address", { exact: true })
@@ -426,7 +439,7 @@ test("office quotes reach the staff inbox and staff pages fit a small screen", a
       "Fictional workspace: request a discussion about weekly office cleaning.",
     );
   await page.getByRole("button", { name: "Send quote request" }).click();
-  await expect(page.getByRole("status")).toContainText("No email was sent.");
+  await expect(page.locator("main").getByRole("status")).toContainText("No email was sent.");
   await post(page.request, "demo", { role: "staff" });
   for (const path of [
     "/staff",

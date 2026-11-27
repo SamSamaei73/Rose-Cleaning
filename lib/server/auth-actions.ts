@@ -4,6 +4,7 @@ import { authSchema } from "../validation";
 import { isDemo, siteUrl } from "./config";
 import { AppError, rateLimit } from "./http";
 import { supabaseServer } from "./supabase";
+import { startGoogleSignIn } from "./google-auth";
 
 export async function authenticate(request: Request, body: unknown) {
   const input = authSchema.parse(body);
@@ -22,6 +23,7 @@ export async function authenticate(request: Request, body: unknown) {
     throw new AppError(
       "Real account access is unavailable in the separate demo. Use the connected application to register.",
     );
+  if (input.action === "google") return startGoogleSignIn(request, input);
   await rateLimit(request, `auth:${input.action}`, 15);
   if (
     ["signup", "resend", "forgot", "magic"].includes(input.action) &&
@@ -50,7 +52,7 @@ export async function authenticate(request: Request, body: unknown) {
     if (error)
       throw new AppError(
         error.code === "email_not_confirmed"
-          ? "Please verify your email before logging in. You can resend the verification email below."
+          ? "Please verify your email before logging in."
           : "We could not sign you in. Check your email and password.",
       );
     return { redirect: "/dashboard" };

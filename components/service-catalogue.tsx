@@ -1,6 +1,6 @@
 "use client";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { useState } from "react";
 import { PhotoFrame } from "./photo-frame";
 import {
@@ -85,7 +85,7 @@ export function ServiceCatalogue({
               >
                 <p>{service.description}</p>
                 <Link
-                  className="text-link"
+                  className="btn secondary small action-link"
                   href={serviceDestination(service, signedIn)}
                   aria-label={`Request: ${service.name}`}
                 >
@@ -106,7 +106,7 @@ export function ServiceCatalogue({
             </div>
           ))}
           {featured && (
-            <Link href="/services" className="collection-link">
+            <Link href="/services" className="btn secondary collection-link">
               View all services <span aria-hidden="true">↗</span>
             </Link>
           )}

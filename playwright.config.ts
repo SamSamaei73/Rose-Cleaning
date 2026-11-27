@@ -17,6 +17,9 @@ export default defineConfig({
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
+        launchOptions: {
+          args: ["--use-angle=swiftshader", "--enable-unsafe-swiftshader"],
+        },
         channel: existsSync(
           "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
         )

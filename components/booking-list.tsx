@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { ArrowRight, CalendarDays } from "lucide-react";
 import type { Booking } from "@/lib/types";
 import { dateLabel } from "@/lib/scheduling";
@@ -56,10 +56,10 @@ export function BookingList({
           </div>
           <div className="booking-item-right">
             <Status status={b.status} />
-            <span style={{ fontSize: 13 }}>{money(b.quote.totalPence)}</span>
+            <span style={{ fontSize: 15 }}>{money(b.quote.totalPence)}</span>
             <Link
               href={`${staff ? "/staff/bookings" : "/dashboard/requests"}/${b.id}`}
-              className="text-link"
+              className="btn secondary small action-link"
             >
               View details <ArrowRight size={14} />
             </Link>

@@ -1,7 +1,8 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { CleaningLoader } from "./cleaning-loader";
+import { useEffect, useRef, useState, useTransition } from "react";
+import Link from "@/components/app-link";
+import { useRouter } from "./navigation-provider";
 import { ArrowLeft, Check, MapPin, RefreshCw } from "lucide-react";
 import type {
   Address,
@@ -65,8 +66,10 @@ export function BookingFlow({
     [loadingWindows, setLoadingWindows] = useState(false),
     [error, setError] = useState(""),
     [quoteError, setQuoteError] = useState(""),
-    [busy, setBusy] = useState(false),
+    [submitting, setBusy] = useState(false),
     [acknowledged, setAcknowledged] = useState(false);
+  const [refreshing, startRefresh] = useTransition();
+  const busy = submitting || refreshing;
   const idempotencyKey = useRef(""),
     router = useRouter(),
     headingRef = useRef<HTMLHeadingElement>(null);
@@ -246,8 +249,10 @@ export function BookingFlow({
       try {
         sessionStorage.removeItem(storageKey);
       } catch {}
-      router.push(`/dashboard/bookings/${result.booking.id}?received=1`);
-      router.refresh();
+      startRefresh(() => {
+        router.push(`/dashboard/bookings/${result.booking.id}?received=1`);
+        router.refresh();
+      });
     } catch (e) {
       setError((e as Error).message);
       const details = (
@@ -320,6 +325,10 @@ export function BookingFlow({
             }
           </p>
           <Message error={error || quoteError} />
+          <CleaningLoader
+            active={busy}
+            label="Sending your cleaning request…"
+          />
           <div style={{ height: error || quoteError ? 18 : 0 }} />
           {step === 0 && (
             <div className="stack">
@@ -366,7 +375,7 @@ export function BookingFlow({
               </fieldset>
               <p className="small">
                 For a workspace, use our{" "}
-                <Link className="text-link" href="/office-quote">
+                <Link className="btn secondary small action-link" href="/office-quote">
                   office quote request
                 </Link>
                 .
@@ -582,9 +591,7 @@ export function BookingFlow({
                     · {dateLabel(draft.date)}
                   </label>
                   {loadingWindows ? (
-                    <p className="small" role="status">
-                      Checking the selected date…
-                    </p>
+                    <CleaningLoader label="Checking the selected date…" />
                   ) : (
                     <div className="window-grid">
                       {windows.map((w) => (
@@ -667,7 +674,7 @@ export function BookingFlow({
                   <p
                     style={{
                       whiteSpace: "pre-wrap",
-                      fontSize: 13,
+                      fontSize: 15,
                       marginTop: 12,
                     }}
                   >
@@ -777,7 +784,7 @@ export function BookingFlow({
                 border: 0,
                 padding: 0,
                 color: "var(--berry)",
-                textDecoration: "underline",
+                textDecoration: "none",
               }}
               onClick={() => {
                 if (
