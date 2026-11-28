@@ -213,6 +213,7 @@ test("the homepage remains readable when enhancement scripts fail to download", 
 test("public and account titles omit trailing full stops while essential notices remain", async ({
   page,
 }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
   const checkTitles = async () => {
     const titles = await page
       .locator(

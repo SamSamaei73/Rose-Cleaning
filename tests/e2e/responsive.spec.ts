@@ -1,4 +1,5 @@
 import { test, expect, type Page } from "@playwright/test";
+import { waitForPageReady } from "./page-ready";
 
 async function fits(page: Page) {
   expect(
@@ -265,6 +266,10 @@ test("a narrow-screen customer can complete the request form and calendar", asyn
     data: { role: "customer" },
   });
   await page.goto("/dashboard/book");
+  await waitForPageReady(page);
+  await expect(
+    page.getByRole("button", { name: "Continue", exact: true }),
+  ).toBeEnabled();
   await page.getByLabel("Property postcode").fill("SW1A 1AA");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page

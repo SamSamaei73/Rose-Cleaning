@@ -29,8 +29,15 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command:
-      "APP_MODE=demo NEXT_PUBLIC_SITE_URL=http://localhost:3005 npm run dev -- --port 3005",
+    // CI should exercise the built app without cold compilation or Fast Refresh
+    // interrupting form input and multi-page journeys.
+    command: process.env.CI
+      ? "npm run build && npm run start -- --port 3005"
+      : "npm run dev -- --port 3005",
+    env: {
+      APP_MODE: "demo",
+      NEXT_PUBLIC_SITE_URL: "http://localhost:3005",
+    },
     url: "http://localhost:3005/login",
     reuseExistingServer: !process.env.CI,
     timeout: 120000,

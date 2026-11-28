@@ -4,6 +4,7 @@ import {
   type Page,
   type APIRequestContext,
 } from "@playwright/test";
+import { waitForPageReady } from "./page-ready";
 const origin = "http://localhost:3005";
 const futureDate = (days = 7) => {
   const d = new Date(Date.now() + days * 86400000);
@@ -55,6 +56,10 @@ test("public request draft survives sign-in; staff confirms; customer sees real 
 }) => {
   await page.goto("/book");
   await expect(page.getByText("DEMO PREVIEW", { exact: true })).toBeVisible();
+  await waitForPageReady(page);
+  await expect(
+    page.getByRole("button", { name: "Continue", exact: true }),
+  ).toBeEnabled();
   await page.getByLabel("Property postcode").fill("sw1a1aa");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByLabel("Bedrooms", { exact: true }).selectOption("2");
@@ -261,6 +266,7 @@ test("public contact form persists in the staff inbox without claiming email del
   page,
 }) => {
   await page.goto("/contact");
+  await waitForPageReady(page);
   await page.getByLabel("Your name").fill("Taylor Fixture");
   await page
     .getByLabel("Email address", { exact: true })
@@ -374,12 +380,14 @@ test("profile, saved address and deletion request persist with truthful account 
 }) => {
   await post(page.request, "demo", { role: "customer" });
   await page.goto("/dashboard/settings");
-  // Wait for hydration: fill() does not honour CSS interactivity like real keyboard input.
-  await expect(page.locator("#application")).not.toHaveCSS("interactivity", "inert");
-  await expect(page.locator("#global-loading-overlay")).toBeHidden();
+  await waitForPageReady(page);
   await page.getByLabel("Full name", { exact: true }).fill("Jordan Fictional");
   await page.getByRole("button", { name: "Save profile", exact: true }).click();
   await expect(page.locator("main").getByRole("status")).toContainText("Profile saved.");
+  await expect(
+    page.getByRole("button", { name: "Save profile", exact: true }),
+  ).toBeEnabled();
+  await waitForPageReady(page);
   await page.getByLabel("Address name").fill("Fictional home");
   await page.getByLabel("Postcode", { exact: true }).fill("SW1A 1AA");
   await page
@@ -424,9 +432,7 @@ test("office quotes reach the staff inbox and staff pages fit a small screen", a
 }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/office-quote");
-  // Playwright fill can set values even while CSS interactivity makes the page inert.
-  await expect(page.locator("#application")).not.toHaveCSS("interactivity", "inert");
-  await expect(page.locator("#global-loading-overlay")).toBeHidden();
+  await waitForPageReady(page);
   await page.getByLabel("Your name").fill("Robin Office Fixture");
   await page
     .getByLabel("Email address", { exact: true })
