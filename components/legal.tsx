@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { PageHeading } from "./public";
 export function LegalDraft({
   title,
@@ -42,7 +42,7 @@ export function LegalDraft({
           Please avoid entering door codes, key-safe codes or sensitive access
           information in general notes.
         </p>
-        <Link href="/contact" className="text-link">
+        <Link href="/contact" className="btn secondary small action-link">
           Contact Rose about this draft
         </Link>
       </div>

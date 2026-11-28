@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { ServiceCatalogue } from "@/components/service-catalogue";
 import { Cta } from "@/components/public";
 import { getSession } from "@/lib/server/auth";
@@ -29,7 +29,7 @@ export default async function Services() {
           <p>
             Need a one-off home clean?{" "}
             <Link
-              className="text-link"
+              className="btn secondary small action-link"
               href={customerEntryHref(signedIn, "one-off")}
               aria-label="Request: One-off cleaning"
             >

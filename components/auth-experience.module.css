@@ -1,0 +1,336 @@
+.layout {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(36px, 5vw, 76px) 32px 80px;
+  background:
+    radial-gradient(ellipse at 15% 22%, #e9d6c2a6, transparent 48%),
+    radial-gradient(ellipse at 90% 85%, #efdfd48c, transparent 45%), #f8f3ec;
+  border-bottom: 1px solid var(--border);
+}
+.stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 510px);
+  grid-template-areas: "welcome form" "scene form";
+  grid-template-rows: auto 1fr;
+  align-items: start;
+  column-gap: clamp(48px, 7vw, 110px);
+  max-width: 1160px;
+  margin-inline: auto;
+}
+.welcome {
+  grid-area: welcome;
+  padding-top: 28px;
+}
+.welcome h2 {
+  font-size: clamp(36px, 4.2vw, 60px);
+  line-height: 1.1;
+  letter-spacing: -0.055em;
+  font-weight: 650;
+  margin: 22px 0;
+  text-wrap: balance;
+}
+.welcome h2 span {
+  color: var(--rose);
+}
+.welcome > p {
+  max-width: 385px;
+  color: var(--muted);
+  font-size: 17px;
+  line-height: 1.85;
+}
+.benefits {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px 22px;
+  margin-top: 26px;
+  color: var(--berry);
+}
+.benefits span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.benefits svg {
+  flex-shrink: 0;
+  color: var(--rose);
+}
+.layout .form {
+  grid-area: form;
+  position: relative;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: clamp(28px, 3.2vw, 46px);
+  background: linear-gradient(150deg, #fffefa, #ffffff);
+  border: 1px solid #e6d9cb;
+  border-top-color: white;
+  border-radius: 28px;
+  box-shadow:
+    0 3px 7px #41271d04,
+    0 24px 60px -28px #65453240,
+    inset 0 1px 0 white;
+}
+.layout .form::before {
+  content: "";
+  position: absolute;
+  inset: 12px 14px -9px;
+  border: 1px solid #e2d2c2;
+  border-radius: inherit;
+  background: #eee1d3;
+  z-index: -1;
+  box-shadow: 0 15px 30px -23px #583b2e4d;
+}
+.layout .form h1 {
+  font-family: var(--font-ui);
+  font-weight: 650;
+  font-size: clamp(28px, 2.8vw, 36px);
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+}
+.layout .form :global(.auth-brand) {
+  margin-bottom: 22px;
+}
+.layout .form :global(.auth-brand .brand-image) {
+  width: 76px;
+}
+.layout .form :global(.auth-subtitle) {
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--muted);
+  margin: 12px auto 0;
+  max-width: 32ch;
+}
+.layout .form form {
+  margin-top: 30px;
+  gap: 20px;
+}
+.layout .form fieldset {
+  gap: 20px;
+}
+.layout .form input {
+  min-height: 54px;
+  border-radius: 12px;
+  padding: 13px 16px;
+}
+.layout .form :global(.btn) {
+  min-height: 54px;
+  border-radius: 12px;
+}
+.layout .form :global(.btn.inline-action) {
+  min-height: 32px;
+  padding: 3px 9px;
+}
+.layout .form :global(.auth-google) {
+  background: #fff;
+  border-color: #dcd1c6;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 3px 0 #ddd1c5,
+    0 7px 16px -10px #522b292e;
+}
+.layout .form :global(.auth-google:hover) {
+  background: #faf5ef;
+  border-color: #b6957b;
+}
+.layout .form :global(.auth-bottom) {
+  padding-top: 24px;
+  margin-top: 26px;
+  border-top: 1px solid #eee5dc;
+  font-size: 15px;
+}
+.layout .form :global(.auth-recovery) {
+  font-size: 14px;
+  margin-top: -4px;
+}
+.layout .form :global(.auth-divider) {
+  color: var(--muted);
+}
+.compact .stage {
+  display: block;
+  max-width: 510px;
+}
+
+/* The scene has a dedicated grid cell. No positioning can cross into the form. */
+.scene {
+  grid-area: scene;
+  align-self: start;
+  min-width: 0;
+  margin-top: 18px;
+}
+.sceneArtwork {
+  position: relative;
+  height: 290px;
+  overflow: hidden;
+  contain: layout paint;
+}
+.window {
+  position: absolute;
+  width: 195px;
+  height: 205px;
+  top: 15px;
+  left: 20%;
+  border: 9px solid #eee2d4;
+  border-radius: 110px 110px 3px 3px;
+  background: linear-gradient(135deg, #fffdf7, #eadcc8);
+  box-shadow:
+    inset 0 0 0 1px #fffaf0,
+    7px 7px 0 #c4a88b12;
+  overflow: hidden;
+}
+.window span {
+  position: absolute;
+  background: #ede1d2;
+}
+.window span:first-child {
+  inset: 0 auto 0 50%;
+  width: 7px;
+}
+.window span:nth-child(2) {
+  inset: 52% 0 auto;
+  height: 7px;
+}
+.window span:last-child {
+  width: 250px;
+  height: 95px;
+  top: 52px;
+  left: -30px;
+  transform: rotate(-35deg);
+  background: #fffaf54d;
+}
+.sunlight {
+  position: absolute;
+  width: 75%;
+  height: 34px;
+  left: 9%;
+  bottom: 18px;
+  background: radial-gradient(ellipse, #e0c5a961, transparent 70%);
+}
+.plant {
+  position: absolute;
+  width: 88px;
+  height: 155px;
+  bottom: 28px;
+  right: 2%;
+  opacity: 0.85;
+}
+.floor {
+  position: absolute;
+  bottom: 26px;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #c1a78a80 20%,
+    #c1a78a80 80%,
+    transparent
+  );
+}
+.sceneCaption {
+  display: flex;
+  justify-content: space-between;
+  gap: 8px;
+  align-items: center;
+  border-top: 1px solid #d9c8b74d;
+  color: var(--muted);
+  font-size: 14px;
+}
+.motionToggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 44px;
+  padding: 8px 12px;
+  margin-block: 8px;
+  background: linear-gradient(150deg, #fffaf3, #f0e2d2);
+  border: 1px solid #ddcbbb;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 2px 0 #d7bfa9;
+  color: var(--rose);
+  font-size: 14px;
+  font-weight: 600;
+  border-radius: 8px;
+}
+.motionToggle:hover {
+  color: var(--berry);
+}
+@media (max-width: 950px) {
+  .layout {
+    padding: 32px 24px 56px;
+  }
+  .stage {
+    max-width: 560px;
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas: "welcome" "form" "scene";
+    gap: 28px;
+  }
+  .welcome {
+    text-align: center;
+    padding-top: 0;
+  }
+  .welcome :global(.eyebrow) {
+    justify-content: center;
+    margin-bottom: 0;
+  }
+  .welcome h2 {
+    font-size: 36px;
+    margin: 14px 0 0;
+  }
+  .welcome h2 br {
+    display: none;
+  }
+  .welcome h2 span {
+    display: block;
+  }
+  .welcome > p,
+  .benefits {
+    display: none;
+  }
+  .scene {
+    margin: 0 auto;
+    width: min(100%, 430px);
+  }
+  .sceneArtwork {
+    height: 240px;
+  }
+  .window {
+    height: 170px;
+    width: 165px;
+    top: 15px;
+  }
+  .plant {
+    height: 125px;
+    width: 72px;
+  }
+}
+@media (max-width: 480px) {
+  .layout {
+    padding: 24px 16px 40px;
+  }
+  .layout .form {
+    padding: 28px 22px;
+    border-radius: 22px;
+  }
+  .welcome h2 {
+    font-size: 29px;
+  }
+  .welcome :global(.eyebrow) {
+    font-size: 14px;
+    letter-spacing: 0.09em;
+  }
+  .sceneCaption {
+    flex-wrap: wrap;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .motionToggle {
+    display: none;
+  }
+  .sceneCaption {
+    min-height: 44px;
+  }
+}

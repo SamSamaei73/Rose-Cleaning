@@ -2,7 +2,7 @@ import { BookingFlow } from "./booking-flow";
 import { getSession } from "@/lib/server/auth";
 import { getAddresses, getCatalogue } from "@/lib/server/repository";
 import { isConfigured, isDemo } from "@/lib/server/config";
-import Link from "next/link";
+import Link from "@/components/app-link";
 export async function BookPage({ service }: { service?: string }) {
   if (!isDemo() && !isConfigured())
     return (

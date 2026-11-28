@@ -50,7 +50,7 @@ html {
 .site-header .header-nav {
   gap: 24px;
   margin: 0;
-  font-size: 13px;
+  font-size: 16px;
 }
 .site-header .header-nav a {
   white-space: nowrap;
@@ -67,7 +67,7 @@ html {
   min-height: 44px;
   display: inline-flex;
   align-items: center;
-  font-size: 13px;
+  font-size: 16px;
 }
 .mobile-nav.rose-menu {
   display: none;
@@ -85,7 +85,7 @@ html {
   border-radius: 30px;
   color: var(--paper);
   background: transparent;
-  font-size: 13px;
+  font-size: 16px;
 }
 .menu-trigger:hover,
 .menu-close:hover {
@@ -219,7 +219,7 @@ html {
   border-top: 1px solid var(--burgundy);
   margin-top: 30px;
   padding-top: 20px;
-  font-size: 14px;
+  font-size: 16px;
 }
 .navigation-bottom a {
   min-height: 44px;
@@ -256,7 +256,7 @@ html {
   margin-top: 32px;
 }
 .rose-scene .hero-lower p {
-  font-size: 15px;
+  font-size: 16px;
 }
 .rose-scene .hero-lower .actions {
   justify-content: center;
@@ -266,7 +266,7 @@ html {
   border-radius: 30px;
 }
 .rose-scene .hero-services-link {
-  font-size: 14px;
+  font-size: 16px;
 }
 .scene-orbit {
   position: absolute;
@@ -504,7 +504,7 @@ textarea {
   }
   .mobile-estimate small {
     display: block;
-    font-size: 12px;
+    font-size: 14px;
   }
   .mobile-estimate strong {
     text-align: right;
@@ -516,19 +516,19 @@ textarea {
   }
   .calendar-day {
     min-height: 44px;
-    font-size: 14px;
+    font-size: 16px;
   }
   .calendar-grid .day-name {
-    font-size: 12px;
+    font-size: 14px;
   }
   .side-nav a {
     min-height: 44px;
-    font-size: 13px;
+    font-size: 16px;
   }
   .btn.small,
   .tab-buttons button {
     min-height: 44px;
-    font-size: 13px;
+    font-size: 16px;
   }
 }
 @media (max-width: 640px) {
@@ -562,13 +562,13 @@ textarea {
   }
   .site-header .header-login {
     padding-inline: 5px;
-    font-size: 13px;
+    font-size: 16px;
   }
   .menu-trigger {
     padding: 8px 9px;
     gap: 7px;
     border-color: transparent;
-    font-size: 13px;
+    font-size: 16px;
   }
   .menu-lines {
     width: 15px;
@@ -591,7 +591,7 @@ textarea {
   .navigation-phone,
   .menu-close {
     padding: 8px 13px;
-    font-size: 13px;
+    font-size: 16px;
   }
   .navigation-body nav > a {
     font-size: 23px;
@@ -602,7 +602,7 @@ textarea {
     gap: 0 20px;
     margin-top: 22px;
     padding-top: 12px;
-    font-size: 13px;
+    font-size: 16px;
   }
   .cinematic-hero.rose-scene {
     min-height: max(700px, 92svh);
@@ -624,7 +624,7 @@ textarea {
     max-width: 330px;
   }
   .rose-scene .hero-lower p {
-    font-size: 15px;
+    font-size: 16px;
     line-height: 1.65;
   }
   .rose-scene .hero-lower .actions {
@@ -632,11 +632,11 @@ textarea {
     margin-top: 24px;
   }
   .rose-scene .btn {
-    font-size: 14px;
+    font-size: 16px;
     padding-inline: 20px;
   }
   .rose-scene .hero-services-link {
-    font-size: 14px;
+    font-size: 16px;
   }
   .scene-photo-one {
     top: 108px;
@@ -686,7 +686,7 @@ textarea {
   .service-index-detail p,
   .process-step p,
   .about-spread-copy p {
-    font-size: 15px;
+    font-size: 16px;
   }
   .approach-list summary,
   .cinematic-faq .faq-list summary {
@@ -710,8 +710,8 @@ textarea {
     font-size: clamp(43px, 12vw, 67px);
   }
   .closing-section .btn,
-  .cinematic .text-link {
-    font-size: 14px;
+  .cinematic .action-link {
+    font-size: 16px;
   }
   .site-footer .footer-grid {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -724,7 +724,7 @@ textarea {
     display: flex;
     align-items: center;
     overflow-wrap: anywhere;
-    font-size: 13px;
+    font-size: 16px;
   }
   .site-footer .footer-links {
     gap: 3px;
@@ -738,30 +738,30 @@ textarea {
   .label,
   .choice strong,
   .window-choice {
-    font-size: 14px;
+    font-size: 16px;
   }
   .choice p,
   .flow-content > .muted,
   .booking-item p {
-    font-size: 13px;
+    font-size: 16px;
   }
   .progress-step {
     flex-direction: column;
     align-items: flex-start;
-    font-size: 11px;
+    font-size: 14px;
     min-width: 0;
     gap: 5px;
     line-height: 1.4;
   }
   .progress-step > span {
     min-height: 16px;
-    font-size: 12px;
+    font-size: 14px;
   }
   .flow-buttons {
     flex-wrap: wrap;
   }
   .flow-buttons .btn {
-    font-size: 14px;
+    font-size: 16px;
     flex: 1 1 auto;
   }
   .calendar {
@@ -771,20 +771,20 @@ textarea {
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   }
   .check-label {
-    font-size: 13px;
+    font-size: 16px;
   }
   .booking-item-right {
     flex-wrap: wrap;
   }
   .status {
-    font-size: 12px;
+    font-size: 14px;
     white-space: normal;
   }
   .status::before {
     flex-shrink: 0;
   }
   .metric .metric-label {
-    font-size: 12px;
+    font-size: 14px;
   }
   .metrics {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -795,7 +795,7 @@ textarea {
   .review-row {
     grid-template-columns: minmax(0, 1fr);
     gap: 6px;
-    font-size: 14px;
+    font-size: 16px;
   }
   .filter-bar .field {
     flex-basis: 100%;
@@ -821,7 +821,7 @@ textarea {
     padding: 14px 8px;
   }
   .metric .metric-label {
-    font-size: 11px;
+    font-size: 14px;
   }
   .service-index-item > button,
   .service-index-page .service-index-item > button {
@@ -1112,7 +1112,7 @@ textarea {
   margin-top: 55px;
   padding-top: 25px;
   border-top: 1px solid var(--border);
-  font-size: 14px;
+  font-size: 16px;
 }
 .portal-account-actions {
   margin-top: 18px;
@@ -1125,7 +1125,7 @@ textarea {
   background: var(--pale);
   border: 1px solid var(--border);
   border-radius: 6px;
-  font-size: 14px;
+  font-size: 16px;
 }
 @media (max-width: 1000px) {
   .dashboard-actions {
@@ -1182,7 +1182,7 @@ textarea {
     font-size: 23px;
   }
   .service-index-detail p {
-    font-size: 14px;
+    font-size: 16px;
   }
   .glass-section {
     padding: 20px 16px 40px;

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { brand } from "@/lib/brand";
 export function Brand({ compact = false }: { compact?: boolean }) {
   return (

@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { CleaningLoader } from "./cleaning-loader";
+import { useState, useTransition } from "react";
+import { useRouter } from "./navigation-provider";
 import { Download, Plus, Trash2 } from "lucide-react";
 import type { Address, Profile } from "@/lib/types";
 import { ActionButton, api, Message } from "./ui";
@@ -15,12 +16,15 @@ export function AccountSettings({
 }) {
   const [error, setError] = useState(""),
     [message, setMessage] = useState(""),
-    [busy, setBusy] = useState(false),
+    [submitting, setBusy] = useState(false),
     [editing, setEditing] = useState<Address | null>(null);
+  const [refreshing, startRefresh] = useTransition();
+  const busy = submitting || refreshing;
   const router = useRouter();
   return (
     <div className="stack">
       <Message error={error} message={message} />
+      <CleaningLoader active={busy} label="Saving your account details…" />
       <div className="grid-2">
         <form
           className="card stack"
@@ -36,7 +40,7 @@ export function AccountSettings({
                 phone: form.get("phone"),
               });
               setMessage(r.message);
-              router.refresh();
+              startRefresh(() => router.refresh());
             } catch (e) {
               setError((e as Error).message);
             } finally {
@@ -173,7 +177,7 @@ export function AccountSettings({
             setMessage(r.message);
             setEditing(null);
             element.reset();
-            router.refresh();
+            startRefresh(() => router.refresh());
           } catch (e) {
             setError((e as Error).message);
           } finally {

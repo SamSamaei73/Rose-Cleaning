@@ -1,5 +1,7 @@
 import type { NextConfig } from "next";
 const config: NextConfig = {
+  // Allow the loopback alias used for signed-out local previews and visual checks.
+  allowedDevOrigins: ["127.0.0.1"],
   // Only non-secret release identity belongs in build-time env configuration.
   env: {
     ROSE_RELEASE_SHA: process.env.ROSE_RELEASE_SHA || "development",

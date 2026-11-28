@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { Brand } from "./brand";
@@ -98,7 +98,10 @@ export function MobileNav() {
       >
         <div className="navigation-sheet">
           <div className="navigation-top">
-            <a href={brand.phoneHref} className="navigation-phone">
+            <a
+              href={brand.phoneHref}
+              className="navigation-phone"
+            >
               Call Rose
             </a>
             <div onClick={close}>
@@ -135,8 +138,12 @@ export function MobileNav() {
             </div>
           </div>
           <div className="navigation-bottom">
-            <a href={brand.phoneHref}>{brand.phone}</a>
-            <a href={`mailto:${brand.email}`}>{brand.email}</a>
+            <a href={brand.phoneHref}>
+              {brand.phone}
+            </a>
+            <a href={`mailto:${brand.email}`}>
+              {brand.email}
+            </a>
           </div>
         </div>
       </dialog>

@@ -1,4 +1,4 @@
-import Link from "next/link";
+import Link from "@/components/app-link";
 import {
   ArrowRight,
   CalendarDays,
@@ -110,7 +110,7 @@ export default async function Dashboard({
               <h2 id="recent-title">Recent requests</h2>
             </div>
             {own.length > 0 && (
-              <Link className="text-link" href="/dashboard/requests">
+              <Link className="btn secondary small action-link" href="/dashboard/requests">
                 View all <ArrowRight size={15} />
               </Link>
             )}
@@ -181,7 +181,7 @@ export default async function Dashboard({
                 {timeLabel(upcoming.draft.windowId)}
               </p>
               <Link
-                className="text-link"
+                className="btn secondary small action-link"
                 href={`/dashboard/requests/${upcoming.id}`}
               >
                 View visit <ArrowRight size={15} />
@@ -205,13 +205,13 @@ export default async function Dashboard({
                 <span>{addresses[0].postcode}</span>
               </div>
             )}
-            <Link className="text-link" href="/dashboard/profile">
+            <Link className="btn secondary small action-link" href="/dashboard/profile">
               Profile & address <ArrowRight size={15} />
             </Link>
           </section>
           <div className="dashboard-contact">
             <p>A question before you request?</p>
-            <Link href="/contact" className="text-link">
+            <Link href="/contact" className="btn secondary small action-link">
               Talk to Rose <ArrowRight size={15} />
             </Link>
           </div>

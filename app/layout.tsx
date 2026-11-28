@@ -1,13 +1,32 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
+import localFont from "next/font/local";
 import "./globals.css";
 import "./cinematic.css";
 import "./rose-experience.css";
+import "./design-system.css";
+
+const manrope = localFont({
+  src: "../public/fonts/manrope-latin-variable.woff2",
+  variable: "--font-manrope",
+  weight: "200 800",
+  display: "swap",
+});
 
 // The shared header and demo indicator depend on the current session and
 // runtime configuration, including when a build was created without secrets.
 export const dynamic = "force-dynamic";
-import { DemoBar, Footer, Header } from "@/components/chrome";
+import { DemoBar, Footer, Header, HeaderFallback } from "@/components/chrome";
 import { isDemo } from "@/lib/server/config";
+import {
+  CleaningLoader,
+  GlobalLoadingOverlay,
+  PageReadiness,
+} from "@/components/cleaning-loader";
+import {
+  NavigationHistory,
+  NavigationProvider,
+} from "@/components/navigation-provider";
 export const metadata: Metadata = {
   title: {
     default: "Rose Professional Cleaning | A fresh home, more time for you",
@@ -35,15 +54,47 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-GB" data-scroll-behavior="smooth">
+    <html
+      lang="en-GB"
+      className={manrope.variable}
+      data-scroll-behavior="smooth"
+    >
       <body data-mode={isDemo() ? "demo" : "connected"}>
-        <a className="skip" href="#main">
-          Skip to content
-        </a>
-        <DemoBar />
-        <Header />
-        <main id="main">{children}</main>
-        <Footer />
+        <NavigationProvider>
+          <GlobalLoadingOverlay />
+          <Suspense fallback={null}>
+            <NavigationHistory />
+          </Suspense>
+          <div id="application">
+            <a className="skip btn" href="#main">
+              Skip to content
+            </a>
+            <DemoBar />
+            <Suspense
+              fallback={
+                <>
+                  <HeaderFallback />
+                  <CleaningLoader scope="shell" />
+                </>
+              }
+            >
+              <Header />
+            </Suspense>
+            <main id="main" tabIndex={-1}>
+              <Suspense
+                fallback={
+                  <CleaningLoader
+                    scope="page"
+                    label="Preparing your next fresh start…"
+                  />
+                }
+              >
+                <PageReadiness>{children}</PageReadiness>
+              </Suspense>
+            </main>
+            <Footer />
+          </div>
+        </NavigationProvider>
       </body>
     </html>
   );

@@ -28,4 +28,10 @@ Runtime file: `/home/roseclea/rose-deploy/shared/production.env`, mode 0600, dir
 
 Supabase Auth has its own SMTP settings: `smtp.resend.com`, TLS port 465, username `resend`, the restricted sending key as password, and the same verified sender. This is separate from the application's Resend HTTP adapter. Auth Site URL is the HTTPS apex; allowed redirects are `/auth/callback`, `/auth/callback?next=/dashboard`, and `/auth/callback?next=/reset-password`. Email confirmation is on and passwords require at least 12 characters.
 
+Google sign-in uses the Google Cloud project `rose-cleaning` and the **Rose Cleaning Web** OAuth client. The Google app has an external audience and was moved to **In production** on 26 November 2026. Its client ID and secret are configured in the existing Supabase project's Google provider; the secret is not an application environment variable and must never enter the repository or frontend bundle. The provider retains nonce checks and requires an email address.
+
+Google's authorised redirect URI is `https://tsnbceddjcdtjvijldpf.supabase.co/auth/v1/callback`. Supabase additionally allows the exact Google callbacks `https://rosecleaning.uk/auth/callback?provider=google` and `http://localhost:3000/auth/callback?provider=google`. The three email callback variants above are also allowed on `http://localhost:3000` for local development. The default Site URL remains `https://rosecleaning.uk`.
+
+Local `.env.local` now connects to the existing hosted Rose Supabase project with matching publishable/server keys and `NEXT_PUBLIC_SITE_URL=http://localhost:3000`. The previous separate local-stack settings were backed up privately under `.local/google-auth/`. Connected local account actions therefore use the real backend. The local integration test script still requires a separate local Supabase stack and refuses a hosted URL.
+
 Only `NEXT_PUBLIC_*` values intended for browsers may be embedded in the frontend. Never use the service-role key as a publishable key. `.env*`, `.local/`, keys, account fixtures and local verification evidence remain ignored by Git.

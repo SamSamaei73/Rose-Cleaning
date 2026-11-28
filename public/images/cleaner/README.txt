@@ -1,0 +1,1 @@
+Original Rose 3D character. Generated from lib/client/cleaner-model.ts by scripts/render-cleaner-assets.mjs. WebM has alpha transparency; WebP posters cover reduced motion and video failures. No third-party character assets or textures.

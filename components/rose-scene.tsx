@@ -1,5 +1,6 @@
+import { ArrowDown } from "lucide-react";
 import Image from "next/image";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { PhotoFrame } from "./photo-frame";
 
 /** Illustrative service imagery; source records are in docs/PHOTOGRAPHY.md. */
@@ -57,7 +58,7 @@ export function RoseScene({ requestHref }: { requestHref: string }) {
           href="#rose-intro"
           aria-label="Discover Rose"
         >
-          <span aria-hidden="true" />
+          <ArrowDown size={22} aria-hidden="true" />
         </a>
       </div>
     </section>

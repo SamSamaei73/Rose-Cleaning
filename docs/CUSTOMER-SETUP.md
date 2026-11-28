@@ -62,6 +62,19 @@ For development, keep the local Auth Site URL set to the local origin. Do not mi
 
 Signup, resend and recovery use server rate limits, including a 60-second per-email cooldown and five email requests per hour per client. Supabase's own delivery limits also apply. Configure the reverse proxy to overwrite forwarded IP headers instead of accepting client-supplied values. Logout does not share the login rate limit. There are no browser-storage authentication flags.
 
+## Google login and registration
+
+The login and signup forms use the same Supabase Google OAuth flow. Supabase creates a customer account for a new Google user and signs in an existing one. No additional application dependency or browser Google secret is required.
+
+1. Create a Google OAuth client for a **Web application**. Set its authorised redirect URI to the callback shown in the Supabase Google provider settings (normally `https://<project-ref>.supabase.co/auth/v1/callback`).
+2. Enable **Google** under Supabase Authentication providers and save the Google client ID and secret there. Keep the secret out of the repository and public environment variables.
+3. In Supabase Auth URL Configuration, add the exact URLs `http://localhost:3000/auth/callback?provider=google` for local development and `https://rosecleaning.uk/auth/callback?provider=google` for production. The app keeps the login/signup intent and selected service in a signed HTTP-only cookie valid for ten minutes; no callback wildcards are needed.
+4. Configure the Google consent screen and publish the OAuth app when ready for public access; while it is in testing, only its permitted test users can sign in.
+
+The server checks that Google is enabled before starting OAuth through `/api/auth`, stores the PKCE verifier in the existing HTTP-only cookies, and exchanges the returned code at `/auth/callback`. Failed or cancelled Google sign-in returns to the original account form with an error. After authentication, the server ensures the verified user has a customer profile, preserving existing profile details and roles. See [Supabase's Google setup guide](https://supabase.com/docs/guides/auth/social-sign-in/auth-google).
+
+For Google sign-in on localhost, use the existing hosted Rose Supabase URL and matching keys in `.env.local`, with `NEXT_PUBLIC_SITE_URL=http://localhost:3000`. A URL such as `http://127.0.0.1:54331` is only valid when the separate local Supabase stack is running and has its own Google provider configured. Never mix keys from different backends.
+
 ## Customer routes
 
 - `/signup`, `/login`, `/forgot-password`, `/reset-password`, `/auth/callback`

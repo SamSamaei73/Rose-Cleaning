@@ -1,0 +1,74 @@
+.host {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  contain: layout paint;
+}
+.canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+}
+.canvas[data-ready="true"] {
+  opacity: 1;
+}
+.fallback {
+  --travel-range: 0px;
+  position: absolute;
+  inset: 0;
+}
+.traveler {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  height: 100%;
+  aspect-ratio: 280 / 360;
+  transform: translateX(-50%);
+}
+.poster,
+.video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.fallback[data-ready="true"] .poster {
+  opacity: 0;
+}
+.video {
+  opacity: 0;
+}
+.video[data-ready="true"] {
+  opacity: 1;
+}
+.host[data-variant="companion"] .fallback[data-enabled="true"] .traveler {
+  animation: travel 24s cubic-bezier(0.3333, 0, 0.6667, 1) infinite;
+  animation-play-state: paused;
+}
+.host[data-variant="companion"] .fallback[data-motion="true"] .traveler {
+  animation-play-state: running;
+}
+@keyframes travel {
+  0%,
+  91.6667%,
+  100% {
+    transform: translateX(calc(-50% - var(--travel-range)));
+  }
+  41.6667%,
+  50% {
+    transform: translateX(calc(-50% + var(--travel-range)));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .host[data-variant="companion"] .fallback[data-enabled="true"] .traveler {
+    animation: none;
+  }
+  .video {
+    visibility: hidden;
+  }
+  .fallback[data-ready="true"] .poster {
+    opacity: 1;
+  }
+}

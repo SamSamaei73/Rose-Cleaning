@@ -1,6 +1,7 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { CleaningLoader } from "./cleaning-loader";
+import { useState, useTransition } from "react";
+import { useRouter } from "./navigation-provider";
 import type { AccountRequest, Availability, Cleaner } from "@/lib/types";
 import { ActionButton, api, Message } from "./ui";
 export function OperationsSettings({
@@ -17,11 +18,14 @@ export function OperationsSettings({
   const [value, setValue] = useState(availability),
     [error, setError] = useState(""),
     [message, setMessage] = useState(""),
-    [busy, setBusy] = useState(false);
+    [submitting, setBusy] = useState(false);
+  const [refreshing, startRefresh] = useTransition();
+  const busy = submitting || refreshing;
   const router = useRouter();
   return (
     <div className="stack">
       <Message error={error} message={message} />
+      <CleaningLoader active={busy} label="Saving workspace changes…" />
       <form
         className="card stack"
         onSubmit={async (e) => {
@@ -31,7 +35,7 @@ export function OperationsSettings({
           try {
             await api("staff/settings", { kind: "availability", value });
             setMessage("Operational settings saved.");
-            router.refresh();
+            startRefresh(() => router.refresh());
           } catch (e) {
             setError((e as Error).message);
           } finally {
@@ -207,7 +211,7 @@ export function OperationsSettings({
             <div>
               <button
                 type="button"
-                className="text-link"
+                className="btn secondary small action-link"
                 disabled={value.windows.length <= 1}
                 onClick={() =>
                   setValue((v) => ({
@@ -294,7 +298,7 @@ export function OperationsSettings({
                 name: new FormData(element).get("name"),
               });
               element.reset();
-              router.refresh();
+              startRefresh(() => router.refresh());
             } catch (e) {
               setError((e as Error).message);
             } finally {

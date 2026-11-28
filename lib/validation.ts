@@ -134,6 +134,13 @@ export type CleaningRequestInput = z.infer<typeof cleaningRequestSchema>;
 export const authSchema = z.discriminatedUnion("action", [
   z
     .object({
+      action: z.literal("google"),
+      intent: z.enum(["login", "signup"]),
+      next: z.string().max(500).optional(),
+    })
+    .strict(),
+  z
+    .object({
       action: z.literal("signup"),
       name: z.string().trim().min(2).max(120),
       email: z.email().max(254),

@@ -1,6 +1,7 @@
 import { ClipboardList, Clock3 } from "lucide-react";
 import { money } from "@/lib/pricing";
 import type { Quote } from "@/lib/types";
+import { CleaningLoader } from "./cleaning-loader";
 export function QuoteSummary({
   quote,
   loading = false,
@@ -16,6 +17,7 @@ export function QuoteSummary({
         </h2>
       </div>
       <div className="summary-body" aria-live="polite" aria-busy={loading}>
+        <CleaningLoader active={loading} label="Updating your estimate…" />
         {quote ? (
           <>
             <div className="summary-service">{quote.service}</div>
@@ -70,13 +72,9 @@ export function QuoteSummary({
               </p>
             </div>
           </>
-        ) : (
-          <p className="small">
-            {loading
-              ? "Updating your estimate…"
-              : "Choose a service to see the summary."}
-          </p>
-        )}
+        ) : !loading ? (
+          <p className="small">Choose a service to see the summary.</p>
+        ) : null}
       </div>
       <div className="summary-note">
         No payment is taken. Your request is subject to confirmation from Rose.

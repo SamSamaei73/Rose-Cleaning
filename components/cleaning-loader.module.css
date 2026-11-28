@@ -1,0 +1,162 @@
+.reserved {
+  min-height: calc(100svh - 108px);
+}
+.overlay {
+  position: fixed;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100dvh;
+  max-width: none;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  outline: 0;
+  overflow: hidden;
+  background: #261b1659;
+  -webkit-backdrop-filter: blur(14px) saturate(0.8);
+  backdrop-filter: blur(14px) saturate(0.8);
+  color: var(--berry);
+  z-index: 2147483647;
+  overscroll-behavior: contain;
+  touch-action: none;
+  visibility: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transition:
+    opacity 180ms ease,
+    visibility 0s linear 180ms;
+}
+.overlay::backdrop {
+  background: transparent;
+}
+/* The same overlay also covers streamed route fallbacks before JavaScript arrives. */
+:global(
+    body:has(
+      [data-route-loading]:not([hidden] *):not([style*="display: none"] *)
+    )
+  )
+  .overlay:not([data-active="true"]) {
+  animation: reveal 180ms ease 250ms both;
+  pointer-events: auto;
+}
+:global(body) .overlay[data-active="true"] {
+  animation: none;
+  visibility: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transition-delay: 0s;
+}
+.spinner {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 100px;
+  aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    #fffaf3 30%,
+    #faebdfe8 70%,
+    #faebdf00 72%
+  );
+  box-shadow: 0 0 70px 35px #faebdf70;
+}
+.ring,
+.innerRing {
+  position: absolute;
+  inset: 0;
+  border: 3px solid #d7bfa36b;
+  border-top-color: var(--rose);
+  border-right-color: #c58e67;
+  border-radius: 50%;
+  animation: spin 1.15s linear infinite;
+}
+.innerRing {
+  inset: 11px;
+  border-width: 1px;
+  border-color: #b78c5d26;
+  border-bottom-color: #b47854;
+  animation-direction: reverse;
+  animation-duration: 1.8s;
+}
+.sparkle {
+  position: absolute;
+  inset: 29px;
+  width: 42px;
+  height: 42px;
+  color: var(--rose);
+}
+.message {
+  position: absolute;
+  left: 50%;
+  top: calc(50% + 78px);
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: min(420px, calc(100vw - 40px));
+  margin: 0;
+  padding: 12px 22px;
+  border: 1px solid #fffcf7;
+  border-radius: 18px;
+  background: #fffaf3f2;
+  box-shadow:
+    inset 0 1px 0 #fff,
+    0 10px 32px -16px #30221b66;
+  font-size: clamp(16px, 2vw, 19px);
+  font-weight: 650;
+  line-height: 1.6;
+  text-align: center;
+}
+.recovery {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(480px, calc(100vw - 32px));
+  padding: 28px;
+  border-radius: 24px;
+  background: var(--paper);
+  box-shadow: var(--surface-shadow);
+}
+.recovery h2 {
+  font-size: 24px;
+  line-height: 1.3;
+}
+.recovery p {
+  margin-block: 14px 22px;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes reveal {
+  from {
+    opacity: 0;
+    visibility: hidden;
+  }
+  to {
+    opacity: 1;
+    visibility: visible;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .overlay {
+    transition-duration: 0s;
+  }
+  :global(
+      body:has(
+        [data-route-loading]:not([hidden] *):not([style*="display: none"] *)
+      )
+    )
+    .overlay:not([data-active="true"]) {
+    /* A delayed visibility switch, with no movement or fade. */
+    animation: reveal 0s steps(1, end) 250ms both !important;
+  }
+  .ring,
+  .innerRing {
+    animation: none;
+  }
+}

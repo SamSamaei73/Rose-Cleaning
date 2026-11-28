@@ -1,5 +1,5 @@
 "use client";
-import Link from "next/link";
+import Link from "@/components/app-link";
 import { useState } from "react";
 import type { Booking, Service } from "@/lib/types";
 import { statusLabels } from "@/lib/status";
@@ -97,7 +97,7 @@ export function StaffBookings({
               {filtered.map((b) => (
                 <tr key={b.id}>
                   <td>
-                    <Link href={`/staff/bookings/${b.id}`}>
+                    <Link className="btn secondary small" href={`/staff/bookings/${b.id}`}>
                       {b.customer_name}
                     </Link>
                     <small>

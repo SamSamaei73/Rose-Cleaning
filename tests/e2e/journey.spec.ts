@@ -4,6 +4,7 @@ import {
   type Page,
   type APIRequestContext,
 } from "@playwright/test";
+import { waitForPageReady } from "./page-ready";
 const origin = "http://localhost:3005";
 const futureDate = (days = 7) => {
   const d = new Date(Date.now() + days * 86400000);
@@ -55,6 +56,10 @@ test("public request draft survives sign-in; staff confirms; customer sees real 
 }) => {
   await page.goto("/book");
   await expect(page.getByText("DEMO PREVIEW", { exact: true })).toBeVisible();
+  await waitForPageReady(page);
+  await expect(
+    page.getByRole("button", { name: "Continue", exact: true }),
+  ).toBeEnabled();
   await page.getByLabel("Property postcode").fill("sw1a1aa");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page.getByLabel("Bedrooms", { exact: true }).selectOption("2");
@@ -261,6 +266,7 @@ test("public contact form persists in the staff inbox without claiming email del
   page,
 }) => {
   await page.goto("/contact");
+  await waitForPageReady(page);
   await page.getByLabel("Your name").fill("Taylor Fixture");
   await page
     .getByLabel("Email address", { exact: true })
@@ -309,7 +315,10 @@ test("mobile navigation, all public routes and progressive form stay within the 
     await noOverflow(page);
     // Follow normal scrolling before checking lazy images. Responsive variants
     // hidden by CSS are intentionally not downloaded on this viewport.
-    for (const image of await page.locator("img").all()) {
+    // The temporary 3D poster is replaced on visibility; its fallback is checked separately.
+    for (const image of await page
+      .locator('img:not([src^="/images/cleaner/"])')
+      .all()) {
       if (!(await image.isVisible())) continue;
       await image.scrollIntoViewIfNeeded();
       await expect
@@ -337,7 +346,9 @@ test("mobile navigation, all public routes and progressive form stay within the 
       exact: true,
     })
     .click();
-  await expect(page).toHaveURL(/\/login\?next=%2Fdashboard%3Fservice%3Dregular$/);
+  await expect(page).toHaveURL(
+    /\/login\?next=%2Fdashboard%3Fservice%3Dregular$/,
+  );
   await page.getByRole("button", { name: "Explore the customer demo" }).click();
   await expect(page).toHaveURL(/\/dashboard\?service=regular$/);
   await page
@@ -346,7 +357,9 @@ test("mobile navigation, all public routes and progressive form stay within the 
     .click();
   await expect(page).toHaveURL(/\/dashboard\/book\?service=regular$/);
   // Wait for the saved draft to restore before entering new property details.
-  await expect(page.getByRole("button", { name: "Continue", exact: true })).toBeEnabled();
+  await expect(
+    page.getByRole("button", { name: "Continue", exact: true }),
+  ).toBeEnabled();
   await page.getByLabel("Property postcode").fill("SW1A 1AA");
   await page.getByRole("button", { name: "Continue", exact: true }).click();
   await page
@@ -367,9 +380,14 @@ test("profile, saved address and deletion request persist with truthful account 
 }) => {
   await post(page.request, "demo", { role: "customer" });
   await page.goto("/dashboard/settings");
+  await waitForPageReady(page);
   await page.getByLabel("Full name", { exact: true }).fill("Jordan Fictional");
   await page.getByRole("button", { name: "Save profile", exact: true }).click();
-  await expect(page.getByRole("status")).toContainText("Profile saved.");
+  await expect(page.locator("main").getByRole("status")).toContainText("Profile saved.");
+  await expect(
+    page.getByRole("button", { name: "Save profile", exact: true }),
+  ).toBeEnabled();
+  await waitForPageReady(page);
   await page.getByLabel("Address name").fill("Fictional home");
   await page.getByLabel("Postcode", { exact: true }).fill("SW1A 1AA");
   await page
@@ -414,6 +432,7 @@ test("office quotes reach the staff inbox and staff pages fit a small screen", a
 }) => {
   await page.setViewportSize({ width: 375, height: 812 });
   await page.goto("/office-quote");
+  await waitForPageReady(page);
   await page.getByLabel("Your name").fill("Robin Office Fixture");
   await page
     .getByLabel("Email address", { exact: true })
@@ -426,7 +445,7 @@ test("office quotes reach the staff inbox and staff pages fit a small screen", a
       "Fictional workspace: request a discussion about weekly office cleaning.",
     );
   await page.getByRole("button", { name: "Send quote request" }).click();
-  await expect(page.getByRole("status")).toContainText("No email was sent.");
+  await expect(page.locator("main").getByRole("status")).toContainText("No email was sent.");
   await post(page.request, "demo", { role: "staff" });
   for (const path of [
     "/staff",

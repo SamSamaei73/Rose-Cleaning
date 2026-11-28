@@ -44,7 +44,7 @@ export function Outbox({
               </h3>
               <p className="small">Submission reference: {s.id}</p>
               <p className="small">
-                <a className="text-link" href={`mailto:${s.email}`}>
+                <a className="btn secondary small action-link" href={`mailto:${s.email}`}>
                   {s.email}
                 </a>
                 {s.phone ? ` · ${s.phone}` : ""}
@@ -54,7 +54,7 @@ export function Outbox({
               <p
                 style={{
                   whiteSpace: "pre-wrap",
-                  fontSize: 13,
+                  fontSize: 15,
                   overflowWrap: "anywhere",
                 }}
               >

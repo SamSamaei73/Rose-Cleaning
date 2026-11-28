@@ -38,13 +38,29 @@ export default async function Contact({
               />
             </div>
             <div className="contact-details">
-              <a href={brand.phoneHref}>{brand.phone}</a>
-              <a href={brand.secondaryPhoneHref}>{brand.secondaryPhone}</a>
+              <a className="btn secondary small" href={brand.phoneHref}>
+                {brand.phone}
+              </a>
+              <a
+                className="btn secondary small"
+                href={brand.secondaryPhoneHref}
+              >
+                {brand.secondaryPhone}
+              </a>
               {brand.email && (
-                <a href={`mailto:${brand.email}`}>{brand.email}</a>
+                <a
+                  className="btn secondary small"
+                  href={`mailto:${brand.email}`}
+                >
+                  {brand.email}
+                </a>
               )}
-              <a href={brand.instagramHref}>{brand.instagram}</a>
-              <a href={brand.website}>{brand.websiteLabel}</a>
+              <a className="btn secondary small" href={brand.instagramHref}>
+                {brand.instagram}
+              </a>
+              <a className="btn secondary small" href={brand.website}>
+                {brand.websiteLabel}
+              </a>
             </div>
             {brand.hours && <p>{brand.hours}</p>}
             <div className="contact-area">

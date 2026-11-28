@@ -1,26 +1,10 @@
 "use client";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useState, useTransition } from "react";
+import { useRouter } from "./navigation-provider";
 import type { ReactNode } from "react";
-export async function api<T = Record<string, unknown>>(
-  path: string,
-  body?: unknown,
-): Promise<T> {
-  const response = await fetch(`/api/${path}`, {
-    method: body === undefined ? "GET" : "POST",
-    headers: { "Content-Type": "application/json" },
-    body: body === undefined ? undefined : JSON.stringify(body),
-  });
-  const data = await response.json();
-  if (!response.ok) {
-    const error = new Error(
-      data.error || "Something went wrong. Please try again.",
-    ) as Error & { details?: unknown };
-    error.details = data.details;
-    throw error;
-  }
-  return data;
-}
+import { CleaningLoader } from "./cleaning-loader";
+import { api } from "@/lib/client/api";
+export { api } from "@/lib/client/api";
 export function ActionButton({
   path,
   body,
@@ -40,17 +24,20 @@ export function ActionButton({
     [error, setError] = useState(""),
     [message, setMessage] = useState("");
   const router = useRouter();
+  const [refreshing, startRefresh] = useTransition();
   return (
     <div>
       <button
         type="button"
         className={className}
-        disabled={busy}
+        disabled={busy || refreshing}
+        aria-busy={busy || refreshing}
         onClick={async () => {
           if (confirmMessage && !window.confirm(confirmMessage)) return;
           setBusy(true);
           setError("");
           setMessage("");
+          let navigating = false;
           try {
             const result = await api<{ redirect?: string; message?: string }>(
               path,
@@ -60,19 +47,24 @@ export function ActionButton({
               // An identity change must discard prefetched account pages and
               // redirects that were rendered for the previous session.
               window.location.assign(result.redirect);
+              navigating = true;
             } else {
               setMessage(result.message || "Saved.");
-              if (refresh) router.refresh();
+              if (refresh) startRefresh(() => router.refresh());
             }
           } catch (e) {
             setError((e as Error).message);
           } finally {
-            setBusy(false);
+            if (!navigating) setBusy(false);
           }
         }}
       >
         {busy ? "Please wait…" : children}
       </button>
+      <CleaningLoader
+        active={busy || refreshing}
+        label="Taking care of your request…"
+      />
       {error && (
         <p
           role="alert"

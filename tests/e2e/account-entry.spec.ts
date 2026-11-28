@@ -14,7 +14,7 @@ test("homepage account actions lead through login to a simple protected dashboar
   const actions = page
     .locator("main")
     .getByRole("link", { name: /^(Request|Request Cleaning)$/ });
-  expect(await actions.count()).toBeGreaterThan(1);
+  await expect.poll(() => actions.count()).toBeGreaterThan(1);
   for (const action of await actions.all())
     await expect(action).toHaveAttribute("href", "/login?next=%2Fdashboard");
   const services = page
@@ -52,6 +52,7 @@ test("homepage account actions lead through login to a simple protected dashboar
   await page.goto("/");
   await expect(account).toHaveText("Dashboard");
   await expect(account).toHaveAttribute("href", "/dashboard");
+  await expect.poll(() => actions.count()).toBeGreaterThan(1);
   for (const action of await actions.all())
     await expect(action).toHaveAttribute("href", "/dashboard");
   await account.click();
